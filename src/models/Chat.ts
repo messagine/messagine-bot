@@ -5,7 +5,7 @@ export interface IChat extends Document {
 }
 
 const ChatSchema: Schema = new Schema({
-  chatIds: { type: [Number], required: true, unique: true }
+  chatIds: { type: [Number], required: true }
 });
 
 const Chat: Model<IChat> = model('Chat', ChatSchema);
