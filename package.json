@@ -4,8 +4,9 @@
   "description": "Telegram chat bot https://t.me/every_chat_bot",
   "main": "dist/index",
   "scripts": {
+    "build-ts": "tsc",
     "start": "node dist/index",
-    "tsc": "tsc"
+    "watch-ts": "tsc -w"
   },
   "repository": {
     "type": "git",
