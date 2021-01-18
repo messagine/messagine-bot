@@ -5,10 +5,17 @@ import User, { IUser } from './models/User';
 
 export class DataHandler {
   public connect() {
-    return mongoose.connect(process.env.DB_URL, {
+    if (this.connected()) return;
+    const dbUrl = process.env.DB_URL;
+    if (!dbUrl) return;
+    return mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
+  }
+
+  private connected() {
+    return mongoose.connection.readyState === 1;
   }
 
   public getUser(chatId: number): Promise<IUser> {

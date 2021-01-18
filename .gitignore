@@ -105,3 +105,6 @@ dist
 
 # System
 .DS_Store
+
+# Build
+.build
