@@ -1,14 +1,14 @@
 import { model, Schema, Model, Document } from 'mongoose';
 
-export interface ILobby extends Document {
+export interface IUser extends Document {
   chatId: number;
   languageCode: string;
 }
 
-const LobbySchema: Schema = new Schema({
+const UserSchema: Schema = new Schema({
   chatId: { type: Number, required: true, unique: true },
   languageCode: { type: String, required: true }
 });
 
-const Lobby: Model<ILobby> = model('Lobby', LobbySchema);
-export default Lobby
+const User: Model<IUser> = model('User', UserSchema);
+export default User
