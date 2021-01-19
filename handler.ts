@@ -141,7 +141,7 @@ export async function main(event) {
           const opponentChatIds = getOpponentChatIds(existingChat, chatId);
           const sendMessagePromise = bot.sendMessage(chatId, 'You have closed the conversation.');
           const deleteChatPromise = dataHandler.deleteChat(existingChat.id);
-          const previousChatCreatePromise = dataHandler.createPreviousChat(existingChat.chatIds, existingChat.languageCode, existingChat.startDate);
+          const previousChatCreatePromise = dataHandler.createPreviousChat(existingChat.chatIds, existingChat.languageCode, chatId, existingChat.startDate);
 
           const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
           opponentChatIds.forEach(opponentChatId => {

@@ -3,6 +3,7 @@ import { model, Schema, Model, Document } from 'mongoose';
 export interface IPreviousChat extends Document {
   chatIds: number[];
   languageCode: string;
+  closedBy: number;
   startDate?: Date;
   endDate?: Date;
 }
@@ -10,6 +11,7 @@ export interface IPreviousChat extends Document {
 const PreviousChatSchema: Schema = new Schema({
   chatIds: { type: [Number], required: true },
   languageCode: { type: String, required: true },
+  closedBy: { type: Number, required: true },
   startDate: { type: Date },
   endDate: { type: Date, default: Date.now }
 });
