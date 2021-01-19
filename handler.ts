@@ -11,6 +11,7 @@ const successResponse = {
 
 export async function main(event) {
   const body = JSON.parse(event.body);
+  if (!body.message) return successResponse;
   const msg: TelegramBot.Message = body.message;
   if (msg.from?.is_bot) return successResponse;
   const dataHandler = new DataHandler();
@@ -25,25 +26,63 @@ export async function main(event) {
 
   const msgText = msg.text;
   if (msgText) {
-    if (msgText.match(/\/start/)) {
-      const user = await dataHandler.getUser(chatId);
-      if (user) {
-        await bot.sendMessage(chatId, 'Welcome back. To find new chat, type /find_chat command.');
-      } else {
-        await dataHandler.addUser(chatId, languageCode);
-        await bot.sendMessage(chatId, `Welcome to Every Chat Bot. To find new chat, type /find_chat. Your language is ${languageCode}, to change your language type /set_language`);
+    if (isBotCommand(msg)) {
+      if (msgText.match(/\/start/)) {
+        const user = await dataHandler.getUser(chatId);
+        if (user) {
+          await bot.sendMessage(chatId, 'Welcome back. To find new chat, type /find_chat command.');
+        } else {
+          await dataHandler.addUser(chatId, languageCode);
+          await bot.sendMessage(chatId, `Welcome to Every Chat Bot. To find new chat, type /find_chat. Your language is ${languageCode}, to change your language type /set_language`);
+        }
+        return successResponse;
       }
-      return successResponse;
-    }
 
-    const setLanguageMatch = msgText.match(/\/set_language (.+)/)
-    if (setLanguageMatch) {
-      const user = await dataHandler.getUser(chatId);
-      let currentLanguageCode = '';
-      if (user && user.languageCode) {
-        currentLanguageCode = user.languageCode;
+      const setLanguageMatch = msgText.match(/\/set_language (.+)/)
+      if (setLanguageMatch) {
+        const user = await dataHandler.getUser(chatId);
+        let currentLanguageCode = '';
+        if (user && user.languageCode) {
+          currentLanguageCode = user.languageCode;
+        }
+        if (setLanguageMatch.length !== 2) {
+          let retryMessage: string;
+          if (currentLanguageCode) {
+            retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language.`;
+          } else {
+            retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
+          }
+          await bot.sendMessage(chatId, retryMessage);
+          return;
+        }
+        const newLanguageCode = setLanguageMatch[1];
+        // TODO: check language
+
+        if (newLanguageCode === currentLanguageCode) {
+          await bot.sendMessage(chatId, `Your language ${currentLanguageCode} not changed.`);
+          return;
+        }
+
+        let successMessage: string;
+        if (currentLanguageCode) {
+          successMessage = `Your language changed from ${currentLanguageCode} to ${newLanguageCode}.`;
+        } else {
+          successMessage = `Your language set to ${newLanguageCode}.`;
+        }
+
+        const successMessagePromise = bot.sendMessage(chatId, successMessage);
+        const setLanguagePromise = dataHandler.setLanguage(chatId, newLanguageCode);
+        await Promise.all([successMessagePromise, setLanguagePromise]);
+        return successResponse;
       }
-      if (setLanguageMatch.length !== 2) {
+
+      if (msgText.match(/\/set_language/)) {
+        const user = await dataHandler.getUser(chatId);
+        let currentLanguageCode = '';
+        if (user && user.languageCode) {
+          currentLanguageCode = user.languageCode;
+        }
+
         let retryMessage: string;
         if (currentLanguageCode) {
           retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language.`;
@@ -51,121 +90,84 @@ export async function main(event) {
           retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
         }
         await bot.sendMessage(chatId, retryMessage);
-        return;
-      }
-      const newLanguageCode = setLanguageMatch[1];
-      // TODO: check language
-
-      if (newLanguageCode === currentLanguageCode) {
-        await bot.sendMessage(chatId, `Your language ${currentLanguageCode} not changed.`);
-        return;
+        return successResponse;
       }
 
-      let successMessage: string;
-      if (currentLanguageCode) {
-        successMessage = `Your language changed from ${currentLanguageCode} to ${newLanguageCode}.`;
-      } else {
-        successMessage = `Your language set to ${newLanguageCode}.`;
+      if (msgText.match(/\/find_chat/)) {
+        const lobbyPromise = dataHandler.findLobby(chatId);
+        const existingChatPromise = dataHandler.findExistingChat(chatId);
+        const userPromise = dataHandler.getUser(chatId);
+        const checkResults = await Promise.all([lobbyPromise, existingChatPromise, userPromise]);
+
+        const lobby = checkResults[0];
+        if (lobby) {
+          await bot.sendMessage(chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
+          return;
+        }
+
+        const existingChat = checkResults[1];
+        if (existingChat) {
+          await bot.sendMessage(chatId, 'You are in an active chat. To exit current chat type /exit_chat and try again.');
+          return;
+        }
+
+        const user = checkResults[2];
+        if (!user || !user.languageCode) {
+          await bot.sendMessage(chatId, 'Set your language via /set_language and try again.');
+          return;
+        }
+
+        const opponent = await dataHandler.findOpponentInLobby(chatId, user.languageCode);
+
+        if (opponent) {
+          const chatStartMessage = 'Chat started. You can exit chat via /exit_chat command. Have fun.';
+
+          const leaveCurrentUserLobbyPromise = dataHandler.leaveLobby(chatId);
+          const leaveOpponentUserLobbyPromise = dataHandler.leaveLobby(opponent.chatId);
+          const createChatPromise = dataHandler.createChat(chatId, opponent.chatId, user.languageCode);
+          const chatStartToCurrentUserPromise = bot.sendMessage(chatId, chatStartMessage);
+          const chatStartToOpponentUserPromise = bot.sendMessage(opponent.chatId, chatStartMessage);
+
+          await Promise.all([leaveCurrentUserLobbyPromise, leaveOpponentUserLobbyPromise, createChatPromise, chatStartToCurrentUserPromise, chatStartToOpponentUserPromise]);
+        } else {
+          const addToLobbyPromise = dataHandler.addToLobby(chatId, user.languageCode);
+          const lobbyMessagePromise = bot.sendMessage(chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
+
+          await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
+        }
+        return successResponse;
       }
 
-      const successMessagePromise = bot.sendMessage(chatId, successMessage);
-      const setLanguagePromise = dataHandler.setLanguage(chatId, newLanguageCode);
-      await Promise.all([successMessagePromise, setLanguagePromise]);
+      if (msgText.match(/\/exit_chat/)) {
+        const existingChat = await dataHandler.findExistingChat(chatId);
+
+        if (existingChat) {
+          const opponentChatIds = getOpponentChatIds(existingChat, chatId);
+          const sendMessagePromise = bot.sendMessage(chatId, 'You have closed the conversation.');
+          const deleteChatPromise = dataHandler.deleteChat(existingChat.id);
+
+          const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise];
+          opponentChatIds.forEach(opponentChatId => {
+            promises.push(bot.sendMessage(opponentChatId, 'Conversation closed by opponent. To find new chat, type /find_chat command.'));
+          });
+
+          await Promise.all(promises);
+        } else {
+          await bot.sendMessage(chatId, 'Chat doesn\'t exist.');
+        }
+        return successResponse;
+      };
+
+      if (msgText.match(/\/cancel_find/)) {
+        const leaveLobbyPromise = dataHandler.leaveLobby(chatId);
+        const leftMessagePromise = bot.sendMessage(chatId, 'Find chat cancelled. To find new chat, type /find_chat command.');
+
+        await Promise.all([leaveLobbyPromise, leftMessagePromise]);
+        return successResponse;
+      };
       return successResponse;
     }
-
-    if (msgText.match(/\/set_language/)) {
-      const user = await dataHandler.getUser(chatId);
-      let currentLanguageCode = '';
-      if (user && user.languageCode) {
-        currentLanguageCode = user.languageCode;
-      }
-
-      let retryMessage: string;
-      if (currentLanguageCode) {
-        retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language.`;
-      } else {
-        retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
-      }
-      await bot.sendMessage(chatId, retryMessage);
-      return successResponse;
-    }
-
-    if (msgText.match(/\/find_chat/)) {
-      const lobbyPromise = dataHandler.findLobby(chatId);
-      const existingChatPromise = dataHandler.findExistingChat(chatId);
-      const userPromise = dataHandler.getUser(chatId);
-      const checkResults = await Promise.all([lobbyPromise, existingChatPromise, userPromise]);
-
-      const lobby = checkResults[0];
-      if (lobby) {
-        await bot.sendMessage(chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
-        return;
-      }
-
-      const existingChat = checkResults[1];
-      if (existingChat) {
-        await bot.sendMessage(chatId, 'You are in an active chat. To exit current chat type /exit_chat and try again.');
-        return;
-      }
-
-      const user = checkResults[2];
-      if (!user || !user.languageCode) {
-        await bot.sendMessage(chatId, 'Set your language via /set_language and try again.');
-        return;
-      }
-
-      const opponent = await dataHandler.findOpponentInLobby(chatId, user.languageCode);
-
-      if (opponent) {
-        const chatStartMessage = 'Chat started. You can exit chat via /exit_chat command. Have fun.';
-
-        const leaveCurrentUserLobbyPromise = dataHandler.leaveLobby(chatId);
-        const leaveOpponentUserLobbyPromise = dataHandler.leaveLobby(opponent.chatId);
-        const createChatPromise = dataHandler.createChat(chatId, opponent.chatId, user.languageCode);
-        const chatStartToCurrentUserPromise = bot.sendMessage(chatId, chatStartMessage);
-        const chatStartToOpponentUserPromise = bot.sendMessage(opponent.chatId, chatStartMessage);
-
-        await Promise.all([leaveCurrentUserLobbyPromise, leaveOpponentUserLobbyPromise, createChatPromise, chatStartToCurrentUserPromise, chatStartToOpponentUserPromise]);
-      } else {
-        const addToLobbyPromise = dataHandler.addToLobby(chatId, user.languageCode);
-        const lobbyMessagePromise = bot.sendMessage(chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
-
-        await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
-      }
-      return successResponse;
-    }
-
-    if (msgText.match(/\/exit_chat/)) {
-      const existingChat = await dataHandler.findExistingChat(chatId);
-
-      if (existingChat) {
-        const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-        const sendMessagePromise = bot.sendMessage(chatId, 'You have closed the conversation.');
-        const deleteChatPromise = dataHandler.deleteChat(existingChat.id);
-
-        const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise];
-        opponentChatIds.forEach(opponentChatId => {
-          promises.push(bot.sendMessage(opponentChatId, 'Conversation closed by opponent. To find new chat, type /find_chat command.'));
-        });
-
-        await Promise.all(promises);
-      } else {
-        await bot.sendMessage(chatId, 'Chat doesn\'t exist.');
-      }
-      return successResponse;
-    };
-
-    if (msgText.match(/\/cancel_find/)) {
-      const leaveLobbyPromise = dataHandler.leaveLobby(chatId);
-      const leftMessagePromise = bot.sendMessage(chatId, 'Find chat cancelled. To find new chat, type /find_chat command.');
-
-      await Promise.all([leaveLobbyPromise, leftMessagePromise]);
-      return successResponse;
-    };
   };
-
-  if (isBotCommand(msg)) return successResponse;
 
   const msgPhoto = msg.photo;
   if (msgPhoto) {

@@ -5,8 +5,8 @@
   "main": "dist/index",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
-    "start": "NODE_ENV=production node ./dist/index.js",
+    "start": "sls offline -s dev",
+    "debug": "SLS_DEBUG=* sls offline",
     "tslint": "tslint --project tsconfig.json"
   },
   "repository": {
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/mongoose": "^5.10.3",
     "@types/node-telegram-bot-api": "^0.51.0",
+    "serverless-offline": "^6.8.0",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-node-dev": "^1.1.1",
     "tslint": "^6.1.3",
