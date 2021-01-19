@@ -1,10 +1,11 @@
 import TelegramBot from 'node-telegram-bot-api';
+import { MessageForwardFactory } from './MessageForwarder/MessageForwardFactory';
 import { DataHandler } from './src/DataHandler';
 import { IChat } from './src/models/Chat';
 
 const defaultLanguageCode = 'en';
 
-const successResponse = {
+export const successResponse = {
   statusCode: 200,
   body: JSON.stringify({ message: 'success' })
 }
@@ -166,141 +167,18 @@ export async function main(event) {
     }
   }
 
-  const msgPhoto = msg.photo;
-  if (msgPhoto) {
-    const response = await forwardPhoto(dataHandler, chatId, bot, msgPhoto);
-    return response;
-  }
-
-  const msgVideo = msg.video;
-  if (msgVideo) {
-    const response = await forwardVideo(dataHandler, chatId, bot, msgVideo);
-    return response;
-  }
-
-  const msgSticker = msg.sticker;
-  if (msgSticker) {
-    const response = await forwardSticker(dataHandler, chatId, bot, msgSticker);
-    return response;
-  }
-
-  const msgDocument = msg.document;
-  if (msgDocument) {
-    const response = await forwardDocument(dataHandler, chatId, bot, msgDocument);
-    return response;
-  }
-
-  const msgLocation = msg.location;
-  if (msgLocation) {
-    const response = await forwardLocation(dataHandler, chatId, bot, msgLocation);
-    return response;
-  }
-
-  const msgContact = msg.contact;
-  if (msgContact) {
-    const response = await forwardContact(dataHandler, chatId, bot, msgContact);
-    return response;
-  }
-
-  if (msgText) {
-    const resopnse = await forwardText(dataHandler, chatId, bot, msgText);
-    return resopnse;
+  const messageForwarderFactory = new MessageForwardFactory();
+  const forwarder = messageForwarderFactory.forwarder(dataHandler, bot, chatId, msg);
+  if (forwarder) {
+    await forwarder.forward();
+  } else {
+    await bot.sendMessage(chatId, 'Unsupported message');
   }
 
   return successResponse;
 }
 
-async function forwardText(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgText: string) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => { await bot.sendMessage(opponentChatId, msgText); });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardPhoto(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgPhoto: TelegramBot.PhotoSize[]) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      const photoSize = msgPhoto.length;
-      const biggestPhoto = msgPhoto[photoSize - 1];
-      await bot.sendPhoto(opponentChatId, biggestPhoto.file_id);
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardVideo(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgVideo: TelegramBot.Video) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      await bot.sendVideo(opponentChatId, msgVideo.file_id);
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardSticker(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgSticker: TelegramBot.Sticker) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      await bot.sendSticker(opponentChatId, msgSticker.file_id);
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardDocument(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgDocument: TelegramBot.Document) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      await bot.sendDocument(opponentChatId, msgDocument.file_id);
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardLocation(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgLocation: TelegramBot.Location) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      await bot.sendLocation(opponentChatId, msgLocation.latitude, msgLocation.longitude);
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-  return successResponse;
-}
-
-async function forwardContact(dataHandler: DataHandler, chatId: number, bot: TelegramBot, msgContact: TelegramBot.Contact) {
-  const existingChat = await dataHandler.findExistingChat(chatId);
-  if (existingChat) {
-    const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-    opponentChatIds.forEach(async opponentChatId => {
-      await bot.sendContact(opponentChatId, msgContact.phone_number, msgContact.first_name, {last_name: msgContact.last_name, vcard: msgContact.vcard});
-    });
-  } else {
-    await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
-  }
-}
-
-function getOpponentChatIds(chat: IChat, chatId: number): number[] {
+export function getOpponentChatIds(chat: IChat, chatId: number): number[] {
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
   return opponentChatIds;
