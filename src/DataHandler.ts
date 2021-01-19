@@ -73,7 +73,7 @@ export class DataHandler {
     return Chat.findByIdAndDelete(id).exec();
   }
 
-  public createPreviousChat(chatIds: number[], languageCode: string) {
-    return PreviousChat.create({ chatIds, languageCode });
+  public createPreviousChat(chatIds: number[], languageCode: string, startDate?: Date) {
+    return PreviousChat.create({ chatIds, languageCode, startDate });
   }
 }
