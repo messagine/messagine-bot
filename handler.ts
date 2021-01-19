@@ -156,7 +156,7 @@ export async function main(event) {
           await bot.sendMessage(chatId, 'Chat doesn\'t exist.');
         }
         return successResponse;
-      };
+      }
 
       if (msgText.match(/\/cancel_find/)) {
         const leaveLobbyPromise = dataHandler.leaveLobby(chatId);
@@ -164,10 +164,10 @@ export async function main(event) {
 
         await Promise.all([leaveLobbyPromise, leftMessagePromise]);
         return successResponse;
-      };
+      }
       return successResponse;
     }
-  };
+  }
 
   const msgPhoto = msg.photo;
   if (msgPhoto) {
@@ -183,7 +183,7 @@ export async function main(event) {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
     return successResponse;
-  };
+  }
 
   const msgVideo = msg.video;
   if (msgVideo) {
@@ -197,7 +197,7 @@ export async function main(event) {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
     return successResponse;
-  };
+  }
 
   const msgSticker = msg.sticker;
   if (msgSticker) {
@@ -211,7 +211,7 @@ export async function main(event) {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
     return successResponse;
-  };
+  }
 
   const msgDocument = msg.document;
   if (msgDocument) {
@@ -225,7 +225,7 @@ export async function main(event) {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
     return successResponse;
-  };
+  }
 
   const msgLocation = msg.location;
   if (msgLocation) {
@@ -239,7 +239,7 @@ export async function main(event) {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
     return successResponse;
-  };
+  }
 
   const msgContact = msg.contact;
   if (msgContact) {
@@ -252,7 +252,7 @@ export async function main(event) {
     } else {
       await bot.sendMessage(chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
-  };
+  }
 
   if (msgText) {
     const existingChat = await dataHandler.findExistingChat(chatId);
@@ -266,7 +266,7 @@ export async function main(event) {
   }
 
   return successResponse;
-};
+}
 
 function getOpponentChatIds(chat: IChat, chatId: number): number[] {
   const chatIds = chat.chatIds;
