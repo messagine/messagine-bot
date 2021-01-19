@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Chat, { IChat } from './models/Chat';
+import Language, { ILanguage } from './models/Language';
 import Lobby, { ILobby } from './models/Lobby';
 import User, { IUser } from './models/User';
 
@@ -24,6 +25,10 @@ export class DataHandler {
 
   public addUser(chatId: number, languageCode: string): Promise<IUser> {
     return User.create({ chatId, languageCode });
+  }
+
+  public getLanguage(languageCode: string): Promise<ILanguage> {
+    return Language.findOne({ lang: languageCode }).exec();
   }
 
   public setLanguage(chatId: number, languageCode: string) {

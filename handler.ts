@@ -55,22 +55,20 @@ export async function main(event) {
           await bot.sendMessage(chatId, retryMessage);
           return;
         }
-        const newLanguageCode = setLanguageMatch[1];
-        // TODO: check language
+        const newLanguageCode = (setLanguageMatch[1]).toLowerCase();
 
         if (newLanguageCode === currentLanguageCode) {
-          await bot.sendMessage(chatId, `Your language ${currentLanguageCode} not changed.`);
+          await bot.sendMessage(chatId, `Your language not changed.`);
           return;
         }
 
-        let successMessage: string;
-        if (currentLanguageCode) {
-          successMessage = `Your language changed from ${currentLanguageCode} to ${newLanguageCode}.`;
-        } else {
-          successMessage = `Your language set to ${newLanguageCode}.`;
+        const newLanguage = await dataHandler.getLanguage(newLanguageCode);
+        if (!newLanguage) {
+          await bot.sendMessage(chatId, `Language code ${newLanguageCode} not found. Try again.`);
+          return;
         }
 
-        const successMessagePromise = bot.sendMessage(chatId, successMessage);
+        const successMessagePromise = bot.sendMessage(chatId, `Your language set to ${newLanguage.name}.`);
         const setLanguagePromise = dataHandler.setLanguage(chatId, newLanguageCode);
         await Promise.all([successMessagePromise, setLanguagePromise]);
         return successResponse;
