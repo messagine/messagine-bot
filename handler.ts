@@ -54,7 +54,7 @@ export async function main(event) {
 
         const newLanguage = await dataHandler.getLanguage(newLanguageCode);
         if (!newLanguage) {
-          await bot.sendMessage(chatId, `Language code ${newLanguageCode} not found. Try again.`);
+          await bot.sendMessage(chatId, `Language code ${newLanguageCode} not found. Type /list_languages to list all available languages.`);
           return;
         }
 
@@ -73,9 +73,9 @@ export async function main(event) {
 
         let retryMessage: string;
         if (currentLanguageCode) {
-          retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language.`;
+          retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.`;
         } else {
-          retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
+          retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.';
         }
         await bot.sendMessage(chatId, retryMessage);
         return successResponse;
@@ -141,8 +141,9 @@ export async function main(event) {
           const opponentChatIds = getOpponentChatIds(existingChat, chatId);
           const sendMessagePromise = bot.sendMessage(chatId, 'You have closed the conversation.');
           const deleteChatPromise = dataHandler.deleteChat(existingChat.id);
+          const previousChatCreatePromise = dataHandler.createPreviousChat(existingChat.chatIds, existingChat.languageCode);
 
-          const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise];
+          const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
           opponentChatIds.forEach(opponentChatId => {
             promises.push(bot.sendMessage(opponentChatId, 'Conversation closed by opponent. To find new chat, type /find_chat command.'));
           });

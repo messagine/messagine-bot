@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Chat, { IChat } from './models/Chat';
 import Language, { ILanguage } from './models/Language';
 import Lobby, { ILobby } from './models/Lobby';
+import PreviousChat from './models/PreviousChat';
 import User, { IUser } from './models/User';
 
 export class DataHandler {
@@ -70,5 +71,9 @@ export class DataHandler {
 
   public deleteChat(id: string) {
     return Chat.findByIdAndDelete(id).exec();
+  }
+
+  public createPreviousChat(chatIds: number[], languageCode: string) {
+    return PreviousChat.create({ chatIds, languageCode });
   }
 }
