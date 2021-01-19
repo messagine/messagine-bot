@@ -45,16 +45,6 @@ export async function main(event) {
         if (user && user.languageCode) {
           currentLanguageCode = user.languageCode;
         }
-        if (setLanguageMatch.length !== 2) {
-          let retryMessage: string;
-          if (currentLanguageCode) {
-            retryMessage = `Your language is ${currentLanguageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language.`;
-          } else {
-            retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
-          }
-          await bot.sendMessage(chatId, retryMessage);
-          return;
-        }
         const newLanguageCode = (setLanguageMatch[1]).toLowerCase();
 
         if (newLanguageCode === currentLanguageCode) {
@@ -88,6 +78,14 @@ export async function main(event) {
           retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language.';
         }
         await bot.sendMessage(chatId, retryMessage);
+        return successResponse;
+      }
+
+      if (msgText.match(/\/list_languages/)) {
+        const languages = await dataHandler.getLanguages();
+        const message = languages.map(language => `${language.name}: ${language.lang}`).join('\n');
+
+        await bot.sendMessage(chatId, message);
         return successResponse;
       }
 

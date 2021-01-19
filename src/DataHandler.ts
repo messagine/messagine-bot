@@ -31,6 +31,10 @@ export class DataHandler {
     return Language.findOne({ lang: languageCode }).exec();
   }
 
+  public getLanguages(): Promise<ILanguage[]> {
+    return Language.find({}).sort({ name: 'asc' }).exec();
+  }
+
   public setLanguage(chatId: number, languageCode: string) {
     return User.updateOne(
       { chatId },
