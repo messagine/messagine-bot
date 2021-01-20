@@ -7,8 +7,6 @@ import { TelegramHandler } from './src/TelegramHandler';
 import config from './config';
 import { CallbackType } from './enum';
 
-const defaultLanguageCode = 'en';
-
 const successResponse = {
   statusCode: 200,
   body: JSON.stringify({ message: 'success' })
@@ -24,7 +22,7 @@ export async function main(event) {
 
     const telegramHandler = new TelegramHandler();
     const chatId = msg.chat.id;
-    const languageCode = msg.from?.language_code ?? defaultLanguageCode;
+    const languageCode = msg.from?.language_code ?? config.DEFAULT_LANGUAGE_CODE;
 
     const msgText = msg.text;
     if (msgText && isBotCommand(msg)) {
