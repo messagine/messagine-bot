@@ -24,6 +24,15 @@ export async function main(event) {
   const chatId = msg.chat.id;
   const languageCode = msg.from?.language_code ?? defaultLanguageCode;
 
+  telegramHandler.onCallbackQuery(async query => {
+    const callbackData = query.data;
+    if (callbackData === 'tr') {
+      await telegramHandler.answerCallbackQuery(query.id, { text: 'Turkish'});
+    } else {
+      await telegramHandler.answerCallbackQuery(query.id, { text: 'Other'});
+    }
+  })
+
   const msgText = msg.text;
   if (msgText && isBotCommand(msg)) {
     const commandFactory = new CommandFactory();

@@ -35,4 +35,12 @@ export class TelegramHandler {
   public sendContact(chatId: number, phoneNumber: string, firstName: string, lastName?: string, vcard?: string) {
     return this.bot.sendContact(chatId, phoneNumber, firstName, { last_name: lastName, vcard });
   }
+
+  public onCallbackQuery(listener: (query: TelegramBot.CallbackQuery) => void) {
+    return this.bot.on('callback_query', listener);
+  }
+
+  public answerCallbackQuery(callbackQueryId: string, options?: Partial<TelegramBot.AnswerCallbackQueryOptions>) {
+    return this.bot.answerCallbackQuery(callbackQueryId, options);
+  }
 }
