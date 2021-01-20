@@ -1,10 +1,11 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { MessageForwarderBase } from './MessageForwarderBase';
-import { DataHandler } from '../src/DataHandler';
+import { DataHandler } from '../DataHandler';
+import { TelegramHandler } from '../TelegramHandler';
 
 export class PhotoForwarder extends MessageForwarderBase {
-  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number, msgPhoto: TelegramBot.PhotoSize[]) {
-    super(dataHandler, bot, chatId);
+  constructor(dataHandler: DataHandler, telegramHandler: TelegramHandler, chatId: number, msgPhoto: TelegramBot.PhotoSize[]) {
+    super(dataHandler, telegramHandler, chatId);
     this.msgPhoto = msgPhoto;
   }
 
@@ -13,6 +14,6 @@ export class PhotoForwarder extends MessageForwarderBase {
   async _forward(opponentChatId: number) {
     const photoSize = this.msgPhoto.length;
     const biggestPhoto = this.msgPhoto[photoSize - 1];
-    await this.bot.sendPhoto(opponentChatId, biggestPhoto.file_id);
+    await this.telegramHandler.sendPhoto(opponentChatId, biggestPhoto.file_id);
   }
 }

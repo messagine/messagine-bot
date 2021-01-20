@@ -1,16 +1,16 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { DataHandler } from '../src/DataHandler';
-import { getOpponentChatIds } from '../handler';
+import { DataHandler } from '../DataHandler';
+import { getOpponentChatIds } from '../../handler';
+import { TelegramHandler } from '../TelegramHandler';
 
 export abstract class MessageForwarderBase {
-  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number) {
+  constructor(dataHandler: DataHandler, telegramHandler: TelegramHandler, chatId: number) {
     this.dataHandler = dataHandler;
-    this.bot = bot;
+    this.telegramHandler = telegramHandler;
     this.chatId = chatId;
   }
 
   protected dataHandler: DataHandler;
-  protected bot: TelegramBot;
+  protected telegramHandler: TelegramHandler;
   protected chatId: number;
 
   public async forward() {
@@ -24,7 +24,7 @@ export abstract class MessageForwarderBase {
       })
       await Promise.all(opponentPromises);
     } else {
-      await this.bot.sendMessage(this.chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
+      await this.telegramHandler.sendMessage(this.chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
   }
 

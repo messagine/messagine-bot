@@ -1,17 +1,17 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { DataHandler } from '../src/DataHandler';
-import { IUser } from '../src/models/User';
+import { DataHandler } from '../DataHandler';
+import { IUser } from '../models/User';
+import { TelegramHandler } from '../TelegramHandler';
 
 export abstract class CommandBase {
-  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number, languageCode: string) {
+  constructor(dataHandler: DataHandler, telegramHandler: TelegramHandler, chatId: number, languageCode: string) {
     this.dataHandler = dataHandler;
-    this.bot = bot;
+    this.telegramHandler = telegramHandler;
     this.chatId = chatId;
     this.languageCode = languageCode;
   }
 
   protected dataHandler: DataHandler;
-  protected bot: TelegramBot;
+  protected telegramHandler: TelegramHandler;
   protected chatId: number;
   protected languageCode: string;
   protected newUser: boolean;

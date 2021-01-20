@@ -1,9 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { CommandFactory } from './Command/CommandFactory';
-import config from './config';
-import { MessageForwardFactory } from './MessageForwarder/MessageForwardFactory';
+import { CommandFactory } from './src/Command/CommandFactory';
+import { MessageForwardFactory } from './src/MessageForwarder/MessageForwardFactory';
 import { DataHandler } from './src/DataHandler';
 import { IChat } from './src/models/Chat';
+import { TelegramHandler } from './src/TelegramHandler';
 
 const defaultLanguageCode = 'en';
 
@@ -20,18 +20,18 @@ export async function main(event) {
   const dataHandler = new DataHandler();
   await dataHandler.connect();
 
-  const bot = new TelegramBot(config.BOT_TOKEN);
+  const telegramHandler = new TelegramHandler();
   const chatId = msg.chat.id;
   const languageCode = msg.from?.language_code ?? defaultLanguageCode;
 
   const msgText = msg.text;
   if (msgText && isBotCommand(msg)) {
     const commandFactory = new CommandFactory();
-    const commander = commandFactory.commander(dataHandler, bot, chatId, msgText, languageCode);
+    const commander = commandFactory.commander(dataHandler, telegramHandler, chatId, msgText, languageCode);
     await commander.execute();
   } else {
     const messageForwarderFactory = new MessageForwardFactory();
-    const forwarder = messageForwarderFactory.forwarder(dataHandler, bot, chatId, msg);
+    const forwarder = messageForwarderFactory.forwarder(dataHandler, telegramHandler, chatId, msg);
     await forwarder.forward();
   }
 

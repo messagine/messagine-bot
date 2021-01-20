@@ -8,6 +8,6 @@ export class StartCommand extends CommandBase {
     } else {
       startMessage = 'Welcome back. To find new chat, type /find_chat command.';
     }
-    await this.bot.sendMessage(this.chatId, startMessage);
+    await this.telegramHandler.sendMessage(this.chatId, startMessage);
   }
 }

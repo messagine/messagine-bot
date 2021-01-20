@@ -1,4 +1,4 @@
-import { IUser } from '../src/models/User';
+import { IUser } from '../models/User';
 import { CommandBase } from './CommandBase';
 
 export class FindChatCommand extends CommandBase {
@@ -9,13 +9,13 @@ export class FindChatCommand extends CommandBase {
 
     const lobby = checkResults[0];
     if (lobby) {
-      await this.bot.sendMessage(this.chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
+      await this.telegramHandler.sendMessage(this.chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
       return;
     }
 
     const existingChat = checkResults[1];
     if (existingChat) {
-      await this.bot.sendMessage(this.chatId, 'You are in an active chat. To exit current chat type /exit_chat and try again.');
+      await this.telegramHandler.sendMessage(this.chatId, 'You are in an active chat. To exit current chat type /exit_chat and try again.');
       return;
     }
 
@@ -27,13 +27,13 @@ export class FindChatCommand extends CommandBase {
       const leaveCurrentUserLobbyPromise = this.dataHandler.leaveLobby(this.chatId);
       const leaveOpponentUserLobbyPromise = this.dataHandler.leaveLobby(opponent.chatId);
       const createChatPromise = this.dataHandler.createChat(this.chatId, opponent.chatId, user.languageCode);
-      const chatStartToCurrentUserPromise = this.bot.sendMessage(this.chatId, chatStartMessage);
-      const chatStartToOpponentUserPromise = this.bot.sendMessage(opponent.chatId, chatStartMessage);
+      const chatStartToCurrentUserPromise = this.telegramHandler.sendMessage(this.chatId, chatStartMessage);
+      const chatStartToOpponentUserPromise = this.telegramHandler.sendMessage(opponent.chatId, chatStartMessage);
 
       await Promise.all([leaveCurrentUserLobbyPromise, leaveOpponentUserLobbyPromise, createChatPromise, chatStartToCurrentUserPromise, chatStartToOpponentUserPromise]);
     } else {
       const addToLobbyPromise = this.dataHandler.addToLobby(this.chatId, user.languageCode);
-      const lobbyMessagePromise = this.bot.sendMessage(this.chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
+      const lobbyMessagePromise = this.telegramHandler.sendMessage(this.chatId, 'Waiting in the lobby. You can exit lobby via /cancel_find command.');
 
       await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
     }

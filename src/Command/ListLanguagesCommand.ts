@@ -5,6 +5,6 @@ export class ListLanguagesCommand extends CommandBase {
     const languages = await this.dataHandler.getLanguages();
     const message = languages.map(language => `${language.name}: ${language.lang}`).join('\n');
 
-    await this.bot.sendMessage(this.chatId, message);
+    await this.telegramHandler.sendMessage(this.chatId, message);
   }
 }

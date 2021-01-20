@@ -1,4 +1,4 @@
-import { IUser } from '../src/models/User';
+import { IUser } from '../models/User';
 import { CommandBase } from './CommandBase';
 
 export class SetLanguageCommand extends CommandBase {
@@ -9,6 +9,6 @@ export class SetLanguageCommand extends CommandBase {
     } else {
       retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.';
     }
-    await this.bot.sendMessage(this.chatId, retryMessage);
+    await this.telegramHandler.sendMessage(this.chatId, retryMessage);
   }
 }
