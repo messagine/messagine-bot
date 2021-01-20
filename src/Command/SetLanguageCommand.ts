@@ -13,8 +13,8 @@ export class SetLanguageCommand extends CommandBase {
     const options = {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'English', callback_data: '/set_language en' }],
-          [{ text: 'Turkish', callback_data: '/set_language tr' }]
+          [{ text: 'English', callback_data: 'LANG#en' }],
+          [{ text: 'Turkish', callback_data: 'LANG#tr' }]
         ]
       }
     };

@@ -26,8 +26,10 @@ export async function main(event) {
 
   telegramHandler.onCallbackQuery(async query => {
     const callbackData = query.data;
-    if (callbackData === 'tr') {
+    if (callbackData === 'LANG#tr') {
       await telegramHandler.answerCallbackQuery(query.id, { text: 'Turkish'});
+    } else if (callbackData === 'LANG#en') {
+      await telegramHandler.answerCallbackQuery(query.id, { text: 'English'});
     } else {
       await telegramHandler.answerCallbackQuery(query.id, { text: 'Other'});
     }
