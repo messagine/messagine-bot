@@ -14,6 +14,7 @@ const successResponse = {
 
 export async function main(event) {
   const body = JSON.parse(event.body);
+  console.debug(body);
   if (!body.message) return successResponse;
   const msg: TelegramBot.Message = body.message;
   if (msg.from?.is_bot) return successResponse;
