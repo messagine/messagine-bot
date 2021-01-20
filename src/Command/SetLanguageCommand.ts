@@ -5,10 +5,20 @@ export class SetLanguageCommand extends CommandBase {
   public async _execute(user: IUser): Promise<any> {
     let retryMessage: string;
     if (user.languageCode) {
-      retryMessage = `Your language is ${user.languageCode}. Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.`;
+      retryMessage = `Your language is ${user.languageCode}. Choose language below.`;
     } else {
-      retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.';
+      retryMessage = 'Choose language below.';
     }
-    await this.telegramHandler.sendMessage(this.chatId, retryMessage);
+
+    const options = {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'English', callback_data: '/set_language en' }],
+          [{ text: 'Turkish', callback_data: '/set_language tr' }]
+        ]
+      }
+    };
+
+    await this.telegramHandler.sendMessage(this.chatId, retryMessage, options);
   }
 }

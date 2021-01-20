@@ -8,8 +8,8 @@ export class TelegramHandler {
 
   private bot: TelegramBot;
 
-  public sendMessage(chatId: number, message: string) {
-    return this.bot.sendMessage(chatId, message);
+  public sendMessage(chatId: number, message: string, options?: TelegramBot.SendMessageOptions) {
+    return this.bot.sendMessage(chatId, message, options);
   }
 
   public sendPhoto(chatId: number, fileId: string) {
