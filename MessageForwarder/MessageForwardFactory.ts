@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { DataHandler } from '../src/DataHandler';
 import { ContactForwarder } from './ContactForwarder';
 import { DocumentForwarder } from './DocumentForwarder';
+import { InvalidForwarder } from './InvalidForwarder';
 import { LocationForwarder } from './LocationForwarder';
 import { MessageForwarderBase } from './MessageForwarderBase';
 import { PhotoForwarder } from './PhotoForwarder';
@@ -10,7 +11,7 @@ import { TextForwarder } from './TextForwarder';
 import { VideoForwarder } from './VideoForwarder';
 
 export class MessageForwardFactory {
-  public forwarder(dataHandler: DataHandler, bot: TelegramBot, chatId: number, message: TelegramBot.Message): MessageForwarderBase | undefined {
+  public forwarder(dataHandler: DataHandler, bot: TelegramBot, chatId: number, message: TelegramBot.Message): MessageForwarderBase {
     const msgPhoto = message.photo;
     if (msgPhoto) return new PhotoForwarder(dataHandler, bot, chatId, msgPhoto);
 
@@ -31,5 +32,7 @@ export class MessageForwardFactory {
 
     const msgText = message.text;
     if (msgText) return new TextForwarder(dataHandler, bot, chatId, msgText);
+
+    return new InvalidForwarder(dataHandler, bot, chatId);
   }
 }
