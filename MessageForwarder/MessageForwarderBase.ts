@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { DataHandler } from '../src/DataHandler';
-import { getOpponentChatIds, successResponse } from '../handler';
+import { getOpponentChatIds } from '../handler';
 
 export abstract class MessageForwarderBase {
   constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number) {
@@ -26,7 +26,6 @@ export abstract class MessageForwarderBase {
     } else {
       await this.bot.sendMessage(this.chatId, 'Chat doesn\'t exist. To find new chat, type /find_chat command.');
     }
-    return successResponse;
   }
 
   abstract _forward(opponentChatId: number): Promise<any>;

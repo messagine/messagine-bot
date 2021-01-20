@@ -1,5 +1,4 @@
 import { CommandBase } from './CommandBase';
-import { successResponse } from '../handler';
 
 export class FindChatCommand extends CommandBase {
   public async execute(): Promise<any> {
@@ -44,6 +43,5 @@ export class FindChatCommand extends CommandBase {
 
       await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
     }
-    return successResponse;
   }
 }

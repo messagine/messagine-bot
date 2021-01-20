@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import config from '../config';
 import Chat, { IChat } from './models/Chat';
 import Language, { ILanguage } from './models/Language';
 import Lobby, { ILobby } from './models/Lobby';
@@ -8,9 +9,7 @@ import User, { IUser } from './models/User';
 export class DataHandler {
   public connect() {
     if (this.connected()) return;
-    const dbUrl = process.env.DB_URL;
-    if (!dbUrl) return;
-    return mongoose.connect(dbUrl, {
+    return mongoose.connect(config.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });

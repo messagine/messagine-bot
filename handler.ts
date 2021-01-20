@@ -1,12 +1,13 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { CommandFactory } from './Command/CommandFactory';
+import config from './config';
 import { MessageForwardFactory } from './MessageForwarder/MessageForwardFactory';
 import { DataHandler } from './src/DataHandler';
 import { IChat } from './src/models/Chat';
 
 const defaultLanguageCode = 'en';
 
-export const successResponse = {
+const successResponse = {
   statusCode: 200,
   body: JSON.stringify({ message: 'success' })
 }
@@ -19,10 +20,7 @@ export async function main(event) {
   const dataHandler = new DataHandler();
   await dataHandler.connect();
 
-  const botToken = process.env.BOT_TOKEN;
-  if (!botToken) return successResponse;
-
-  const bot = new TelegramBot(botToken);
+  const bot = new TelegramBot(config.BOT_TOKEN);
   const chatId = msg.chat.id;
   const languageCode = msg.from?.language_code ?? defaultLanguageCode;
 

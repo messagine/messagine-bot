@@ -1,5 +1,5 @@
 import { CommandBase } from './CommandBase';
-import { getOpponentChatIds, successResponse } from '../handler';
+import { getOpponentChatIds } from '../handler';
 
 export class ExitChatCommand extends CommandBase {
   public async execute(): Promise<any> {
@@ -20,6 +20,5 @@ export class ExitChatCommand extends CommandBase {
     } else {
       await this.bot.sendMessage(this.chatId, 'Chat doesn\'t exist.');
     }
-    return successResponse;
   }
 }

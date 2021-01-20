@@ -1,5 +1,4 @@
 import { CommandBase } from './CommandBase';
-import { successResponse } from '../handler';
 
 export class SetLanguageCommand extends CommandBase {
   public async execute(): Promise<any> {
@@ -16,6 +15,5 @@ export class SetLanguageCommand extends CommandBase {
       retryMessage = 'Type /set_language [lang] (e.g. /set_language en) to change your language. Type /list_languages to list all available languages.';
     }
     await this.bot.sendMessage(this.chatId, retryMessage);
-    return successResponse;
   }
 }
