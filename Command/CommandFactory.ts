@@ -16,19 +16,19 @@ export class CommandFactory {
     const setLanguageMatch = msgText.match(/\/set_language (.+)/)
     if (setLanguageMatch) {
       const newLanguageCode = (setLanguageMatch[1]).toLowerCase();
-      return new SetLanguageParameterCommand(dataHandler, bot, chatId, newLanguageCode);
+      return new SetLanguageParameterCommand(dataHandler, bot, chatId, languageCode, newLanguageCode);
     }
 
-    if (msgText.match(/\/set_language/)) return new SetLanguageCommand(dataHandler, bot, chatId);
+    if (msgText.match(/\/set_language/)) return new SetLanguageCommand(dataHandler, bot, chatId, languageCode);
 
-    if (msgText.match(/\/list_languages/)) return new ListLanguagesCommand(dataHandler, bot, chatId);
+    if (msgText.match(/\/list_languages/)) return new ListLanguagesCommand(dataHandler, bot, chatId, languageCode);
 
-    if (msgText.match(/\/find_chat/)) return new FindChatCommand(dataHandler, bot, chatId);
+    if (msgText.match(/\/find_chat/)) return new FindChatCommand(dataHandler, bot, chatId, languageCode);
 
-    if (msgText.match(/\/exit_chat/)) return new FindChatCommand(dataHandler, bot, chatId);
+    if (msgText.match(/\/exit_chat/)) return new FindChatCommand(dataHandler, bot, chatId, languageCode);
 
-    if (msgText.match(/\/cancel_find/)) return new CancelFindCommand(dataHandler, bot, chatId);
+    if (msgText.match(/\/cancel_find/)) return new CancelFindCommand(dataHandler, bot, chatId, languageCode);
 
-    return new InvalidCommand(dataHandler, bot, chatId);
+    return new InvalidCommand(dataHandler, bot, chatId, languageCode);
   }
 }

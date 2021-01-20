@@ -1,7 +1,7 @@
 import { CommandBase } from './CommandBase';
 
 export class CancelFindCommand extends CommandBase {
-  public async execute(): Promise<any> {
+  public async _execute(): Promise<any> {
     const leaveLobbyPromise = this.dataHandler.leaveLobby(this.chatId);
     const leftMessagePromise = this.bot.sendMessage(this.chatId, 'Find chat cancelled. To find new chat, type /find_chat command.');
 

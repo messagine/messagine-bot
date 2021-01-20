@@ -1,23 +1,18 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { CommandBase } from './CommandBase';
 import { DataHandler } from '../src/DataHandler';
+import { IUser } from '../src/models/User';
 
 export class SetLanguageParameterCommand extends CommandBase {
-  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number, newLanguageCode: string) {
-    super(dataHandler, bot, chatId);
+  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number, languageCode: string, newLanguageCode: string) {
+    super(dataHandler, bot, chatId, languageCode);
     this.newLanguageCode = newLanguageCode;
   }
 
   private newLanguageCode: string;
 
-  public async execute(): Promise<any> {
-    const user = await this.dataHandler.getUser(this.chatId);
-    let currentLanguageCode = '';
-    if (user && user.languageCode) {
-      currentLanguageCode = user.languageCode;
-    }
-
-    if (this.newLanguageCode === currentLanguageCode) {
+  public async _execute(user: IUser): Promise<any> {
+    if (this.newLanguageCode === user.languageCode) {
       await this.bot.sendMessage(this.chatId, `Your language not changed.`);
       return;
     }

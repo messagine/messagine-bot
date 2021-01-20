@@ -1,18 +1,8 @@
-import TelegramBot from 'node-telegram-bot-api';
 import { CommandBase } from './CommandBase';
-import { DataHandler } from '../src/DataHandler';
 
 export class StartCommand extends CommandBase {
-  constructor(dataHandler: DataHandler, bot: TelegramBot, chatId: number, languageCode: string) {
-    super(dataHandler, bot, chatId);
-    this.languageCode = languageCode;
-  }
-
-  private languageCode: string;
-
-  public async execute() {
-    const user = await this.dataHandler.getUser(this.chatId);
-    if (user) {
+  public async _execute() {
+    if (this.newUser) {
       await this.bot.sendMessage(this.chatId, 'Welcome back. To find new chat, type /find_chat command.');
     } else {
       await this.dataHandler.addUser(this.chatId, this.languageCode);

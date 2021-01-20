@@ -1,11 +1,11 @@
+import { IUser } from '../src/models/User';
 import { CommandBase } from './CommandBase';
 
 export class FindChatCommand extends CommandBase {
-  public async execute(): Promise<any> {
+  public async _execute(user: IUser): Promise<any> {
     const lobbyPromise = this.dataHandler.findLobby(this.chatId);
     const existingChatPromise = this.dataHandler.findExistingChat(this.chatId);
-    const userPromise = this.dataHandler.getUser(this.chatId);
-    const checkResults = await Promise.all([lobbyPromise, existingChatPromise, userPromise]);
+    const checkResults = await Promise.all([lobbyPromise, existingChatPromise]);
 
     const lobby = checkResults[0];
     if (lobby) {
@@ -16,12 +16,6 @@ export class FindChatCommand extends CommandBase {
     const existingChat = checkResults[1];
     if (existingChat) {
       await this.bot.sendMessage(this.chatId, 'You are in an active chat. To exit current chat type /exit_chat and try again.');
-      return;
-    }
-
-    const user = checkResults[2];
-    if (!user || !user.languageCode) {
-      await this.bot.sendMessage(this.chatId, 'Set your language via /set_language and try again.');
       return;
     }
 

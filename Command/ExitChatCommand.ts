@@ -2,7 +2,7 @@ import { CommandBase } from './CommandBase';
 import { getOpponentChatIds } from '../handler';
 
 export class ExitChatCommand extends CommandBase {
-  public async execute(): Promise<any> {
+  public async _execute(): Promise<any> {
     const existingChat = await this.dataHandler.findExistingChat(this.chatId);
 
     if (existingChat) {
