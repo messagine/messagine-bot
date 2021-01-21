@@ -9,5 +9,5 @@ const bot = new Telegraf(process.env.BOT_TOKEN, {
 bot.start((ctx) => ctx.reply('Hello'))
 
 module.exports.main = makeHandler(
-  bot.webhookCallback('https://tlpnlzb40f.execute-api.us-east-1.amazonaws.com/main')
+  bot.webhookCallback()
 )
