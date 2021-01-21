@@ -1,5 +1,6 @@
-import { Telegraf } from 'telegraf';
-import makeHandler from 'lambda-request-handler';
+const { Telegraf } = require('telegraf')
+// @ts-expect-error not a dependency of Telegraf
+const makeHandler = require('lambda-request-handler')
 
 const token = process.env.BOT_TOKEN
 if (token === undefined) {
