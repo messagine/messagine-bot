@@ -1,4 +1,5 @@
 import { InlineKeyboardButton } from 'node-telegram-bot-api';
+import _ from 'lodash';
 import config from '../../config';
 import { IUser } from '../models/User';
 import { CommandBase } from './CommandBase';
@@ -14,14 +15,19 @@ export class SetLanguageCommand extends CommandBase {
 
     let currentRow: InlineKeyboardButton[] = []
     inlineKeyboardItems.forEach(item => {
-      if (currentRow.length > 0) {
-        const currentRowCharLength = currentRow.reduce((sum, current) => sum + current.text.length, 0);
+      const currentRowLength = currentRow.length;
+      if (currentRowLength > 0) {
+        const longestItemLength = _.maxBy(currentRow, cr => cr.text.length)?.text.length ?? maxRowChars;
         const itemTextLength = item.text.length;
-        if (currentRowCharLength + itemTextLength > maxRowChars) {
+        const maxNewListItemLength = _.max([longestItemLength, itemTextLength]) ?? 0;
+        const maxPerItemLengthForAdd = Math.round(maxRowChars / (currentRowLength + 1));
+        const addToCurrentRow = maxNewListItemLength <= maxPerItemLengthForAdd;
+
+        if (addToCurrentRow) {
+          currentRow.push(item);
+        } else {
           inlineKeyboard.push(currentRow);
           currentRow = [item];
-        } else {
-          currentRow.push(item);
         }
       } else {
         currentRow.push(item);
