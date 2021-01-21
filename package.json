@@ -2,7 +2,6 @@
   "name": "every-chat-bot",
   "version": "1.0.0",
   "description": "Telegram chat bot https://t.me/every_chat_bot",
-  "main": "dist/index",
   "scripts": {
     "start": "sls offline -s dev",
     "debug": "SLS_DEBUG=* sls offline"
@@ -20,9 +19,5 @@
   "dependencies": {
     "lambda-request-handler": "^0.5.1-alpha1",
     "telegraf": "^4.0.1"
-  },
-  "devDependencies": {
-    "serverless-offline": "^6.8.0",
-    "serverless-plugin-typescript": "^1.1.9"
   }
 }

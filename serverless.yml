@@ -20,10 +20,6 @@ org: suphero
 # Check out our docs for more details
 frameworkVersion: '2'
 
-plugins:
-  - serverless-plugin-typescript
-  - serverless-offline
-
 provider:
   name: aws
   runtime: nodejs12.x
