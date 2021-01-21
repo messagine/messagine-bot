@@ -1,3 +1,4 @@
+import config from '../../config';
 import { DataHandler } from '../DataHandler';
 import { IUser } from '../models/User';
 import { TelegramHandler } from '../TelegramHandler';
@@ -20,11 +21,23 @@ export abstract class CommandBase {
     let user = await this.dataHandler.getUser(this.chatId);
     if (!user) {
       this.newUser = true;
-      user = await this.dataHandler.addUser(this.chatId, this.languageCode);
+      const languageCode = await this.getLanguageCodeToCreate();
+      user = await this.dataHandler.addUser(this.chatId, languageCode);
     } else {
       this.newUser = false;
     }
     await this._execute(user);
+  }
+
+  private async getLanguageCodeToCreate(): Promise<string> {
+    const language = await this.dataHandler.getLanguage(this.languageCode);
+    let languageCode: string;
+    if (language) {
+      languageCode = language.lang;
+    } else {
+      languageCode = config.DEFAULT_LANGUAGE_CODE;
+    }
+    return languageCode;
   }
 
   protected abstract _execute(user: IUser): Promise<any>;
