@@ -1,22 +1,26 @@
 import Telegraf, { Context as TelegrafContext, Extra } from "telegraf";
 import { BotCommand, ExtraReplyMessage } from "telegraf/typings/telegram-types";
-import { about, greeting } from "..";
+import { greeting, start, find_chat } from "..";
+import { cancel_find } from "../commands";
 import config from "../config";
+import { DataHandler } from "./dataHandler";
 import { ok } from "./responses";
 
 const debug = require("debug")("lib:telegram");
 
 export const bot = new Telegraf(config.BOT_TOKEN);
+const dataHandler = new DataHandler();
 
 function botUtils() {
+	dataHandler.connect();
 	bot.use(Telegraf.log());
 	bot.use(logger);
 
-	bot.start(ctx => {
-		return ctx.reply("This is a test bot.");
-	});
-
-	bot.command("about", about()).on("text", greeting());
+	bot
+		.command("start", start())
+		.command("find_chat", find_chat())
+		.command("cancel_find", cancel_find())
+		.on("text", greeting());
 }
 
 async function localBot() {
@@ -73,7 +77,8 @@ async function syncCommands() {
 
 const commands: BotCommand[] = [
 	{ command: 'start', description: "Start Bot" },
-	{ command: 'about', description: "About Bot" }
+	{ command: 'find_chat', description: "Find chat" },
+	{ command: 'cancel_find', description: "Cancel chat find" }
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {
