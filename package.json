@@ -1,23 +1,26 @@
 {
-  "name": "every-chat-bot",
-  "version": "1.0.0",
-  "description": "Telegram chat bot https://t.me/every_chat_bot",
-  "scripts": {
-    "start": "sls offline -s dev",
-    "debug": "SLS_DEBUG=* sls offline"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/suphero/every-chat-bot.git"
-  },
-  "author": "Harun Sokullu",
-  "license": "GPLv2",
-  "bugs": {
-    "url": "https://github.com/suphero/every-chat-bot/issues"
-  },
-  "homepage": "https://github.com/suphero/every-chat-bot#readme",
-  "dependencies": {
-    "lambda-request-handler": "^0.5.1-alpha1",
-    "telegraf": "^4.0.1"
-  }
+	"name": "telegram-bot-boilerplate-now-serverless-api",
+	"version": "2.0.0",
+	"description": "A template for building Telegram bots with Telegraf.js Vercel's Serverless Functions",
+	"main": "api/index.ts",
+	"author": "Stephane Mensah",
+	"homepage": "https://github.com/waptik/telegram-bot-boilerplate-now-serverless-api.git",
+	"scripts": {
+		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
+		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'"
+	},
+	"dependencies": {
+		"telegraf": "^3.38.0"
+	},
+	"devDependencies": {
+		"@types/aws-lambda": "^8.10.71",
+		"aws-lambda": "^1.0.6",
+		"debug": "^4.3.1",
+		"dotenv-cli": "^4.0.0",
+		"nodemon": "^2.0.6",
+		"prettier": "^2.2.0",
+		"serverless-plugin-typescript": "^1.1.9",
+		"ts-node": "^9.0.0",
+		"typescript": "^4.1.2"
+	}
 }
