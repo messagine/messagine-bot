@@ -31,7 +31,11 @@ export class DataHandler {
     return Language.findOne({ lang: languageCode }).exec();
   }
 
-  public getLanguages(): Promise<ILanguage[]> {
+  public getFavLanguages(): Promise<ILanguage[]> {
+    return Language.find({ fav_order: { $gt: 0 } }).sort({ fav_order: 'asc' }).exec();
+  }
+
+  public getAllLanguages(): Promise<ILanguage[]> {
     return Language.find({}).sort({ name: 'asc' }).exec();
   }
 

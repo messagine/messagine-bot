@@ -1,6 +1,6 @@
 import Telegraf, { Context as TelegrafContext, Extra } from "telegraf";
 import { BotCommand, ExtraReplyMessage } from "telegraf/typings/telegram-types";
-import { greeting, start, find_chat, exit_chat } from "..";
+import { greeting, start, find_chat, exit_chat, language_menu_middleware } from "..";
 import { cancel_find } from "../commands";
 import config from "../config";
 import { DataHandler } from "./dataHandler";
@@ -11,14 +11,18 @@ const debug = require("debug")("lib:telegram");
 export const bot = new Telegraf(config.BOT_TOKEN);
 const dataHandler = new DataHandler();
 
-function botUtils() {
-	dataHandler.connect();
+async function botUtils() {
+	await dataHandler.connect();
+  const languageMenuMiddleware = await language_menu_middleware();
+
 	bot.use(Telegraf.log());
 	bot.use(logger);
+  bot.use(languageMenuMiddleware)
 
 	bot
 		.command("start", start())
 		.command("find_chat", find_chat())
+		.command('set_language', ctx => languageMenuMiddleware.replyToContext(ctx))
 		.command("exit_chat", exit_chat())
 		.command("cancel_find", cancel_find())
 		.on("text", greeting());
@@ -98,7 +102,7 @@ function checkCommands(existingCommands: BotCommand[]) {
 export async function webhook(event: any) {
 	bot.webhookReply = true;
 	// call bot commands and middlware
-	botUtils();
+	await botUtils();
 
   const body = JSON.parse(event.body);
 	await bot.handleUpdate(body);
@@ -134,9 +138,9 @@ if (config.IS_DEV) {
 
 	localBot().then(() => {
 		// call bot commands and middlware
-		botUtils();
-
-		// launch bot
-		bot.launch();
+		botUtils().then(() => {
+			// launch bot
+			bot.launch();
+		})
 	});
 }
