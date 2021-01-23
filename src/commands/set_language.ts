@@ -1,6 +1,6 @@
 import { Context as TelegrafContext } from "telegraf";
 import { MenuTemplate, MenuMiddleware, createBackMainMenuButtons } from 'telegraf-inline-menu';
-import { mapLanguagesToRecords } from "../lib/common";
+import { getChatId, mapLanguagesToRecords } from "../lib/common";
 import { DataHandler } from '../lib/dataHandler';
 import { ILanguage } from '../lib/models/Language';
 
@@ -21,10 +21,7 @@ function getTopLanguagesMenuTemplate(languages: ILanguage[], allLanguagesMenuTem
 	const menuTemplate = new MenuTemplate<TelegrafContext>(ctx => `Choose new language.`)
   menuTemplate.choose('topLanguages', languageRecords, {
   	columns: 2,
-		do: async (ctx, key) => {
-			await ctx.answerCbQuery(`${languageRecords[key]} selected.`)
-			return false
-		},
+		do: async (context, key) => await languageSelected(context, key, languageRecords),
   	buttonText: (context, key) => languageRecords[key]
   });
   menuTemplate.chooseIntoSubmenu('topLanguages', ['Show All >>'], allLanguagesMenuTemplate)
@@ -37,14 +34,19 @@ function getAllLanguagesMenuTemplate(languages: ILanguage[]) {
   menuTemplate.choose('allLanguages', languageRecords, {
   	columns: 2,
 		maxRows: 100,
-		do: async (ctx, key) => {
-			await ctx.answerCbQuery(`${languageRecords[key]} selected.`)
-			return false
-		},
+		do: async (context, key) => await languageSelected(context, key, languageRecords),
   	buttonText: (context, key) => languageRecords[key]
   });
   menuTemplate.manualRow(createBackMainMenuButtons('<< Show Top 10', '<< Show Top 10'))
 	return menuTemplate;
+}
+
+async function languageSelected(context: TelegrafContext, languageCode: string, languageRecords: Record<string, string>) {
+	const dataHandler = new DataHandler();
+	const chatId = getChatId(context);
+	await dataHandler.setLanguage(chatId, languageCode);
+	await context.answerCbQuery(`${languageRecords[languageCode]} selected.`)
+	return false
 }
 
 export {
