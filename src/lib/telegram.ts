@@ -1,6 +1,6 @@
 import Telegraf, { Context as TelegrafContext, Extra } from "telegraf";
 import { BotCommand, ExtraReplyMessage } from "telegraf/typings/telegram-types";
-import { greeting, start, find_chat } from "..";
+import { greeting, start, find_chat, exit_chat } from "..";
 import { cancel_find } from "../commands";
 import config from "../config";
 import { DataHandler } from "./dataHandler";
@@ -19,6 +19,7 @@ function botUtils() {
 	bot
 		.command("start", start())
 		.command("find_chat", find_chat())
+		.command("exit_chat", exit_chat())
 		.command("cancel_find", cancel_find())
 		.on("text", greeting());
 }
@@ -76,9 +77,10 @@ async function syncCommands() {
 }
 
 const commands: BotCommand[] = [
-	{ command: 'start', description: "Start Bot" },
-	{ command: 'find_chat', description: "Find chat" },
-	{ command: 'cancel_find', description: "Cancel chat find" }
+	{ command: 'find_chat', description: "Find Chat" },
+	{ command: 'exit_chat', description: "Exit Current Chat" },
+	{ command: 'set_language', description: "Set Language" },
+	{ command: 'cancel_find', description: "Cancel Find Find" }
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {

@@ -1,10 +1,11 @@
 {
-	"name": "telegram-bot-boilerplate-now-serverless-api",
-	"version": "2.0.0",
-	"description": "A template for building Telegram bots with Telegraf.js Vercel's Serverless Functions",
-	"main": "api/index.ts",
-	"author": "Stephane Mensah",
-	"homepage": "https://github.com/waptik/telegram-bot-boilerplate-now-serverless-api.git",
+	"name": "every-chat-bot",
+	"version": "1.0.0",
+	"description": "Telegram chat bot https://t.me/every_chat_bot",
+	"main": "handler.ts",
+	"author": "Harun Sokullu",
+	"license": "GPLv2",
+	"homepage": "https://github.com/suphero/every-chat-bot#readme",
 	"scripts": {
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
 		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'"

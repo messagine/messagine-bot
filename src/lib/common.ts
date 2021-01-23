@@ -1,5 +1,6 @@
 import { TelegrafContext } from "telegraf/typings/context";
 import config from "../config";
+import { IChat } from "./models/Chat";
 
 const debug = require("debug")("common");
 
@@ -22,4 +23,10 @@ export function getLanguageCode(ctx: TelegrafContext): string {
     debug("Language code not found.");
     return config.DEFAULT_LANGUAGE_CODE;
   }
+}
+
+export function getOpponentChatIds(chat: IChat, chatId: number): number[] {
+  const chatIds = chat.chatIds;
+  const opponentChatIds = chatIds.filter(id => chatId !== id);
+  return opponentChatIds;
 }
