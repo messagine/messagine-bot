@@ -1,11 +1,11 @@
-import { TelegrafContext } from 'telegraf/typings/context';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 
-const debug = require('debug')('bot:on_video');
+const debug = require('debug')('bot:on_contact');
 
-const on_video = () => async (ctx: TelegrafContext) => {
-	debug('Triggered "on_video" command');
+// TODO: Fix after telegraf v4 upgrade
+const on_contact = () => async (ctx: any) => {
+	debug('Triggered "on_contact" command');
 
 	const chatId = ctx.chat?.id;
 	if (!chatId) {
@@ -13,10 +13,10 @@ const on_video = () => async (ctx: TelegrafContext) => {
 		return await ctx.reply('Chat Id not found. Check your security settings.');
 	}
 
-	const messageVideo = ctx.message?.video;
-	if (!messageVideo) {
-		debug('Message video not found.');
-		return await ctx.reply('Message video not found.');
+	const messageContact = ctx.message?.contact;
+	if (!messageContact) {
+		debug('Message contact not found.');
+		return await ctx.reply('Message contact not found.');
 	}
 
 	const existingChat = await findExistingChat(chatId);
@@ -28,10 +28,15 @@ const on_video = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendPhoto(opponentChatId, messageVideo.file_id);
+		const opponentPromise = ctx.telegram.sendContact(
+			opponentChatId,
+			messageContact.phone_number,
+			messageContact.first_name,
+			messageContact,
+		);
 		opponentPromises.push(opponentPromise);
 	});
 	return await Promise.all(opponentPromises);
 };
 
-export { on_video };
+export { on_contact };

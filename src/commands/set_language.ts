@@ -1,7 +1,9 @@
 import { Context as TelegrafContext } from 'telegraf';
 import { MenuTemplate, MenuMiddleware, createBackMainMenuButtons } from 'telegraf-inline-menu';
-import { getChatId, mapLanguagesToRecords, getAllLanguages, getTopLanguages } from '../lib/common';
+import { mapLanguagesToRecords, getAllLanguages, getTopLanguages } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
+
+const debug = require('debug')('bot:set_language');
 
 function language_menu_middleware() {
 	const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
@@ -14,25 +16,25 @@ function language_menu_middleware() {
 function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<TelegrafContext>) {
 	const languages = getTopLanguages();
 	const languageRecords = mapLanguagesToRecords(languages);
-	const menuTemplate = new MenuTemplate<TelegrafContext>(ctx => `Choose new language.`);
+	const menuTemplate = new MenuTemplate<TelegrafContext>(() => `Choose new language.`);
 	menuTemplate.choose('topLanguages', languageRecords, {
 		columns: 2,
 		do: async (context, key) => await languageSelected(context, key, languageRecords),
-		buttonText: (context, key) => languageRecords[key],
+		buttonText: (_context, key) => languageRecords[key],
 	});
-	menuTemplate.chooseIntoSubmenu('topLanguages', ['All'], allLanguagesMenuTemplate);
+	menuTemplate.chooseIntoSubmenu('topLanguages', ['Show All >>'], allLanguagesMenuTemplate);
 	return menuTemplate;
 }
 
 function getAllLanguagesMenuTemplate() {
 	const languages = getAllLanguages();
 	const languageRecords = mapLanguagesToRecords(languages);
-	const menuTemplate = new MenuTemplate<TelegrafContext>(ctx => `Showing all languages.`);
+	const menuTemplate = new MenuTemplate<TelegrafContext>(() => `Showing all languages.`);
 	menuTemplate.choose('allLanguages', languageRecords, {
 		columns: 2,
 		maxRows: 100,
 		do: async (context, key) => await languageSelected(context, key, languageRecords),
-		buttonText: (context, key) => languageRecords[key],
+		buttonText: (_context, key) => languageRecords[key],
 	});
 	menuTemplate.manualRow(createBackMainMenuButtons('<< Show Top 10', '<< Show Top 10'));
 	return menuTemplate;
@@ -43,7 +45,13 @@ async function languageSelected(
 	languageCode: string,
 	languageRecords: Record<string, string>,
 ) {
-	const chatId = getChatId(context);
+	const chatId = context.chat?.id;
+	if (!chatId) {
+		debug('Chat Id not found.');
+		await context.reply('Chat Id not found. Check your security settings.');
+		return false;
+	}
+
 	const setLanguagePromise = setLanguage(chatId, languageCode);
 	const answerQueryPromise = context.answerCbQuery();
 	const replyPromise = context.reply(`${languageRecords[languageCode]} selected.`);

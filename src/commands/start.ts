@@ -1,11 +1,16 @@
 import { TelegrafContext } from 'telegraf/typings/context';
-import { getChatId, getLanguageCode } from '../lib/common';
+import { getLanguageCode } from '../lib/common';
 import { getUser, addUser } from '../lib/dataHandler';
 
 const debug = require('debug')('bot:start_command');
 
 const start = () => async (ctx: TelegrafContext) => {
-	const chatId = getChatId(ctx);
+	const chatId = ctx.chat?.id;
+	if (!chatId) {
+		debug('Chat Id not found.');
+		return await ctx.reply('Chat Id not found. Check your security settings.');
+	}
+
 	const languageCode = getLanguageCode(ctx);
 	let user = await getUser(chatId);
 	if (!user) {
@@ -16,7 +21,7 @@ const start = () => async (ctx: TelegrafContext) => {
 		);
 		return await Promise.all([addUserPromise, replyPromise]);
 	} else {
-		return ctx.reply('Welcome back. To find new chat, type /find_chat command.');
+		return await ctx.reply('Welcome back. To find new chat, type /find_chat command.');
 	}
 };
 

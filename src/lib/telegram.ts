@@ -133,7 +133,7 @@ export const NO_PREVIEW = MARKDOWN.webPreview(false);
 
 export const hiddenCharacter = '\u200b';
 
-export const logger = async (_: TelegrafContext, next): Promise<void> => {
+export const logger = async (_: TelegrafContext, next: any): Promise<void> => {
 	const logStart = new Date();
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore

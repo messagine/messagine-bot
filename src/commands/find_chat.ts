@@ -1,5 +1,4 @@
 import { TelegrafContext } from 'telegraf/typings/context';
-import { getChatId } from '../lib/common';
 import {
 	findLobby,
 	findExistingChat,
@@ -14,7 +13,12 @@ const debug = require('debug')('bot:find_chat_command');
 
 const find_chat = () => async (ctx: TelegrafContext) => {
 	debug(`Triggered "find_chat" command.`);
-	const chatId = getChatId(ctx);
+
+	const chatId = ctx.chat?.id;
+	if (!chatId) {
+		debug('Chat Id not found.');
+		return await ctx.reply('Chat Id not found. Check your security settings.');
+	}
 
 	const lobbyPromise = findLobby(chatId);
 	const existingChatPromise = findExistingChat(chatId);
@@ -50,7 +54,7 @@ const find_chat = () => async (ctx: TelegrafContext) => {
 		const chatStartToCurrentUserPromise = ctx.reply(chatStartMessage);
 		const chatStartToOpponentUserPromise = ctx.telegram.sendMessage(opponent.chatId, chatStartMessage);
 
-		await Promise.all([
+		return await Promise.all([
 			leaveCurrentUserLobbyPromise,
 			leaveOpponentUserLobbyPromise,
 			createChatPromise,
@@ -61,7 +65,7 @@ const find_chat = () => async (ctx: TelegrafContext) => {
 		const addToLobbyPromise = addToLobby(chatId, user.languageCode);
 		const lobbyMessagePromise = ctx.reply('Waiting in the lobby. You can exit lobby via /cancel_find command.');
 
-		await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
+		return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
 	}
 };
 

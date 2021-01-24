@@ -1,14 +1,23 @@
 import { TelegrafContext } from 'telegraf/typings/context';
-import { findExistingChatSafe, getChatId, getOpponentChatIds } from '../lib/common';
-import { deleteChat, createPreviousChat } from '../lib/dataHandler';
+import { getOpponentChatIds } from '../lib/common';
+import { deleteChat, createPreviousChat, findExistingChat } from '../lib/dataHandler';
 
 const debug = require('debug')('bot:exit_chat_command');
 
 const exit_chat = () => async (ctx: TelegrafContext) => {
 	debug(`Triggered "exit_chat" command.`);
-	const chatId = getChatId(ctx);
 
-	const existingChat = await findExistingChatSafe(ctx);
+	const chatId = ctx.chat?.id;
+	if (!chatId) {
+		debug('Chat Id not found.');
+		return await ctx.reply('Chat Id not found. Check your security settings.');
+	}
+
+	const existingChat = await findExistingChat(chatId);
+	if (!existingChat) {
+		debug("Chat doesn't exist.");
+		return await ctx.reply("Chat doesn't exist. To find new chat, type /find_chat command.");
+	}
 
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const sendMessagePromise = ctx.reply('You have closed the conversation.');
@@ -30,7 +39,7 @@ const exit_chat = () => async (ctx: TelegrafContext) => {
 		);
 	});
 
-	return Promise.all(promises);
+	return await Promise.all(promises);
 };
 
 export { exit_chat };
