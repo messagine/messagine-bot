@@ -7,6 +7,10 @@ import { setLanguage } from '../lib/dataHandler';
 import resource from '../resource';
 const debug = Debug(`command:${commandEnum.setLanguage}`);
 
+const setLanguageCommand = (languageMenu: MenuMiddleware<TelegrafContext>) => (ctx: TelegrafContext) => {
+  return languageMenu.replyToContext(ctx);
+};
+
 function languageMenuMiddleware() {
   const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
   const topLanguagesMenuTemplate = getTopLanguagesMenuTemplate(allLanguagesMenuTemplate);
@@ -67,4 +71,4 @@ async function languageSelected(
   await Promise.all(promises);
 }
 
-export { languageMenuMiddleware };
+export { languageMenuMiddleware, setLanguageCommand };

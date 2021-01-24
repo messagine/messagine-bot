@@ -5,18 +5,18 @@ Secret messaging with anyone in the world via Telegram. [Click here](https://t.m
 ## Roadmap
 
 - [ ] Message Type
+  - [x] Animation
+  - [x] Contact
   - [x] Document
   - [x] Location
   - [x] Photo
   - [x] Sticker
   - [x] Text
   - [x] Video
-  - [x] Contact
-  - [ ] Animation
+  - [x] Voice
   - [ ] Game
   - [ ] Poll
   - [ ] Venue
-  - [ ] Voice
   - [ ] Edited Message
   - [ ] Left Chat Member
 - [ ] Technical
