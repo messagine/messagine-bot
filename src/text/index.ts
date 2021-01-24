@@ -1,3 +1,4 @@
+export * from './on_contact';
 export * from './on_document';
 export * from './on_invalid';
 export * from './on_location';
