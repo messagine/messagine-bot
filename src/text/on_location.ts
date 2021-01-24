@@ -1,5 +1,5 @@
 import { TelegrafContext } from 'telegraf/typings/context';
-import { findExistingChatSafe, getChatId, getMessageLocation, getMessageText, getOpponentChatIds } from '../lib/common';
+import { findExistingChatSafe, getChatId, getMessageLocation, getOpponentChatIds } from '../lib/common';
 
 const debug = require('debug')('bot:on_location');
 
