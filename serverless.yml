@@ -22,7 +22,6 @@ frameworkVersion: '2'
 
 plugins:
   - serverless-plugin-typescript
-  - serverless-offline
 
 provider:
   name: aws
@@ -63,15 +62,26 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  main:
-    handler: handler.main
+  status:
+    handler: src/handler.statusHandler
     events:
       - httpApi:
-          path: /main
+          path: /
+          method: get
+    environment:
+      BOT_TOKEN: ${param:BOT_TOKEN}
+      ENDPOINT_URL: ${param:ENDPOINT_URL}
+      WEBHOOK_PATH: 'api'
+  webhook:
+    handler: src/handler.webhookHandler
+    events:
+      - httpApi:
+          path: /api
           method: post
     environment:
       BOT_TOKEN: ${param:BOT_TOKEN}
       DB_URL: ${param:DB_URL}
+      ENDPOINT_URL: ${param:ENDPOINT_URL}
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

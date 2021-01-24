@@ -2,14 +2,23 @@
   "compilerOptions": {
     "preserveConstEnums": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "target": "es5",
     "sourceMap": true,
     "skipLibCheck": true,
     "allowJs": true,
     "outDir": ".build",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "lib": ["es2015"],
-    "rootDir": "./"
+    "rootDir": "./",
+
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true
   }
 }
