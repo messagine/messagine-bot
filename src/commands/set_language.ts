@@ -19,7 +19,10 @@ function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<Tele
 	const menuTemplate = new MenuTemplate<TelegrafContext>(() => `Choose new language.`);
 	menuTemplate.choose('topLanguages', languageRecords, {
 		columns: 2,
-		do: async (context, key) => await languageSelected(context, key, languageRecords),
+		do: async (context, key) => {
+			await languageSelected(context, key, languageRecords);
+			return false;
+		},
 		buttonText: (_context, key) => languageRecords[key],
 	});
 	menuTemplate.chooseIntoSubmenu('topLanguages', ['Show All >>'], allLanguagesMenuTemplate);
@@ -33,7 +36,10 @@ function getAllLanguagesMenuTemplate() {
 	menuTemplate.choose('allLanguages', languageRecords, {
 		columns: 2,
 		maxRows: 100,
-		do: async (context, key) => await languageSelected(context, key, languageRecords),
+		do: async (context, key) => {
+			await languageSelected(context, key, languageRecords);
+			return false;
+		},
 		buttonText: (_context, key) => languageRecords[key],
 	});
 	menuTemplate.manualRow(createBackMainMenuButtons('<< Show Top 10', '<< Show Top 10'));
@@ -49,7 +55,7 @@ async function languageSelected(
 	if (!chatId) {
 		debug('Chat Id not found.');
 		await context.reply('Chat Id not found. Check your security settings.');
-		return false;
+		return;
 	}
 
 	const setLanguagePromise = setLanguage(chatId, languageCode);
@@ -57,7 +63,6 @@ async function languageSelected(
 	const replyPromise = context.reply(`${languageRecords[languageCode]} selected.`);
 	const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
 	await Promise.all(promises);
-	return false;
 }
 
 export { language_menu_middleware };
