@@ -6,7 +6,7 @@ import resource from '../resource';
 const debug = Debug('message:on_location');
 
 const onLocationMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_location" message');
+  debug('Triggered "on_location" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

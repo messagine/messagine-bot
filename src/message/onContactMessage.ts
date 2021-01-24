@@ -6,7 +6,7 @@ const debug = Debug('message:on_contact');
 
 // TODO: Fix after telegraf v4 upgrade
 const onContactMessage = () => async (ctx: any) => {
-  debug('Triggered "on_contact" command');
+  debug('Triggered "on_contact" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

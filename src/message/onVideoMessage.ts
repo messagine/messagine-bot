@@ -6,7 +6,7 @@ import resource from '../resource';
 const debug = Debug('message:on_video');
 
 const onVideoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_video" message');
+  debug('Triggered "on_video" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

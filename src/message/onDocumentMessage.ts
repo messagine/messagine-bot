@@ -6,7 +6,7 @@ import resource from '../resource';
 const debug = Debug('message:on_document');
 
 const onDocumentMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_document" message');
+  debug('Triggered "on_document" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

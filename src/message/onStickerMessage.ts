@@ -6,7 +6,7 @@ import resource from '../resource';
 const debug = Debug('message:on_sticker');
 
 const onStickerMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_sticker" message');
+  debug('Triggered "on_sticker" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

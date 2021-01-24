@@ -6,7 +6,7 @@ import resource from '../resource';
 const debug = Debug('message:on_text');
 
 const onTextMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_text" message');
+  debug('Triggered "on_text" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

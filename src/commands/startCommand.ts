@@ -14,7 +14,7 @@ const startCommand = () => async (ctx: TelegrafContext) => {
 
   const user = await getUser(chatId);
   if (!user) {
-    debug(`Triggered "start" command with message.`);
+    debug(`Triggered "start" command.`);
     const language = getLanguage(ctx);
     const addUserPromise = addUser(chatId, language.lang);
     const messageParts = [
