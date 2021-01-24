@@ -1,5 +1,5 @@
 import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
-import { BotCommand, ExtraReplyMessage } from 'telegraf/typings/telegram-types';
+import { BotCommand } from 'telegraf/typings/telegram-types';
 import { greeting, start, find_chat, exit_chat, cancel_find, language_menu_middleware } from '..';
 import config from '../config';
 import { DataHandler } from './dataHandler';
