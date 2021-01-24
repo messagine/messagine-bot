@@ -11,10 +11,11 @@ const start = () => async (ctx: TelegrafContext) => {
 	let user = await dataHandler.getUser(chatId);
 	if (!user) {
 		debug(`Triggered "start" command with message.`);
-		user = await dataHandler.addUser(chatId, languageCode);
-		return ctx.reply(
+		const addUserPromise = dataHandler.addUser(chatId, languageCode);
+		const replyPromise = ctx.reply(
 			`Welcome to Every Chat Bot. To find new chat, type /find_chat. Your language is ${languageCode}, to change your language type /set_language.`,
 		);
+		return await Promise.all([addUserPromise, replyPromise]);
 	} else {
 		return ctx.reply('Welcome back. To find new chat, type /find_chat command.');
 	}

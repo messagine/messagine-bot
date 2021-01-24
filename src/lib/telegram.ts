@@ -118,18 +118,18 @@ export function toArgs(ctx: TelegrafContext) {
 	return !parts[3] ? [] : parts[3].split(/\s+/).filter(arg => arg.length);
 }
 
-export const MARKDOWN = Extra.markdown(true) as ExtraReplyMessage;
+export const MARKDOWN = Extra.markdown(true);
 
-export const NO_PREVIEW = Extra.markdown(true).webPreview(false) as ExtraReplyMessage;
+export const NO_PREVIEW = MARKDOWN.webPreview(false);
 
 export const hiddenCharacter = '\u200b';
 
 export const logger = async (_: TelegrafContext, next): Promise<void> => {
-	const start = new Date();
+	const logStart = new Date();
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	await next();
-	const ms = new Date().getTime() - start.getTime();
+	const ms = new Date().getTime() - logStart.getTime();
 	console.log('Response time: %sms', ms);
 };
 
