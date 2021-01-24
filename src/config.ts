@@ -4,5 +4,5 @@ export default {
 	ENDPOINT_URL: process.env.ENDPOINT_URL || '',
 	WEBHOOK_PATH: process.env.WEBHOOK_PATH || '',
 	IS_DEV: process.env.DEV === 'true' || false,
-	DEFAULT_LANGUAGE_CODE: 'en'
+	DEFAULT_LANGUAGE_CODE: 'en',
 };

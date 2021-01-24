@@ -5,16 +5,12 @@ import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
 import * as languageFile from '../../languages.json';
 
-const debug = require('debug')('common');
-
-export function getLanguageCode(ctx: TelegrafContext): string {
-	const language_code = ctx.from?.language_code;
-	if (language_code) {
-		return language_code;
-	} else {
-		debug('Language code not found.');
-		return config.DEFAULT_LANGUAGE_CODE;
-	}
+export function getLanguage(ctx: TelegrafContext): ILanguage {
+	const language_code = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
+	const languages: ILanguage[] = languageFile;
+	const language = _.find(languages, l => l.lang === language_code);
+	if (!language) throw new Error('Language not found.');
+	return language;
 }
 
 export function getOpponentChatIds(chat: IChat, chatId: number): number[] {
