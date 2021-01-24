@@ -1,9 +1,17 @@
 import Debug from 'debug';
 import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
 import { BotCommand } from 'telegraf/typings/telegram-types';
-import { cancelFindCommand, exitChatCommand, findChatCommand, languageMenuMiddleware, startCommand } from '../commands';
+import {
+  cancelFindCommand,
+  exitChatCommand,
+  findChatCommand,
+  languageMenuMiddleware,
+  setLanguageCommand,
+  startCommand,
+} from '../commands';
 import config from '../config';
 import {
+  onAnimationMessage,
   onContactMessage,
   onDocumentMessage,
   onInvalidMessage,
@@ -12,6 +20,7 @@ import {
   onStickerMessage,
   onTextMessage,
   onVideoMessage,
+  onVoiceMessage,
 } from '../message';
 import commandEnum from './commandEnum';
 import { connect } from './dataHandler';
@@ -31,21 +40,21 @@ async function botUtils() {
   bot
     .command(commandEnum.start, startCommand())
     .command(commandEnum.findChat, findChatCommand())
-    .command(commandEnum.setLanguage, ctx => languageMenu.replyToContext(ctx))
+    .command(commandEnum.setLanguage, setLanguageCommand(languageMenu))
     .command(commandEnum.exitChat, exitChatCommand())
     .command(commandEnum.cancelFind, cancelFindCommand())
+    .on('animation', onAnimationMessage())
+    .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
     .on('location', onLocationMessage())
     .on('photo', onPhotoMessage())
     .on('sticker', onStickerMessage())
     .on('text', onTextMessage())
     .on('video', onVideoMessage())
-    .on('contact', onContactMessage())
-    .on('animation', onInvalidMessage('animation'))
+    .on('voice', onVoiceMessage())
     .on('game', onInvalidMessage('game'))
     .on('poll', onInvalidMessage('poll'))
-    .on('venue', onInvalidMessage('venue'))
-    .on('voice', onInvalidMessage('voice'));
+    .on('venue', onInvalidMessage('venue'));
 }
 
 async function localBot() {
