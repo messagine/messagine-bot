@@ -28,7 +28,7 @@ const on_sticker = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendMessage(opponentChatId, messageSticker.file_id);
+		const opponentPromise = ctx.tg.sendMessage(opponentChatId, messageSticker.file_id);
 		opponentPromises.push(opponentPromise);
 	});
 	return await Promise.all(opponentPromises);

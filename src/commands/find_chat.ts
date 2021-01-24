@@ -52,7 +52,7 @@ const find_chat = () => async (ctx: TelegrafContext) => {
 		const leaveOpponentUserLobbyPromise = leaveLobby(opponent.chatId);
 		const createChatPromise = createChat(chatId, opponent.chatId, user.languageCode);
 		const chatStartToCurrentUserPromise = ctx.reply(chatStartMessage);
-		const chatStartToOpponentUserPromise = ctx.telegram.sendMessage(opponent.chatId, chatStartMessage);
+		const chatStartToOpponentUserPromise = ctx.tg.sendMessage(opponent.chatId, chatStartMessage);
 
 		return await Promise.all([
 			leaveCurrentUserLobbyPromise,

@@ -22,20 +22,12 @@ const exit_chat = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const sendMessagePromise = ctx.reply('You have closed the conversation.');
 	const deleteChatPromise = deleteChat(existingChat.id);
-	const previousChatCreatePromise = createPreviousChat(
-		existingChat.chatIds,
-		existingChat.languageCode,
-		chatId,
-		existingChat.startDate,
-	);
+	const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
 
 	const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
 	opponentChatIds.forEach(opponentChatId => {
 		promises.push(
-			ctx.telegram.sendMessage(
-				opponentChatId,
-				'Conversation closed by opponent. To find new chat, type /find_chat command.',
-			),
+			ctx.tg.sendMessage(opponentChatId, 'Conversation closed by opponent. To find new chat, type /find_chat command.'),
 		);
 	});
 

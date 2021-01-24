@@ -28,7 +28,7 @@ const on_video = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendPhoto(opponentChatId, messageVideo.file_id);
+		const opponentPromise = ctx.tg.sendPhoto(opponentChatId, messageVideo.file_id);
 		opponentPromises.push(opponentPromise);
 	});
 	return await Promise.all(opponentPromises);

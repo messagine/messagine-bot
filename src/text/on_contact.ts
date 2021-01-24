@@ -28,7 +28,7 @@ const on_contact = () => async (ctx: any) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendContact(
+		const opponentPromise = ctx.tg.sendContact(
 			opponentChatId,
 			messageContact.phone_number,
 			messageContact.first_name,

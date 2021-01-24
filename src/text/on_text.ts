@@ -28,7 +28,7 @@ const on_text = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendMessage(opponentChatId, messageText);
+		const opponentPromise = ctx.tg.sendMessage(opponentChatId, messageText);
 		opponentPromises.push(opponentPromise);
 	});
 	return await Promise.all(opponentPromises);

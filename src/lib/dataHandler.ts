@@ -58,6 +58,11 @@ export function deleteChat(id: string) {
 	return Chat.findByIdAndDelete(id).exec();
 }
 
-export function createPreviousChat(chatIds: number[], languageCode: string, closedBy: number, startDate?: Date) {
-	return PreviousChat.create({ chatIds, languageCode, closedBy, startDate });
+export function createPreviousChat(chat: IChat, closedBy: number) {
+	return PreviousChat.create({
+		chatIds: chat.chatIds,
+		languageCode: chat.languageCode,
+		startDate: chat.startDate,
+		closedBy,
+	});
 }

@@ -31,7 +31,7 @@ const on_photo = () => async (ctx: TelegrafContext) => {
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
 	const opponentPromises: Promise<any>[] = [];
 	opponentChatIds.forEach(opponentChatId => {
-		const opponentPromise = ctx.telegram.sendPhoto(opponentChatId, biggestPhoto.file_id);
+		const opponentPromise = ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
 		opponentPromises.push(opponentPromise);
 	});
 	return await Promise.all(opponentPromises);
