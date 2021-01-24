@@ -1,10 +1,11 @@
 import Debug from 'debug';
 import { Context as TelegrafContext } from 'telegraf';
 import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
+import commandEnum from '../lib/commandEnum';
 import { getAllLanguages, getTopLanguages, mapLanguagesToRecords } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('command:set_language');
+const debug = Debug(`command:${commandEnum.setLanguage}`);
 
 function languageMenuMiddleware() {
   const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
