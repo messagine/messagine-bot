@@ -20,7 +20,7 @@ const exit_chat = () => async (ctx: TelegrafContext) => {
 	}
 
 	const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-	const sendMessagePromise = ctx.reply('You have closed the conversation.');
+	const sendMessagePromise = ctx.reply('You have closed the conversation. To find new chat, type /find_chat command.');
 	const deleteChatPromise = deleteChat(existingChat.id);
 	const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
 
