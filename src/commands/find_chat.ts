@@ -1,17 +1,24 @@
 import { TelegrafContext } from 'telegraf/typings/context';
 import { getChatId } from '../lib/common';
-import { DataHandler } from '../lib/dataHandler';
+import {
+	findLobby,
+	findExistingChat,
+	getUser,
+	findOpponentInLobby,
+	leaveLobby,
+	createChat,
+	addToLobby,
+} from '../lib/dataHandler';
 
 const debug = require('debug')('bot:find_chat_command');
 
 const find_chat = () => async (ctx: TelegrafContext) => {
 	debug(`Triggered "find_chat" command.`);
-	const dataHandler = new DataHandler();
 	const chatId = getChatId(ctx);
 
-	const lobbyPromise = dataHandler.findLobby(chatId);
-	const existingChatPromise = dataHandler.findExistingChat(chatId);
-	const userPromise = dataHandler.getUser(chatId);
+	const lobbyPromise = findLobby(chatId);
+	const existingChatPromise = findExistingChat(chatId);
+	const userPromise = getUser(chatId);
 	const checkResults = await Promise.all([lobbyPromise, existingChatPromise, userPromise]);
 
 	const lobby = checkResults[0];
@@ -32,14 +39,14 @@ const find_chat = () => async (ctx: TelegrafContext) => {
 		return;
 	}
 
-	const opponent = await dataHandler.findOpponentInLobby(chatId, user.languageCode);
+	const opponent = await findOpponentInLobby(chatId, user.languageCode);
 
 	if (opponent) {
 		const chatStartMessage = 'Chat started. You can exit chat via /exit_chat command. Have fun.';
 
-		const leaveCurrentUserLobbyPromise = dataHandler.leaveLobby(chatId);
-		const leaveOpponentUserLobbyPromise = dataHandler.leaveLobby(opponent.chatId);
-		const createChatPromise = dataHandler.createChat(chatId, opponent.chatId, user.languageCode);
+		const leaveCurrentUserLobbyPromise = leaveLobby(chatId);
+		const leaveOpponentUserLobbyPromise = leaveLobby(opponent.chatId);
+		const createChatPromise = createChat(chatId, opponent.chatId, user.languageCode);
 		const chatStartToCurrentUserPromise = ctx.reply(chatStartMessage);
 		const chatStartToOpponentUserPromise = ctx.telegram.sendMessage(opponent.chatId, chatStartMessage);
 
@@ -51,7 +58,7 @@ const find_chat = () => async (ctx: TelegrafContext) => {
 			chatStartToOpponentUserPromise,
 		]);
 	} else {
-		const addToLobbyPromise = dataHandler.addToLobby(chatId, user.languageCode);
+		const addToLobbyPromise = addToLobby(chatId, user.languageCode);
 		const lobbyMessagePromise = ctx.reply('Waiting in the lobby. You can exit lobby via /cancel_find command.');
 
 		await Promise.all([addToLobbyPromise, lobbyMessagePromise]);

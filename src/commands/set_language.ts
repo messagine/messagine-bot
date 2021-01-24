@@ -1,7 +1,7 @@
 import { Context as TelegrafContext } from 'telegraf';
 import { MenuTemplate, MenuMiddleware, createBackMainMenuButtons } from 'telegraf-inline-menu';
 import { getChatId, mapLanguagesToRecords, getAllLanguages, getTopLanguages } from '../lib/common';
-import { DataHandler } from '../lib/dataHandler';
+import { setLanguage } from '../lib/dataHandler';
 
 function language_menu_middleware() {
 	const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
@@ -43,9 +43,8 @@ async function languageSelected(
 	languageCode: string,
 	languageRecords: Record<string, string>,
 ) {
-	const dataHandler = new DataHandler();
 	const chatId = getChatId(context);
-	const setLanguagePromise = dataHandler.setLanguage(chatId, languageCode);
+	const setLanguagePromise = setLanguage(chatId, languageCode);
 	const answerQueryPromise = context.answerCbQuery();
 	const replyPromise = context.reply(`${languageRecords[languageCode]} selected.`);
 	const promises = [setLanguagePromise, answerQueryPromise, replyPromise];

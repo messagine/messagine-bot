@@ -1,17 +1,17 @@
 import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
 import { BotCommand } from 'telegraf/typings/telegram-types';
-import { greeting, start, find_chat, exit_chat, cancel_find, language_menu_middleware } from '..';
+import { start, find_chat, exit_chat, cancel_find, language_menu_middleware } from '../commands';
+import { on_document, on_invalid, on_location, on_photo, on_sticker, on_text, on_video } from '../text';
 import config from '../config';
-import { DataHandler } from './dataHandler';
+import { connect } from './dataHandler';
 import { ok } from './responses';
 
 const debug = require('debug')('lib:telegram');
 
 export const bot = new Telegraf(config.BOT_TOKEN);
-const dataHandler = new DataHandler();
 
 async function botUtils() {
-	await dataHandler.connect();
+	await connect();
 	const languageMenuMiddleware = language_menu_middleware();
 
 	bot.use(Telegraf.log());
@@ -24,8 +24,17 @@ async function botUtils() {
 		.command('set_language', ctx => languageMenuMiddleware.replyToContext(ctx))
 		.command('exit_chat', exit_chat())
 		.command('cancel_find', cancel_find())
-		.on('text', greeting())
-		.on('edited_message', greeting());
+		.on('document', on_document())
+		.on('location', on_location())
+		.on('photo', on_photo())
+		.on('sticker', on_sticker())
+		.on('text', on_text())
+		.on('video', on_video())
+		.on('contact', on_invalid('contact'))
+		.on('animation', on_invalid('animation'))
+		.on('game', on_invalid('game'))
+		.on('venue', on_invalid('venue'))
+		.on('voice', on_invalid('voice'));
 }
 
 async function localBot() {
