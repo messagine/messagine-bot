@@ -1,0 +1,235 @@
+[{
+  "lang": "en",
+  "name": "English",
+  "native_name": "English",
+  "fav_order": 1
+},{
+  "lang": "zh",
+  "name": "Chinese",
+  "native_name": "简体中文",
+  "fav_order": 2
+},{
+  "lang": "es",
+  "name": "Spanish",
+  "native_name": "Español",
+  "fav_order": 3
+},{
+  "lang": "ar",
+  "name": "Arabic",
+  "native_name": "العربية",
+  "fav_order": 4
+},{
+  "lang": "id",
+  "name": "Indonesian",
+  "native_name": "Bahasa Indonesia",
+  "fav_order": 5
+},{
+  "lang": "pt",
+  "name": "Portuguese",
+  "native_name": "Português",
+  "fav_order": 6
+},{
+  "lang": "fr",
+  "name": "French",
+  "native_name": "Français",
+  "fav_order": 7
+},{
+  "lang": "ja",
+  "name": "Japanese",
+  "native_name": "日本語",
+  "fav_order": 8
+},{
+  "lang": "ru",
+  "name": "Russian",
+  "native_name": "Русский",
+  "fav_order": 9
+},{
+  "lang": "de",
+  "name": "German",
+  "native_name": "Deutsch",
+  "fav_order": 10
+},{
+  "lang": "sq",
+  "name": "Albanian",
+  "native_name": "Shqip"
+},{
+  "lang": "am",
+  "name": "Amharic",
+  "native_name": "አማርኛ"
+},{
+  "lang": "az",
+  "name": "Azerbaijani",
+  "native_name": "Azərbaycanca"
+},{
+  "lang": "eu",
+  "name": "Basque",
+  "native_name": "Euskara"
+},{
+  "lang": "be",
+  "name": "Belarusian",
+  "native_name": "Беларуская"
+},{
+  "lang": "bg",
+  "name": "Bulgarian",
+  "native_name": "Български"
+},{
+  "lang": "ca",
+  "name": "Catalan",
+  "native_name": "Català"
+},{
+  "lang": "hr",
+  "name": "Croatian",
+  "native_name": "Hrvatski"
+},{
+  "lang": "cs",
+  "name": "Czech",
+  "native_name": "Čeština"
+},{
+  "lang": "da",
+  "name": "Danish",
+  "native_name": "Dansk"
+},{
+  "lang": "nl",
+  "name": "Dutch",
+  "native_name": "Nederlands"
+},{
+  "lang": "eo",
+  "name": "Esperanto",
+  "native_name": "Esperanto"
+},{
+  "lang": "fi",
+  "name": "Finnish",
+  "native_name": "Suomi"
+},{
+  "lang": "gl",
+  "name": "Galician",
+  "native_name": "Galego"
+},{
+  "lang": "el",
+  "name": "Greek",
+  "native_name": "Ελληνικά"
+},{
+  "lang": "gu",
+  "name": "Gujarati",
+  "native_name": "ગુજરાતી"
+},{
+  "lang": "he",
+  "name": "Hebrew",
+  "native_name": "עברית"
+},{
+  "lang": "hi",
+  "name": "Hindi",
+  "native_name": "हिन्दी"
+},{
+  "lang": "hu",
+  "name": "Hungarian",
+  "native_name": "Magyar"
+},{
+  "lang": "ga",
+  "name": "Irish",
+  "native_name": "Gaeilge"
+},{
+  "lang": "it",
+  "name": "Italian",
+  "native_name": "Italiano"
+},{
+  "lang": "kn",
+  "name": "Kannada",
+  "native_name": "ಕನ್ನಡ"
+},{
+  "lang": "kk",
+  "name": "Kazakh",
+  "native_name": "Қазақша"
+},{
+  "lang": "ko",
+  "name": "Korean",
+  "native_name": "한국어"
+},{
+  "lang": "lt",
+  "name": "Lithuanian",
+  "native_name": "Lietuvių"
+},{
+  "lang": "ms",
+  "name": "Malay",
+  "native_name": "Bahasa Melayu"
+},{
+  "lang": "ml",
+  "name": "Malayalam",
+  "native_name": "മലയാളം"
+},{
+  "lang": "mt",
+  "name": "Maltese",
+  "native_name": "Malti"
+},{
+  "lang": "mr",
+  "name": "Marathi",
+  "native_name": "मराठी"
+},{
+  "lang": "nb",
+  "name": "Norwegian (Bokmål)",
+  "native_name": "Norsk (Bokmål)"
+},{
+  "lang": "or",
+  "name": "Odia",
+  "native_name": "ଓଡ଼ିଆ"
+},{
+  "lang": "fa",
+  "name": "Persian",
+  "native_name": "فارسی"
+},{
+  "lang": "pl",
+  "name": "Polish",
+  "native_name": "Polski"
+},{
+  "lang": "ro",
+  "name": "Romanian",
+  "native_name": "Română"
+},{
+  "lang": "sr",
+  "name": "Serbian",
+  "native_name": "Српски"
+},{
+  "lang": "sk",
+  "name": "Slovak",
+  "native_name": "Slovenčina"
+},{
+  "lang": "sw",
+  "name": "Swahili",
+  "native_name": "Kiswahili"
+},{
+  "lang": "sv",
+  "name": "Swedish",
+  "native_name": "Svenska"
+},{
+  "lang": "ta",
+  "name": "Tamil",
+  "native_name": "தமிழ்"
+},{
+  "lang": "te",
+  "name": "Telugu",
+  "native_name": "తెలుగు"
+},{
+  "lang": "th",
+  "name": "Thai",
+  "native_name": "ไทย"
+},{
+  "lang": "tr",
+  "name": "Turkish",
+  "native_name": "Türkçe"
+},{
+  "lang": "tk",
+  "name": "Turkmen",
+  "native_name": "Türkmen"
+},{
+  "lang": "uk",
+  "name": "Ukrainian",
+  "native_name": "Українська"
+},{
+  "lang": "uz",
+  "name": "Uzbek",
+  "native_name": "O‘zbek"
+},{
+  "lang": "vi",
+  "name": "Vietnamese",
+  "native_name": "Tiếng Việt"
+}]

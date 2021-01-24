@@ -1,41 +1,42 @@
-import Telegraf, { Context as TelegrafContext, Extra } from "telegraf";
-import { BotCommand, ExtraReplyMessage } from "telegraf/typings/telegram-types";
-import { greeting, start, find_chat, exit_chat, cancel_find, language_menu_middleware } from "..";
-import config from "../config";
-import { DataHandler } from "./dataHandler";
-import { ok } from "./responses";
+import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
+import { BotCommand, ExtraReplyMessage } from 'telegraf/typings/telegram-types';
+import { greeting, start, find_chat, exit_chat, cancel_find, language_menu_middleware } from '..';
+import config from '../config';
+import { DataHandler } from './dataHandler';
+import { ok } from './responses';
 
-const debug = require("debug")("lib:telegram");
+const debug = require('debug')('lib:telegram');
 
 export const bot = new Telegraf(config.BOT_TOKEN);
 const dataHandler = new DataHandler();
 
 async function botUtils() {
 	await dataHandler.connect();
-  const languageMenuMiddleware = await language_menu_middleware();
+	const languageMenuMiddleware = language_menu_middleware();
 
 	bot.use(Telegraf.log());
 	bot.use(logger);
-  bot.use(languageMenuMiddleware)
+	bot.use(languageMenuMiddleware);
 
 	bot
-		.command("start", start())
-		.command("find_chat", find_chat())
+		.command('start', start())
+		.command('find_chat', find_chat())
 		.command('set_language', ctx => languageMenuMiddleware.replyToContext(ctx))
-		.command("exit_chat", exit_chat())
-		.command("cancel_find", cancel_find())
-		.on("text", greeting());
+		.command('exit_chat', exit_chat())
+		.command('cancel_find', cancel_find())
+		.on('text', greeting())
+		.on('edited_message', greeting());
 }
 
 async function localBot() {
-	debug("Bot is running in development mode at http://localhost:3000");
+	debug('Bot is running in development mode at http://localhost:3000');
 
 	bot.webhookReply = false;
 
 	const botInfo = await bot.telegram.getMe();
 	bot.options.username = botInfo.username;
 
-	console.info("Server has initialized bot username: ", botInfo.username);
+	console.info('Server has initialized bot username: ', botInfo.username);
 
 	debug(`deleting webhook`);
 	await bot.telegram.deleteWebhook();
@@ -48,19 +49,19 @@ export async function status() {
 	await syncWebhook();
 	await syncCommands();
 
-	return ok("Listening to bot events...");
+	return ok('Listening to bot events...');
 }
 
 async function syncWebhook() {
 	if (!config.ENDPOINT_URL) {
-		throw new Error("ENDPOINT_URL is not set.");
+		throw new Error('ENDPOINT_URL is not set.');
 	}
 	if (!config.WEBHOOK_PATH) {
-		throw new Error("WEBHOOK_PATH is not set.");
+		throw new Error('WEBHOOK_PATH is not set.');
 	}
 
 	const getWebhookInfo = await bot.telegram.getWebhookInfo();
-	const expectedWebhookUrl = `${config.ENDPOINT_URL}/${config.WEBHOOK_PATH}`
+	const expectedWebhookUrl = `${config.ENDPOINT_URL}/${config.WEBHOOK_PATH}`;
 
 	if (getWebhookInfo.url !== expectedWebhookUrl) {
 		debug(`deleting webhook`);
@@ -80,10 +81,10 @@ async function syncCommands() {
 }
 
 const commands: BotCommand[] = [
-	{ command: 'find_chat', description: "Find Chat" },
-	{ command: 'exit_chat', description: "Exit Current Chat" },
-	{ command: 'set_language', description: "Set Language" },
-	{ command: 'cancel_find', description: "Cancel Find Find" }
+	{ command: 'find_chat', description: 'Find Chat' },
+	{ command: 'exit_chat', description: 'Exit Current Chat' },
+	{ command: 'set_language', description: 'Set Language' },
+	{ command: 'cancel_find', description: 'Cancel Find Find' },
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {
@@ -103,9 +104,9 @@ export async function webhook(event: any) {
 	// call bot commands and middlware
 	await botUtils();
 
-  const body = JSON.parse(event.body);
+	const body = JSON.parse(event.body);
 	await bot.handleUpdate(body);
-	return ok("Success");
+	return ok('Success');
 }
 
 export function toArgs(ctx: TelegrafContext) {
@@ -121,7 +122,7 @@ export const MARKDOWN = Extra.markdown(true) as ExtraReplyMessage;
 
 export const NO_PREVIEW = Extra.markdown(true).webPreview(false) as ExtraReplyMessage;
 
-export const hiddenCharacter = "\u200b";
+export const hiddenCharacter = '\u200b';
 
 export const logger = async (_: TelegrafContext, next): Promise<void> => {
 	const start = new Date();
@@ -129,17 +130,17 @@ export const logger = async (_: TelegrafContext, next): Promise<void> => {
 	// @ts-ignore
 	await next();
 	const ms = new Date().getTime() - start.getTime();
-	console.log("Response time: %sms", ms);
+	console.log('Response time: %sms', ms);
 };
 
 if (config.IS_DEV) {
-	console.log("isDev", config.IS_DEV);
+	console.log('isDev', config.IS_DEV);
 
 	localBot().then(() => {
 		// call bot commands and middlware
 		botUtils().then(() => {
 			// launch bot
 			bot.launch();
-		})
+		});
 	});
 }
