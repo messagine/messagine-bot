@@ -3,10 +3,10 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('bot:on_text');
+const debug = Debug('message:on_text');
 
 const onTextMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_text" command');
+  debug('Triggered "on_text" message');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

@@ -3,10 +3,10 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('bot:on_video');
+const debug = Debug('message:on_video');
 
 const onVideoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_video" command');
+  debug('Triggered "on_video" message');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

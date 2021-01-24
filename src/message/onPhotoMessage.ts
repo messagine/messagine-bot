@@ -3,10 +3,10 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('bot:on_photo');
+const debug = Debug('message:on_photo');
 
 const onPhotoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_photo" command');
+  debug('Triggered "on_photo" message');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {

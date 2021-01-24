@@ -2,7 +2,7 @@ import Debug from 'debug';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('bot:on_contact_command');
+const debug = Debug('message:on_contact');
 
 // TODO: Fix after telegraf v4 upgrade
 const onContactMessage = () => async (ctx: any) => {
