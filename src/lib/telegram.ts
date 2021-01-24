@@ -1,7 +1,7 @@
 import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import { start, find_chat, exit_chat, cancel_find, language_menu_middleware } from '../commands';
-import { on_document, on_invalid, on_location, on_photo, on_sticker, on_text, on_video } from '../text';
+import { on_contact, on_document, on_invalid, on_location, on_photo, on_sticker, on_text, on_video } from '../text';
 import config from '../config';
 import { connect } from './dataHandler';
 import { ok } from './responses';
@@ -30,9 +30,10 @@ async function botUtils() {
 		.on('sticker', on_sticker())
 		.on('text', on_text())
 		.on('video', on_video())
-		.on('contact', on_invalid('contact'))
+		.on('contact', on_contact())
 		.on('animation', on_invalid('animation'))
 		.on('game', on_invalid('game'))
+		.on('poll', on_invalid('poll'))
 		.on('venue', on_invalid('venue'))
 		.on('voice', on_invalid('voice'));
 }
