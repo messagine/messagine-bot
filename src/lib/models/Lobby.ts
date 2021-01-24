@@ -1,15 +1,15 @@
-import { model, Schema, Model, Document } from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 
 export interface ILobby extends Document {
-	chatId: number;
-	languageCode: string;
-	entranceDate: Date;
+  chatId: number;
+  entranceDate: Date;
+  languageCode: string;
 }
 
 const LobbySchema: Schema = new Schema({
-	chatId: { type: Number, required: true, unique: true },
-	languageCode: { type: String, required: true },
-	entranceDate: { type: Date, default: Date.now },
+  chatId: { type: Number, required: true, unique: true },
+  entranceDate: { type: Date, default: Date.now },
+  languageCode: { type: String, required: true },
 });
 
 const Lobby: Model<ILobby> = model<ILobby>('Lobby', LobbySchema);

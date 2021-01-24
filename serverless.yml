@@ -63,7 +63,7 @@ provider:
 
 functions:
   status:
-    handler: handler.statusHandler
+    handler: src/handler.statusHandler
     events:
       - httpApi:
           path: /
@@ -73,7 +73,7 @@ functions:
       ENDPOINT_URL: ${param:ENDPOINT_URL}
       WEBHOOK_PATH: 'api'
   webhook:
-    handler: handler.webhookHandler
+    handler: src/handler.webhookHandler
     events:
       - httpApi:
           path: /api

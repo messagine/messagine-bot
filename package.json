@@ -8,7 +8,8 @@
 	"homepage": "https://github.com/suphero/every-chat-bot#readme",
 	"scripts": {
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
-		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'"
+		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'",
+		"tslint": "tslint --project tsconfig.json"
 	},
 	"dependencies": {
 		"lodash": "^4.17.20",
@@ -18,6 +19,7 @@
 	},
 	"devDependencies": {
 		"@types/aws-lambda": "^8.10.71",
+		"@types/debug": "^4.1.5",
 		"@types/lodash": "^4.14.168",
 		"@types/mongoose": "^5.10.3",
 		"aws-lambda": "^1.0.6",

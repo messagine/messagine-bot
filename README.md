@@ -23,7 +23,9 @@ Secret messaging with anyone in the world via Telegram. [Click here](https://t.m
   - [x] Typescript
   - [x] Serverless
   - [x] Inline Menu
-  - [ ] Telegraf upgrade
+  - [ ] Telegraf upgrade v4
   - [ ] Unit Test
   - [ ] Center resources
   - [ ] Multilanguage by commands
+  - [ ] Fix debug messages
+  - [ ] Add missing debug messages
