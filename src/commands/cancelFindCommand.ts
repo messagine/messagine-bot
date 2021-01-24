@@ -1,8 +1,9 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
+import commandEnum from '../lib/commandEnum';
 import { leaveLobby } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('command:cancel_find');
+const debug = Debug(`command:${commandEnum.cancelFind}`);
 
 const cancelFindCommand = () => async (ctx: TelegrafContext) => {
   const chatId = ctx.chat?.id;
@@ -12,7 +13,7 @@ const cancelFindCommand = () => async (ctx: TelegrafContext) => {
   }
 
   const leaveLobbyPromise = leaveLobby(chatId);
-  const leftMessagePromise = ctx.reply('Find chat cancelled. To find new chat, type /find_chat command.');
+  const leftMessagePromise = ctx.reply(`Find chat cancelled. To find new chat, type /${commandEnum.findChat} command.`);
 
   return await Promise.all([leaveLobbyPromise, leftMessagePromise]);
 };

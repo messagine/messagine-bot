@@ -13,6 +13,7 @@ import {
   onTextMessage,
   onVideoMessage,
 } from '../message';
+import commandEnum from './commandEnum';
 import { connect } from './dataHandler';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
@@ -28,11 +29,11 @@ async function botUtils() {
   bot.use(languageMenu);
 
   bot
-    .command('start', startCommand())
-    .command('find_chat', findChatCommand())
-    .command('set_language', ctx => languageMenu.replyToContext(ctx))
-    .command('exit_chat', exitChatCommand())
-    .command('cancel_find', cancelFindCommand())
+    .command(commandEnum.start, startCommand())
+    .command(commandEnum.findChat, findChatCommand())
+    .command(commandEnum.setLanguage, ctx => languageMenu.replyToContext(ctx))
+    .command(commandEnum.exitChat, exitChatCommand())
+    .command(commandEnum.cancelFind, cancelFindCommand())
     .on('document', onDocumentMessage())
     .on('location', onLocationMessage())
     .on('photo', onPhotoMessage())
@@ -101,10 +102,10 @@ async function syncCommands() {
 }
 
 const commands: BotCommand[] = [
-  { command: 'find_chat', description: 'Find Chat' },
-  { command: 'exit_chat', description: 'Exit Current Chat' },
-  { command: 'set_language', description: 'Set Language' },
-  { command: 'cancel_find', description: 'Cancel Find Find' },
+  { command: commandEnum.findChat, description: 'Find Chat' },
+  { command: commandEnum.exitChat, description: 'Exit Current Chat' },
+  { command: commandEnum.setLanguage, description: 'Set Language' },
+  { command: commandEnum.cancelFind, description: 'Cancel Find Find' },
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {

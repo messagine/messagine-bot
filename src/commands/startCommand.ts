@@ -1,9 +1,10 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
+import commandEnum from '../lib/commandEnum';
 import { getLanguage } from '../lib/common';
 import { addUser, getUser } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('command:start');
+const debug = Debug(`command:${commandEnum.start}`);
 
 const startCommand = () => async (ctx: TelegrafContext) => {
   const chatId = ctx.chat?.id;
@@ -14,19 +15,19 @@ const startCommand = () => async (ctx: TelegrafContext) => {
 
   const user = await getUser(chatId);
   if (!user) {
-    debug(`Triggered "start" command.`);
+    debug(`Triggered "${commandEnum.start}" command.`);
     const language = getLanguage(ctx);
     const addUserPromise = addUser(chatId, language.lang);
     const messageParts = [
       'Welcome to Every Chat Bot.',
-      'To find new chat, type /find_chat command.',
-      `Your language is ${language.name}, to change your language type /set_language.`,
+      `To find new chat, type /${commandEnum.findChat} command.`,
+      `Your language is ${language.name}, to change your language type /${commandEnum.setLanguage}.`,
     ];
     const message = messageParts.join(' ');
     const replyPromise = ctx.reply(message);
     return await Promise.all([addUserPromise, replyPromise]);
   } else {
-    return await ctx.reply('Welcome back. To find new chat, type /find_chat command.');
+    return await ctx.reply(`Welcome back. To find new chat, type /${commandEnum.findChat} command.`);
   }
 };
 

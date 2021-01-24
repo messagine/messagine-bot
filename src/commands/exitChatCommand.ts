@@ -1,12 +1,13 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
+import commandEnum from '../lib/commandEnum';
 import { getOpponentChatIds } from '../lib/common';
 import { createPreviousChat, deleteChat, findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('command:exit_chat');
+const debug = Debug(`command:${commandEnum.exitChat}`);
 
 const exitChatCommand = () => async (ctx: TelegrafContext) => {
-  debug(`Triggered "exit_chat" command.`);
+  debug(`Triggered "${commandEnum.exitChat}" command.`);
 
   const chatId = ctx.chat?.id;
   if (!chatId) {
@@ -21,14 +22,19 @@ const exitChatCommand = () => async (ctx: TelegrafContext) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const sendMessagePromise = ctx.reply('You have closed the conversation. To find new chat, type /find_chat command.');
+  const sendMessagePromise = ctx.reply(
+    `You have closed the conversation. To find new chat, type /${commandEnum.findChat} command.`,
+  );
   const deleteChatPromise = deleteChat(existingChat.id);
   const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
 
   const promises: Array<Promise<any>> = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
   opponentChatIds.forEach(opponentChatId => {
     promises.push(
-      ctx.tg.sendMessage(opponentChatId, 'Conversation closed by opponent. To find new chat, type /find_chat command.'),
+      ctx.tg.sendMessage(
+        opponentChatId,
+        `Conversation closed by opponent. To find new chat, type /${commandEnum.findChat} command.`,
+      ),
     );
   });
 
