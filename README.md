@@ -1,5 +1,7 @@
 # Every Chat Bot
 
+[![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/every_chat_bot) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/suphero/every-chat-bot/graphs/commit-activity) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=suphero_every-chat-bot&metric=alert_status)](https://sonarcloud.io/dashboard?id=suphero_every-chat-bot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=suphero_every-chat-bot&metric=bugs)](https://sonarcloud.io/dashboard?id=suphero_every-chat-bot) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=suphero_every-chat-bot&metric=code_smells)](https://sonarcloud.io/dashboard?id=suphero_every-chat-bot) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=suphero_every-chat-bot&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=suphero_every-chat-bot) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=suphero_every-chat-bot&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=suphero_every-chat-bot) [![Known Vulnerabilities](https://snyk.io/test/github/suphero/every-chat-bot/badge.svg)](https://snyk.io/test/github/suphero/every-chat-bot)
+
 Secret messaging with anyone in the world via Telegram. [Click here](https://t.me/every_chat_bot) to access bot.
 
 ## Roadmap
@@ -19,6 +21,8 @@ Secret messaging with anyone in the world via Telegram. [Click here](https://t.m
   - [ ] Venue
   - [ ] Edited Message
   - [ ] Left Chat Member
+- [ ] Command
+  - [ ] /settings
 - [ ] Technical
   - [x] Typescript
   - [x] Serverless
