@@ -27,7 +27,7 @@ const onDocumentMessage = () => async (ctx: TelegrafContext) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Array<Promise<any>> = [];
+  const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
     const opponentPromise = ctx.tg.sendDocument(opponentChatId, messageDocument.file_id);
     opponentPromises.push(opponentPromise);

@@ -27,7 +27,7 @@ const onAnimationMessage = () => async (ctx: TelegrafContext) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Array<Promise<any>> = [];
+  const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
     const opponentPromise = ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
     opponentPromises.push(opponentPromise);

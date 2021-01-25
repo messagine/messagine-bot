@@ -27,7 +27,7 @@ const onLocationMessage = () => async (ctx: TelegrafContext) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Array<Promise<any>> = [];
+  const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
     const opponentPromise = ctx.tg.sendLocation(opponentChatId, messageLocation.latitude, messageLocation.longitude);
     opponentPromises.push(opponentPromise);
