@@ -27,7 +27,7 @@ const onContactMessage = () => async (ctx: any) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Array<Promise<any>> = [];
+  const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
     const opponentPromise = ctx.tg.sendContact(
       opponentChatId,

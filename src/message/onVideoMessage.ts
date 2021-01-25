@@ -27,7 +27,7 @@ const onVideoMessage = () => async (ctx: TelegrafContext) => {
   }
 
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Array<Promise<any>> = [];
+  const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
     const opponentPromise = ctx.tg.sendPhoto(opponentChatId, messageVideo.file_id);
     opponentPromises.push(opponentPromise);

@@ -28,7 +28,7 @@ const exitChatCommand = () => async (ctx: TelegrafContext) => {
   const deleteChatPromise = deleteChat(existingChat.id);
   const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
 
-  const promises: Array<Promise<any>> = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
+  const promises: Promise<any>[] = [sendMessagePromise, deleteChatPromise, previousChatCreatePromise];
   opponentChatIds.forEach(opponentChatId => {
     promises.push(
       ctx.tg.sendMessage(
