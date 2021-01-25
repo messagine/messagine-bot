@@ -8,4 +8,5 @@ export default {
   FIND_CHAT_COMMAND_DESC: 'Find Chat',
   HELP_COMMAND_DESC: 'Get Help',
   SET_LANGUAGE_COMMAND_DESC: 'Set Language',
+  STATS_COMMAND_DESC: 'Current Bot Stats',
 };

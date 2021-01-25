@@ -5,4 +5,5 @@ export default {
   help: 'help',
   setLanguage: 'set_language',
   start: 'start',
+  stats: 'stats',
 };

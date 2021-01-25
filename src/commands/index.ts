@@ -4,3 +4,4 @@ export * from './exitChatCommand';
 export * from './helpCommand';
 export * from './setLanguageCommand';
 export * from './startCommand';
+export * from './statsCommand';

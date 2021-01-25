@@ -9,6 +9,7 @@ const helpCommand = () => async (ctx: TelegrafContext) => {
     `/${commandEnum.setLanguage}: ${resource.SET_LANGUAGE_COMMAND_DESC}`,
     `/${commandEnum.cancelFind}: ${resource.CANCEL_FIND_COMMAND_DESC}`,
     `/${commandEnum.help}: ${resource.HELP_COMMAND_DESC}`,
+    `/${commandEnum.stats}: ${resource.STATS_COMMAND_DESC}`,
   ];
   const message = messageParts.join('\n');
   return ctx.reply(message);
