@@ -9,7 +9,8 @@
             true,
             "single"
         ],
-        "arrow-parens": false
+        "arrow-parens": false,
+        "array-type": false
     },
     "rulesDirectory": []
 }
