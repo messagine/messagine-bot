@@ -9,6 +9,7 @@ import {
   languageMenuMiddleware,
   setLanguageCommand,
   startCommand,
+  statsCommand,
 } from '../commands';
 import config from '../config';
 import {
@@ -46,6 +47,7 @@ async function botUtils() {
     .command(commandEnum.exitChat, exitChatCommand())
     .command(commandEnum.cancelFind, cancelFindCommand())
     .command(commandEnum.help, helpCommand())
+    .command(commandEnum.stats, statsCommand())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
@@ -119,6 +121,7 @@ const commands: BotCommand[] = [
   { command: commandEnum.setLanguage, description: resource.SET_LANGUAGE_COMMAND_DESC },
   { command: commandEnum.cancelFind, description: resource.CANCEL_FIND_COMMAND_DESC },
   { command: commandEnum.help, description: resource.HELP_COMMAND_DESC },
+  { command: commandEnum.stats, description: resource.STATS_COMMAND_DESC },
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {

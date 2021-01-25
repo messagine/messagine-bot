@@ -68,3 +68,19 @@ export function createPreviousChat(chat: IChat, closedBy: number) {
     startDate: chat.startDate,
   });
 }
+
+export function getUserCount() {
+  return User.count({}).exec();
+}
+
+export function getChatCount(): Promise<number> {
+  return Chat.count({}).exec();
+}
+
+export function getPreviousChatCount(): Promise<number> {
+  return PreviousChat.count({}).exec();
+}
+
+export function getUserPreviousChatCount(chatId: number): Promise<number> {
+  return PreviousChat.count({ chatIds: chatId }).exec();
+}
