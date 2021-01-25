@@ -5,6 +5,7 @@ import {
   cancelFindCommand,
   exitChatCommand,
   findChatCommand,
+  helpCommand,
   languageMenuMiddleware,
   setLanguageCommand,
   startCommand,
@@ -22,6 +23,7 @@ import {
   onVideoMessage,
   onVoiceMessage,
 } from '../message';
+import resource from '../resource';
 import commandEnum from './commandEnum';
 import { connect } from './dataHandler';
 import { ok } from './responses';
@@ -43,6 +45,7 @@ async function botUtils() {
     .command(commandEnum.setLanguage, setLanguageCommand(languageMenu))
     .command(commandEnum.exitChat, exitChatCommand())
     .command(commandEnum.cancelFind, cancelFindCommand())
+    .command(commandEnum.help, helpCommand())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
@@ -111,10 +114,11 @@ async function syncCommands() {
 }
 
 const commands: BotCommand[] = [
-  { command: commandEnum.findChat, description: 'Find Chat' },
-  { command: commandEnum.exitChat, description: 'Exit Current Chat' },
-  { command: commandEnum.setLanguage, description: 'Set Language' },
-  { command: commandEnum.cancelFind, description: 'Cancel Find Find' },
+  { command: commandEnum.findChat, description: resource.FIND_CHAT_COMMAND_DESC },
+  { command: commandEnum.exitChat, description: resource.EXIT_CHAT_COMMAND_DESC },
+  { command: commandEnum.setLanguage, description: resource.SET_LANGUAGE_COMMAND_DESC },
+  { command: commandEnum.cancelFind, description: resource.CANCEL_FIND_COMMAND_DESC },
+  { command: commandEnum.help, description: resource.HELP_COMMAND_DESC },
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {
