@@ -13,7 +13,7 @@
 
 service: messagine-bot
 # app and org for use with dashboard.serverless.com
-app: messagine-bot
+app: messagine
 org: suphero
 
 # You can pin your service to only deploy with a specific Serverless version
