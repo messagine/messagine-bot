@@ -19,7 +19,7 @@ const startCommand = () => async (ctx: TelegrafContext) => {
     const language = getLanguage(ctx);
     const addUserPromise = addUser(chatId, language.lang);
     const messageParts = [
-      'Welcome to Every Chat Bot.',
+      'Welcome to Messagine Bot.',
       `To find new chat, type /${commandEnum.findChat} command.`,
       `Your language is ${language.name}, to change your language type /${commandEnum.setLanguage}.`,
     ];

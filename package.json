@@ -1,11 +1,11 @@
 {
-	"name": "every-chat-bot",
+	"name": "messagine-bot",
 	"version": "1.0.0",
-	"description": "Telegram chat bot https://t.me/every_chat_bot",
+	"description": "Telegram chat bot https://t.me/MessagineBot",
 	"main": "handler.ts",
 	"author": "Harun Sokullu",
 	"license": "GPLv2",
-	"homepage": "https://github.com/suphero/every-chat-bot#readme",
+	"homepage": "https://github.com/suphero/messagine-bot#readme",
 	"scripts": {
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
 		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'",
