@@ -11,9 +11,9 @@
 #
 # Happy Coding!
 
-service: every-chat-bot
+service: messagine-bot
 # app and org for use with dashboard.serverless.com
-app: every-chat-bot
+app: messagine-bot
 org: suphero
 
 # You can pin your service to only deploy with a specific Serverless version
