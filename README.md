@@ -6,4 +6,4 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/suphero/messagine-bot/badge)](https://www.codefactor.io/repository/github/suphero/messagine-bot)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d922d969a904b2188e324a864b19513)](https://app.codacy.com/gh/suphero/messagine-bot?utm_source=github.com&utm_medium=referral&utm_content=suphero/messagine-bot&utm_campaign=Badge_Grade)
 
-Secret messaging with anyone in the world via Telegram. [Click here](https://t.me/every_chat_bot) to access bot.
+Secret messaging with anyone in the world via Telegram. [Click here](https://t.me/MessagineBot) to access bot.
