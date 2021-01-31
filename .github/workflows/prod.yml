@@ -11,6 +11,8 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    environment:
+      name: Prod
     strategy:
       matrix:
         node-version: [14.x]
@@ -33,4 +35,4 @@ jobs:
     - name: call serverless endpoint url
       uses: wei/curl@v1.1.1
       with:
-        args: ${{ secrets.SERVERLESS_PROD_ENDPOINT_URL }}
+        args: ${{ secrets.SERVERLESS_ENDPOINT_URL }}
