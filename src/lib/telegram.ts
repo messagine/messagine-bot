@@ -16,6 +16,7 @@ import {
   onAnimationMessage,
   onContactMessage,
   onDocumentMessage,
+  onEditedMessage,
   onInvalidMessage,
   onLocationMessage,
   onPhotoMessage,
@@ -57,6 +58,7 @@ async function botUtils() {
     .on('text', onTextMessage())
     .on('video', onVideoMessage())
     .on('voice', onVoiceMessage())
+    .on('edited_message', onEditedMessage())
     .on('game', onInvalidMessage('game'))
     .on('poll', onInvalidMessage('poll'))
     .on('venue', onInvalidMessage('venue'));
