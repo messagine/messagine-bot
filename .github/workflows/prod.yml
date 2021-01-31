@@ -30,3 +30,7 @@ jobs:
         # or if using AWS credentials directly
         # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: call serverless endpoint url
+      uses: wei/curl@v1.1.1
+      with:
+        args: ${{ secrets.SERVERLESS_PROD_ENDPOINT_URL }}
