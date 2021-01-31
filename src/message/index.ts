@@ -1,6 +1,7 @@
 export * from './onAnimationMessage';
 export * from './onContactMessage';
 export * from './onDocumentMessage';
+export * from './onEditedMessage';
 export * from './onInvalidMessage';
 export * from './onLocationMessage';
 export * from './onPhotoMessage';
