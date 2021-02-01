@@ -24,6 +24,7 @@ import {
   onTextMessage,
   onVenueMessage,
   onVideoMessage,
+  onVideoNoteMessage,
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
@@ -59,6 +60,7 @@ async function botUtils() {
     .on('sticker', onStickerMessage())
     .on('text', onTextMessage())
     .on('video', onVideoMessage())
+    .on('video_note', onVideoNoteMessage())
     .on('voice', onVoiceMessage())
     .on('edited_message', onEditedMessage())
     .on('game', onInvalidMessage('game'))
