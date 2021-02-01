@@ -3,10 +3,10 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import { getOpponentChatIds } from '../lib/common';
 import { findExistingChat } from '../lib/dataHandler';
 import resource from '../resource';
-const debug = Debug('message:on_video');
+const debug = Debug('message:on_video_note');
 
-const onVideoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_video" message.');
+const onVideoNoteMessage = () => async (ctx: TelegrafContext) => {
+  debug('Triggered "on_video_note" message.');
 
   const chatId = ctx.chat?.id;
   if (!chatId) {
@@ -14,10 +14,10 @@ const onVideoMessage = () => async (ctx: TelegrafContext) => {
     return await ctx.reply(resource.CHATID_NOT_FOUND);
   }
 
-  const messageVideo = ctx.message?.video;
-  if (!messageVideo) {
-    debug('Message video not found.');
-    return await ctx.reply('Message video not found.');
+  const messageVideoNote = ctx.message?.video_note;
+  if (!messageVideoNote) {
+    debug('Message video note not found.');
+    return await ctx.reply('Message video note not found.');
   }
 
   const existingChat = await findExistingChat(chatId);
@@ -29,10 +29,10 @@ const onVideoMessage = () => async (ctx: TelegrafContext) => {
   const opponentChatIds = getOpponentChatIds(existingChat, chatId);
   const opponentPromises: Promise<any>[] = [];
   opponentChatIds.forEach(opponentChatId => {
-    const opponentPromise = ctx.tg.sendVideo(opponentChatId, messageVideo.file_id);
+    const opponentPromise = ctx.tg.sendVideoNote(opponentChatId, messageVideoNote.file_id);
     opponentPromises.push(opponentPromise);
   });
   return await Promise.all(opponentPromises);
 };
 
-export { onVideoMessage };
+export { onVideoNoteMessage };
