@@ -26,7 +26,7 @@ jobs:
     - name: serverless deploy
       uses: serverless/github-action@master
       with:
-        args: deploy --stage prod
+        args: deploy --stage ${{ secrets.SERVERLESS_STAGE }}
       env:
         SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
         # or if using AWS credentials directly
