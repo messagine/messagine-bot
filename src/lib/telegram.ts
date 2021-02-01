@@ -22,6 +22,7 @@ import {
   onPhotoMessage,
   onStickerMessage,
   onTextMessage,
+  onVenueMessage,
   onVideoMessage,
   onVoiceMessage,
 } from '../message';
@@ -52,6 +53,7 @@ async function botUtils() {
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
+    .on('venue', onVenueMessage())
     .on('location', onLocationMessage())
     .on('photo', onPhotoMessage())
     .on('sticker', onStickerMessage())
@@ -60,8 +62,7 @@ async function botUtils() {
     .on('voice', onVoiceMessage())
     .on('edited_message', onEditedMessage())
     .on('game', onInvalidMessage('game'))
-    .on('poll', onInvalidMessage('poll'))
-    .on('venue', onInvalidMessage('venue'));
+    .on('poll', onInvalidMessage('poll'));
 }
 
 async function localBot() {
