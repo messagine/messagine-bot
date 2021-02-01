@@ -7,5 +7,6 @@ export * from './onLocationMessage';
 export * from './onPhotoMessage';
 export * from './onStickerMessage';
 export * from './onTextMessage';
+export * from './onVenueMessage';
 export * from './onVideoMessage';
 export * from './onVoiceMessage';
