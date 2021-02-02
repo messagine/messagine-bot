@@ -40,8 +40,9 @@ async function botUtils() {
   const languageMenu = languageMenuMiddleware();
 
   bot.use(Telegraf.log());
-  bot.use(logger);
   bot.use(languageMenu);
+  bot.use(catcher);
+  bot.use(logger);
 
   bot
     .command(commandEnum.start, startCommand())
@@ -82,7 +83,7 @@ async function localBot() {
   await bot.telegram.deleteWebhook();
 
   debug(`starting polling`);
-  await bot.start();
+  bot.start();
 }
 
 export async function status() {
@@ -180,6 +181,14 @@ export const logger = async (_: TelegrafContext, next: any): Promise<void> => {
   const ms = new Date().getTime() - logStart.getTime();
   // tslint:disable-next-line: no-console
   console.log('Response time: %sms', ms);
+};
+
+const catcher = async (ctx: TelegrafContext, next: any): Promise<void> => {
+  try {
+    await next();
+  } catch (e) {
+    await ctx.reply('Unhandled error');
+  }
 };
 
 if (config.IS_DEV) {
