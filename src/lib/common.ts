@@ -2,6 +2,8 @@ import _ from 'lodash';
 import { TelegrafContext } from 'telegraf/typings/context';
 import * as languageFile from '../../languages.json';
 import config from '../config';
+import { ChatIdNotFoundError, ChatNotExistError } from '../error';
+import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
 
@@ -40,4 +42,20 @@ export function getTopLanguages(): ILanguage[] {
   const favLanguages = _.filter(languages, l => l.fav_order !== undefined);
   const sortedTopLanguages = _.sortBy(favLanguages, l => l.fav_order);
   return sortedTopLanguages;
+}
+
+export function getChatId(ctx: TelegrafContext): number {
+  const chatId = ctx.chat?.id;
+  if (!chatId) {
+    throw new ChatIdNotFoundError();
+  }
+  return chatId;
+}
+
+export async function getExistingChat(chatId: number): Promise<IChat> {
+  const existingChat = await findExistingChat(chatId);
+  if (!existingChat) {
+    throw new ChatNotExistError(chatId);
+  }
+  return existingChat;
 }

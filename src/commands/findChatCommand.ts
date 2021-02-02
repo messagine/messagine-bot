@@ -1,6 +1,7 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
 import commandEnum from '../lib/commandEnum';
+import { getChatId } from '../lib/common';
 import {
   addToLobby,
   createChat,
@@ -10,18 +11,12 @@ import {
   getUser,
   leaveLobby,
 } from '../lib/dataHandler';
-import resource from '../resource';
 const debug = Debug(`command:${commandEnum.findChat}`);
 
 const findChatCommand = () => async (ctx: TelegrafContext) => {
   debug(`Triggered "${commandEnum.findChat}" command.`);
 
-  const chatId = ctx.chat?.id;
-  if (!chatId) {
-    debug(resource.CHATID_NOT_FOUND);
-    return await ctx.reply(resource.CHATID_NOT_FOUND);
-  }
-
+  const chatId = getChatId(ctx);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
   const userPromise = getUser(chatId);
