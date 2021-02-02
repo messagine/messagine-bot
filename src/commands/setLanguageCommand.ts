@@ -18,15 +18,7 @@ function languageMenuMiddleware() {
 function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<TelegrafContext>) {
   const languages = getTopLanguages();
   const languageRecords = mapLanguagesToRecords(languages);
-  const menuTemplate = new MenuTemplate<TelegrafContext>(() => `Choose new language.`);
-  menuTemplate.choose('topLanguages', languageRecords, {
-    buttonText: (_, key) => languageRecords[key],
-    columns: 2,
-    do: async (context, key) => {
-      await languageSelected(context, key, languageRecords);
-      return false;
-    },
-  });
+  const menuTemplate = generateMenuTemplate('topLanguages', 'Choose new language.', languageRecords);
   menuTemplate.chooseIntoSubmenu('topLanguages', ['Show All >>'], allLanguagesMenuTemplate);
   return menuTemplate;
 }
@@ -34,8 +26,14 @@ function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<Tele
 function getAllLanguagesMenuTemplate() {
   const languages = getAllLanguages();
   const languageRecords = mapLanguagesToRecords(languages);
-  const menuTemplate = new MenuTemplate<TelegrafContext>(() => `Showing all languages.`);
-  menuTemplate.choose('allLanguages', languageRecords, {
+  const menuTemplate = generateMenuTemplate('allLanguages', 'Showing all languages.', languageRecords);
+  menuTemplate.manualRow(createBackMainMenuButtons('<< Show Top 10', '<< Show Top 10'));
+  return menuTemplate;
+}
+
+function generateMenuTemplate(actionPrefix: string, title: string, languageRecords: Record<string, string>) {
+  const menuTemplate = new MenuTemplate<TelegrafContext>(() => title);
+  menuTemplate.choose(actionPrefix, languageRecords, {
     buttonText: (_, key) => languageRecords[key],
     columns: 2,
     do: async (context, key) => {
@@ -44,7 +42,6 @@ function getAllLanguagesMenuTemplate() {
     },
     maxRows: 100,
   });
-  menuTemplate.manualRow(createBackMainMenuButtons('<< Show Top 10', '<< Show Top 10'));
   return menuTemplate;
 }
 
