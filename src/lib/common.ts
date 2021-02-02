@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { TelegrafContext } from 'telegraf/typings/context';
 import * as languageFile from '../../languages.json';
 import config from '../config';
-import { ChatIdNotFoundError, ChatNotExistError } from '../error';
+import { ChatIdNotFoundError, ChatNotExistError, InvalidNumberOfOpponentError } from '../error';
 import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
@@ -17,10 +17,13 @@ export function getLanguage(ctx: TelegrafContext): ILanguage {
   return language;
 }
 
-export function getOpponentChatIds(chat: IChat, chatId: number): number[] {
+export function extractOpponentChatId(chat: IChat, chatId: number): number {
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
-  return opponentChatIds;
+  if (opponentChatIds.length !== 1) {
+    throw new InvalidNumberOfOpponentError(chatId, opponentChatIds);
+  }
+  return opponentChatIds[0];
 }
 
 export function mapLanguagesToRecords(languages: ILanguage[]): Record<string, string> {
@@ -58,4 +61,10 @@ export async function getExistingChat(chatId: number): Promise<IChat> {
     throw new ChatNotExistError(chatId);
   }
   return existingChat;
+}
+
+export async function getOpponentChatId(chatId: number): Promise<number> {
+  const existingChat = await getExistingChat(chatId);
+  const opponentChatId = extractOpponentChatId(existingChat, chatId);
+  return opponentChatId;
 }
