@@ -1,11 +1,7 @@
-import Debug from 'debug';
 import { Context as TelegrafContext } from 'telegraf';
 import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
-import commandEnum from '../lib/commandEnum';
-import { getAllLanguages, getTopLanguages, mapLanguagesToRecords } from '../lib/common';
+import { getAllLanguages, getChatId, getTopLanguages, mapLanguagesToRecords } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
-import resource from '../resource';
-const debug = Debug(`command:${commandEnum.setLanguage}`);
 
 const setLanguageCommand = (languageMenu: MenuMiddleware<TelegrafContext>) => (ctx: TelegrafContext) => {
   return languageMenu.replyToContext(ctx);
@@ -53,20 +49,14 @@ function getAllLanguagesMenuTemplate() {
 }
 
 async function languageSelected(
-  context: TelegrafContext,
+  ctx: TelegrafContext,
   languageCode: string,
   languageRecords: Record<string, string>,
 ) {
-  const chatId = context.chat?.id;
-  if (!chatId) {
-    debug(resource.CHATID_NOT_FOUND);
-    await context.reply(resource.CHATID_NOT_FOUND);
-    return;
-  }
-
+  const chatId = getChatId(ctx);
   const setLanguagePromise = setLanguage(chatId, languageCode);
-  const answerQueryPromise = context.answerCbQuery();
-  const replyPromise = context.reply(`${languageRecords[languageCode]} selected.`);
+  const answerQueryPromise = ctx.answerCbQuery();
+  const replyPromise = ctx.reply(`${languageRecords[languageCode]} selected.`);
   const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
   await Promise.all(promises);
 }

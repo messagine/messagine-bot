@@ -187,7 +187,7 @@ const catcher = async (ctx: TelegrafContext, next: any): Promise<void> => {
   try {
     await next();
   } catch (e) {
-    await ctx.reply('Unhandled error');
+    await ctx.reply(e.message);
   }
 };
 

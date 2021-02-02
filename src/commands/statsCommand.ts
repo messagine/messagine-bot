@@ -1,19 +1,14 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
 import commandEnum from '../lib/commandEnum';
+import { getChatId } from '../lib/common';
 import { getChatCount, getPreviousChatCount, getUserCount, getUserPreviousChatCount } from '../lib/dataHandler';
-import resource from '../resource';
 const debug = Debug(`command:${commandEnum.stats}`);
 
 const statsCommand = () => async (ctx: TelegrafContext) => {
   debug(`Triggered "${commandEnum.stats}" command.`);
 
-  const chatId = ctx.chat?.id;
-  if (!chatId) {
-    debug(resource.CHATID_NOT_FOUND);
-    return await ctx.reply(resource.CHATID_NOT_FOUND);
-  }
-
+  const chatId = getChatId(ctx);
   const userCountPromise = getUserCount();
   const chatCountPromise = getChatCount();
   const previousChatCountPromise = getPreviousChatCount();
