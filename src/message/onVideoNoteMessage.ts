@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getExistingChat, getOpponentChatIds } from '../lib/common';
+import { getChatId, getOpponentChatId } from '../lib/common';
 const debug = Debug('message:on_video_note');
 
 const onVideoNoteMessage = () => async (ctx: TelegrafContext) => {
@@ -13,14 +13,8 @@ const onVideoNoteMessage = () => async (ctx: TelegrafContext) => {
     throw new MessageTypeNotFoundError(chatId, 'video note');
   }
 
-  const existingChat = await getExistingChat(chatId);
-  const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Promise<any>[] = [];
-  opponentChatIds.forEach(opponentChatId => {
-    const opponentPromise = ctx.tg.sendVideoNote(opponentChatId, messageVideoNote.file_id);
-    opponentPromises.push(opponentPromise);
-  });
-  return await Promise.all(opponentPromises);
+  const opponentChatId = await getOpponentChatId(chatId);
+  return await ctx.tg.sendVideoNote(opponentChatId, messageVideoNote.file_id);
 };
 
 export { onVideoNoteMessage };

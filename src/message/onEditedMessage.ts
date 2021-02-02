@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import { TelegrafContext } from 'telegraf/typings/context';
-import { getChatId, getExistingChat, getOpponentChatIds } from '../lib/common';
+import { getChatId, getOpponentChatId } from '../lib/common';
 const debug = Debug('message:on_edited');
 
 const onEditedMessage = () => async (ctx: TelegrafContext) => {
@@ -13,15 +13,9 @@ const onEditedMessage = () => async (ctx: TelegrafContext) => {
     return await ctx.reply('Edited message text not found.');
   }
 
-  const existingChat = await getExistingChat(chatId);
   const editMessageText = `Edited to: ${messageText}`;
-  const opponentChatIds = getOpponentChatIds(existingChat, chatId);
-  const opponentPromises: Promise<any>[] = [];
-  opponentChatIds.forEach(opponentChatId => {
-    const opponentPromise = ctx.tg.sendMessage(opponentChatId, editMessageText);
-    opponentPromises.push(opponentPromise);
-  });
-  return await Promise.all(opponentPromises);
+  const opponentChatId = await getOpponentChatId(chatId);
+  return await ctx.tg.sendMessage(opponentChatId, editMessageText);
 };
 
 export { onEditedMessage };

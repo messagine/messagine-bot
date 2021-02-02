@@ -48,11 +48,7 @@ function getAllLanguagesMenuTemplate() {
   return menuTemplate;
 }
 
-async function languageSelected(
-  ctx: TelegrafContext,
-  languageCode: string,
-  languageRecords: Record<string, string>,
-) {
+async function languageSelected(ctx: TelegrafContext, languageCode: string, languageRecords: Record<string, string>) {
   const chatId = getChatId(ctx);
   const setLanguagePromise = setLanguage(chatId, languageCode);
   const answerQueryPromise = ctx.answerCbQuery();
