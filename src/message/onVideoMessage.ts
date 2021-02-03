@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_video');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onVideoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_video" message.');
+const onVideoMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.video}`);
 
   const chatId = getChatId(ctx);
   const messageVideo = ctx.message?.video;
   if (!messageVideo) {
-    throw new MessageTypeNotFoundError(chatId, 'video');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.video);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

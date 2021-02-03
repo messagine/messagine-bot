@@ -1,9 +1,10 @@
-import { Context as TelegrafContext } from 'telegraf';
 import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
-import { getAllLanguages, getChatId, getTopLanguages, mapLanguagesToRecords } from '../lib/common';
+import { getAllLanguages, getChatId, getTopLanguages, IMessagineContext, mapLanguagesToRecords } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 
-const setLanguageCommand = (languageMenu: MenuMiddleware<TelegrafContext>) => (ctx: TelegrafContext) => {
+const setLanguageCommand = (languageMenu: MenuMiddleware<IMessagineContext>) => (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
   return languageMenu.replyToContext(ctx);
 };
 
@@ -15,7 +16,7 @@ function languageMenuMiddleware() {
   return middleware;
 }
 
-function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<TelegrafContext>) {
+function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<IMessagineContext>) {
   const languages = getTopLanguages();
   const languageRecords = mapLanguagesToRecords(languages);
   const menuTemplate = generateMenuTemplate('topLanguages', 'Choose new language.', languageRecords);
@@ -32,7 +33,7 @@ function getAllLanguagesMenuTemplate() {
 }
 
 function generateMenuTemplate(actionPrefix: string, title: string, languageRecords: Record<string, string>) {
-  const menuTemplate = new MenuTemplate<TelegrafContext>(() => title);
+  const menuTemplate = new MenuTemplate<IMessagineContext>(() => title);
   menuTemplate.choose(actionPrefix, languageRecords, {
     buttonText: (_, key) => languageRecords[key],
     columns: 2,
@@ -45,7 +46,7 @@ function generateMenuTemplate(actionPrefix: string, title: string, languageRecor
   return menuTemplate;
 }
 
-async function languageSelected(ctx: TelegrafContext, languageCode: string, languageRecords: Record<string, string>) {
+async function languageSelected(ctx: IMessagineContext, languageCode: string, languageRecords: Record<string, string>) {
   const chatId = getChatId(ctx);
   const setLanguagePromise = setLanguage(chatId, languageCode);
   const answerQueryPromise = ctx.answerCbQuery();

@@ -71,6 +71,7 @@ functions:
     environment:
       BOT_TOKEN: ${param:BOT_TOKEN}
       ENDPOINT_URL: ${param:ENDPOINT_URL}
+      MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       WEBHOOK_PATH: 'api'
   webhook:
     handler: src/handler.webhookHandler
@@ -82,6 +83,7 @@ functions:
       BOT_TOKEN: ${param:BOT_TOKEN}
       DB_URL: ${param:DB_URL}
       ENDPOINT_URL: ${param:ENDPOINT_URL}
+      MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

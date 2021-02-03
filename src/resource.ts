@@ -1,4 +1,4 @@
-import commandEnum from './lib/commandEnum';
+import { commandEnum } from './lib/enums';
 
 export default {
   CANCEL_FIND_COMMAND_DESC: 'Cancel Chat Find',

@@ -1,12 +1,9 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-import commandEnum from '../lib/commandEnum';
-import { getChatId } from '../lib/common';
+import { getChatId, IMessagineContext } from '../lib/common';
 import { getChatCount, getPreviousChatCount, getUserCount, getUserPreviousChatCount } from '../lib/dataHandler';
-const debug = Debug(`command:${commandEnum.stats}`);
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 
-const statsCommand = () => async (ctx: TelegrafContext) => {
-  debug(`Triggered "${commandEnum.stats}" command.`);
+const statsCommand = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.stats}`);
 
   const chatId = getChatId(ctx);
   const userCountPromise = getUserCount();

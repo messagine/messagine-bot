@@ -7,7 +7,7 @@ import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
 
-export function getLanguage(ctx: TelegrafContext): ILanguage {
+export function getLanguage(ctx: IMessagineContext): ILanguage {
   const languageCode = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
   const languages: ILanguage[] = languageFile;
   const language = _.find(languages, l => l.lang === languageCode);
@@ -47,7 +47,7 @@ export function getTopLanguages(): ILanguage[] {
   return sortedTopLanguages;
 }
 
-export function getChatId(ctx: TelegrafContext): number {
+export function getChatId(ctx: IMessagineContext): number {
   const chatId = ctx.chat?.id;
   if (!chatId) {
     throw new ChatIdNotFoundError();
@@ -67,4 +67,8 @@ export async function getOpponentChatId(chatId: number): Promise<number> {
   const existingChat = await getExistingChat(chatId);
   const opponentChatId = extractOpponentChatId(existingChat, chatId);
   return opponentChatId;
+}
+
+export interface IMessagineContext extends TelegrafContext {
+  mixpanel?: any;
 }
