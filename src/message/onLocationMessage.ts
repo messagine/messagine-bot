@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_location');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onLocationMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_location" message.');
+const onLocationMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.location}`);
 
   const chatId = getChatId(ctx);
   const messageLocation = ctx.message?.location;
   if (!messageLocation) {
-    throw new MessageTypeNotFoundError(chatId, 'location');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.location);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

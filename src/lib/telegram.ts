@@ -1,5 +1,7 @@
 import Debug from 'debug';
-import Telegraf, { Context as TelegrafContext, Extra } from 'telegraf';
+import Telegraf, { Extra } from 'telegraf';
+// tslint:disable-next-line: no-var-requires
+const TelegrafMixpanel = require('telegraf-mixpanel');
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
   cancelFindCommand,
@@ -28,18 +30,21 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import commandEnum from './commandEnum';
+import { IMessagineContext } from './common';
 import { connect } from './dataHandler';
+import { commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 
 export const bot = new Telegraf(config.BOT_TOKEN);
+export const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
 
 async function botUtils() {
   await connect();
   const languageMenu = languageMenuMiddleware();
 
   bot.use(Telegraf.log());
+  bot.use(mixpanel.middleware());
   bot.use(languageMenu);
   bot.use(catcher);
   bot.use(logger);
@@ -158,7 +163,7 @@ export async function webhook(event: any) {
   return ok('Success');
 }
 
-export function toArgs(ctx: TelegrafContext) {
+export function toArgs(ctx: IMessagineContext) {
   const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]+)?$/i;
   const parts = regex.exec(ctx.message!.text!.trim());
   if (!parts) {
@@ -173,7 +178,7 @@ export const NO_PREVIEW = MARKDOWN.webPreview(false);
 
 export const hiddenCharacter = '\u200b';
 
-export const logger = async (_: TelegrafContext, next: any): Promise<void> => {
+export const logger = async (_: IMessagineContext, next: any): Promise<void> => {
   const logStart = new Date();
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -183,7 +188,7 @@ export const logger = async (_: TelegrafContext, next: any): Promise<void> => {
   console.log('Response time: %sms', ms);
 };
 
-const catcher = async (ctx: TelegrafContext, next: any): Promise<void> => {
+const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
   try {
     await next();
   } catch (e) {

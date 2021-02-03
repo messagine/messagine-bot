@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_sticker');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onStickerMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_sticker" message.');
+const onStickerMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.sticker}`);
 
   const chatId = getChatId(ctx);
   const messageSticker = ctx.message?.sticker;
   if (!messageSticker) {
-    throw new MessageTypeNotFoundError(chatId, 'sticker');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.sticker);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

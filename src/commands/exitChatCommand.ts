@@ -1,12 +1,9 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-import commandEnum from '../lib/commandEnum';
-import { extractOpponentChatId, getChatId, getExistingChat } from '../lib/common';
+import { extractOpponentChatId, getChatId, getExistingChat, IMessagineContext } from '../lib/common';
 import { createPreviousChat, deleteChat } from '../lib/dataHandler';
-const debug = Debug(`command:${commandEnum.exitChat}`);
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 
-const exitChatCommand = () => async (ctx: TelegrafContext) => {
-  debug(`Triggered "${commandEnum.exitChat}" command.`);
+const exitChatCommand = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
 
   const chatId = getChatId(ctx);
   const existingChat = await getExistingChat(chatId);

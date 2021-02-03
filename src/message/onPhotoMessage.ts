@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_photo');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onPhotoMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_photo" message.');
+const onPhotoMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`);
 
   const chatId = getChatId(ctx);
   const messagePhoto = ctx.message?.photo;
   if (!messagePhoto) {
-    throw new MessageTypeNotFoundError(chatId, 'photo');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.photo);
   }
 
   const photoSize = messagePhoto.length;

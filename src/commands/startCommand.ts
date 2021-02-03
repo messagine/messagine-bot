@@ -1,16 +1,20 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-import commandEnum from '../lib/commandEnum';
-import { getChatId, getLanguage } from '../lib/common';
+import { getChatId, getLanguage, IMessagineContext } from '../lib/common';
 import { addUser, getUser } from '../lib/dataHandler';
-const debug = Debug(`command:${commandEnum.start}`);
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 
-const startCommand = () => async (ctx: TelegrafContext) => {
+const startCommand = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
+  ctx.mixpanel.people.set({
+    first_name: ctx.from?.first_name,
+    language_code: ctx.from?.language_code,
+    last_name: ctx.from?.last_name,
+    username: ctx.from?.username,
+  });
+
   const chatId = getChatId(ctx);
 
   const user = await getUser(chatId);
   if (!user) {
-    debug(`Triggered "${commandEnum.start}" command.`);
     const language = getLanguage(ctx);
     const addUserPromise = addUser(chatId, language.lang);
     const messageParts = [

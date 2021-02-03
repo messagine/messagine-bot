@@ -1,9 +1,8 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-const debug = Debug('message:on_invalid');
+import { IMessagineContext } from '../lib/common';
+import { eventTypeEnum } from '../lib/enums';
 
-const onInvalidMessage = (type: string) => async (ctx: TelegrafContext) => {
-  debug(`Triggered invalid ${type} type.`);
+const onInvalidMessage = (type: string) => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.invalid.${type}`);
   return await ctx.reply('Invalid input.');
 };
 

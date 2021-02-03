@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_animation');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onAnimationMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_animation" message.');
+const onAnimationMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.animation}`);
 
   const chatId = getChatId(ctx);
   const messageAnimation = ctx.message?.animation;
   if (!messageAnimation) {
-    throw new MessageTypeNotFoundError(chatId, 'animation');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.animation);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

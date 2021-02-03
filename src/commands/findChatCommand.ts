@@ -1,7 +1,4 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-import commandEnum from '../lib/commandEnum';
-import { getChatId } from '../lib/common';
+import { getChatId, IMessagineContext } from '../lib/common';
 import {
   addToLobby,
   createChat,
@@ -11,10 +8,10 @@ import {
   getUser,
   leaveLobby,
 } from '../lib/dataHandler';
-const debug = Debug(`command:${commandEnum.findChat}`);
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 
-const findChatCommand = () => async (ctx: TelegrafContext) => {
-  debug(`Triggered "${commandEnum.findChat}" command.`);
+const findChatCommand = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
 
   const chatId = getChatId(ctx);
   const lobbyPromise = findLobby(chatId);

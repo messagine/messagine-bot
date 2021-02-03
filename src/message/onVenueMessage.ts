@@ -1,16 +1,15 @@
-import Debug from 'debug';
 import { MessageTypeNotFoundError } from '../error';
 import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_venue');
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 // TODO: Fix after telegraf v4 upgrade
 const onVenueMessage = () => async (ctx: any) => {
-  debug('Triggered "on_venue" message.');
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.venue}`);
 
   const chatId = getChatId(ctx);
   const messageVenue = ctx.message?.venue;
   if (!messageVenue) {
-    throw new MessageTypeNotFoundError(chatId, 'venue');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.venue);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_edited');
+import { MessageTypeNotFoundError } from '../error';
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onEditedMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_edited" message.');
+const onEditedMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.editedMessage}`);
 
   const chatId = getChatId(ctx);
   const messageText = ctx.editedMessage?.text;
   if (!messageText) {
-    debug('Edited message text not found.');
-    return await ctx.reply('Edited message text not found.');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.editedMessage);
   }
 
   const editMessageText = `Edited to: ${messageText}`;

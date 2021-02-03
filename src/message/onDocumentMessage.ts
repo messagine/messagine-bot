@@ -1,16 +1,14 @@
-import Debug from 'debug';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { MessageTypeNotFoundError } from '../error';
-import { getChatId, getOpponentChatId } from '../lib/common';
-const debug = Debug('message:on_document');
+import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
+import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onDocumentMessage = () => async (ctx: TelegrafContext) => {
-  debug('Triggered "on_document" message.');
+const onDocumentMessage = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.document}`);
 
   const chatId = getChatId(ctx);
   const messageDocument = ctx.message?.document;
   if (!messageDocument) {
-    throw new MessageTypeNotFoundError(chatId, 'document');
+    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.document);
   }
 
   const opponentChatId = await getOpponentChatId(chatId);

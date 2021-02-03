@@ -1,8 +1,9 @@
-import { TelegrafContext } from 'telegraf/typings/context';
-import commandEnum from '../lib/commandEnum';
+import { IMessagineContext } from '../lib/common';
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 import resource from '../resource';
 
-const helpCommand = () => async (ctx: TelegrafContext) => {
+const helpCommand = () => async (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
   const messageParts = [
     `/${commandEnum.findChat}: ${resource.FIND_CHAT_COMMAND_DESC}`,
     `/${commandEnum.exitChat}: ${resource.EXIT_CHAT_COMMAND_DESC}`,
