@@ -8,11 +8,11 @@ const onEditedMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageText = ctx.editedMessage?.text;
   if (!messageText) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.editedMessage);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.editedMessage);
   }
 
-  const editMessageText = `Edited to: ${messageText}`;
-  const opponentChatId = await getOpponentChatId(chatId);
+  const editMessageText = ctx.i18n.t('message_edited', {newMessage: messageText});
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendMessage(opponentChatId, editMessageText);
 };
 

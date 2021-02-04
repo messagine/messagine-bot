@@ -8,10 +8,10 @@ const onTextMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageText = ctx.message?.text;
   if (!messageText) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.text);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.text);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendMessage(opponentChatId, messageText);
 };
 

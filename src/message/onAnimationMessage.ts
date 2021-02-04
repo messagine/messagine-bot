@@ -8,10 +8,10 @@ const onAnimationMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageAnimation = ctx.message?.animation;
   if (!messageAnimation) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.animation);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.animation);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
 };
 

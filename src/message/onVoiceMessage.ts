@@ -8,10 +8,10 @@ const onVoiceMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageVoice = ctx.message?.voice;
   if (!messageVoice) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.voice);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.voice);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendVoice(opponentChatId, messageVoice.file_id);
 };
 

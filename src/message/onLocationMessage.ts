@@ -8,10 +8,10 @@ const onLocationMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageLocation = ctx.message?.location;
   if (!messageLocation) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.location);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.location);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendLocation(opponentChatId, messageLocation.latitude, messageLocation.longitude);
 };
 

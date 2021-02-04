@@ -1,5 +1,5 @@
 import { getChatId, getLanguage, IMessagineContext } from '../lib/common';
-import { addUser, getUser } from '../lib/dataHandler';
+import { addUser } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 
 const startCommand = () => async (ctx: IMessagineContext) => {
@@ -11,22 +11,21 @@ const startCommand = () => async (ctx: IMessagineContext) => {
     username: ctx.from?.username,
   });
 
-  const chatId = getChatId(ctx);
-
-  const user = await getUser(chatId);
+  const user = ctx.user;
   if (!user) {
+    const chatId = getChatId(ctx);
     const language = getLanguage(ctx);
     const addUserPromise = addUser(chatId, language.lang);
-    const messageParts = [
-      'Welcome to Messagine Bot.',
-      `To find new chat, type /${commandEnum.findChat} command.`,
-      `Your language is ${language.name}, to change your language type /${commandEnum.setLanguage}.`,
-    ];
-    const message = messageParts.join(' ');
-    const replyPromise = ctx.reply(message);
+    const replyPromise = ctx.reply(
+      ctx.i18n.t('new_user', {
+        findChatCommand: commandEnum.findChat,
+        languageNativeName: language.native_name,
+        setLanguageCommand: commandEnum.setLanguage,
+      }),
+    );
     return await Promise.all([addUserPromise, replyPromise]);
   } else {
-    return await ctx.reply(`Welcome back. To find new chat, type /${commandEnum.findChat} command.`);
+    return await ctx.reply(ctx.i18n.t('welcome_back', { findChatCommand: commandEnum.findChat }));
   }
 };
 

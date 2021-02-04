@@ -9,10 +9,10 @@ const onVenueMessage = () => async (ctx: any) => {
   const chatId = getChatId(ctx);
   const messageVenue = ctx.message?.venue;
   if (!messageVenue) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.venue);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.venue);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendVenue(
     opponentChatId,
     messageVenue.location.latitude,

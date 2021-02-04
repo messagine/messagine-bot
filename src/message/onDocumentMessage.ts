@@ -8,10 +8,10 @@ const onDocumentMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageDocument = ctx.message?.document;
   if (!messageDocument) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.document);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.document);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendDocument(opponentChatId, messageDocument.file_id);
 };
 
