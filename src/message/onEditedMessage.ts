@@ -11,7 +11,7 @@ const onEditedMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.editedMessage);
   }
 
-  const editMessageText = ctx.i18n.t('message_edited', {newMessage: messageText});
+  const editMessageText = ctx.i18n.t('message_edited', { newMessage: messageText });
   const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendMessage(opponentChatId, editMessageText);
 };

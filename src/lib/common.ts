@@ -14,7 +14,9 @@ export function getLanguage(ctx: IMessagineContext): ILanguage {
   const language = _.find(languages, l => l.lang === languageCode);
   const defaultLanguage = _.find(languages, l => l.lang === config.DEFAULT_LANGUAGE_CODE);
   if (!language) {
-    if (!defaultLanguage) { throw new Error(ctx.i18n.t('default_language_not_found')); }
+    if (!defaultLanguage) {
+      throw new Error(ctx.i18n.t('default_language_not_found'));
+    }
     return defaultLanguage;
   } else {
     return language;
