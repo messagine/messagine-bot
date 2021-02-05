@@ -8,10 +8,10 @@ const onStickerMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageSticker = ctx.message?.sticker;
   if (!messageSticker) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.sticker);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.sticker);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendMessage(opponentChatId, messageSticker.file_id);
 };
 

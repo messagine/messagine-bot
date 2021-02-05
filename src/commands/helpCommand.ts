@@ -1,16 +1,15 @@
 import { IMessagineContext } from '../lib/common';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
-import resource from '../resource';
 
 const helpCommand = () => async (ctx: IMessagineContext) => {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
   const messageParts = [
-    `/${commandEnum.findChat}: ${resource.FIND_CHAT_COMMAND_DESC}`,
-    `/${commandEnum.exitChat}: ${resource.EXIT_CHAT_COMMAND_DESC}`,
-    `/${commandEnum.setLanguage}: ${resource.SET_LANGUAGE_COMMAND_DESC}`,
-    `/${commandEnum.cancelFind}: ${resource.CANCEL_FIND_COMMAND_DESC}`,
-    `/${commandEnum.help}: ${resource.HELP_COMMAND_DESC}`,
-    `/${commandEnum.stats}: ${resource.STATS_COMMAND_DESC}`,
+    `/${commandEnum.findChat}: ${ctx.i18n.t('find_chat_command_desc')}`,
+    `/${commandEnum.exitChat}: ${ctx.i18n.t('exit_chat_command_desc')}`,
+    `/${commandEnum.setLanguage}: ${ctx.i18n.t('set_language_command_desc')}`,
+    `/${commandEnum.cancelFind}: ${ctx.i18n.t('cancel_find_command_desc')}`,
+    `/${commandEnum.help}: ${ctx.i18n.t('help_command_desc')}`,
+    `/${commandEnum.stats}: ${ctx.i18n.t('stats_command_desc')}`,
   ];
   const message = messageParts.join('\n');
   return ctx.reply(message);

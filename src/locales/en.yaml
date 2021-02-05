@@ -1,0 +1,27 @@
+active_chat: You are in an active chat. To exit current chat type /${exitChatCommand} and try again.
+cancel_find: Find chat cancelled. To find new chat, type /${findChatCommand} command.
+cancel_find_command_desc: Cancel Chat Find
+chatid_not_found: Chat Id not found. Check your security settings.
+chat_not_exist: Chat doesn't exist. To find new chat, type /${findChatCommand} command.
+chat_start: Chat started. You can exit chat via /${exitChatCommand} command. Have fun.
+exit_chat: You have closed the conversation. To find new chat, type /${findChatCommand} command.
+exit_chat_command_desc: Exit Current Chat
+exit_chat_opponent: Conversation closed by opponent. To find new chat, type /${findChatCommand} command.
+find_chat_command_desc: Find Chat
+help_command_desc: Get Help
+invalid_opponent_error: Invalid number of opponents found.
+lobby_wait: Waiting in the lobby. You can exit lobby via /${cancelFindCommand} command.
+set_language_command_desc: Set Language
+stats_command_desc: Bot Statistics
+user_not_found: User not found. Type /${startCommand} to initialize user.
+user_stats: 'Users: ${numberOfUsers}'
+all_chat_stats: 'All Chats: ${numberOfChats}'
+previous_chat_stats: 'Previous Chats: ${numberOfPreviousChats}'
+my_previous_chat_stats: 'My Previous Chats: ${numberOfMyPreviousChats}'
+welcome_back: Welcome back. To find new chat, type /${findChatCommand} command.
+new_user: Welcome to Messagine Bot. To find new chat, type /${findChatCommand} command. Your language is ${languageNativeName}, to change your language type /${setLanguageCommand}.
+message_edited: 'Message Edited: ${newMessage}'
+default_language_not_found: Default language not found.
+invalid_input: Invalid input
+message_type_not_found: Message ${messageType} not found.
+language_selected: 'Selected Language: ${selectedLanguage}'

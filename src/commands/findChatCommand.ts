@@ -5,7 +5,6 @@ import {
   findExistingChat,
   findLobby,
   findOpponentInLobby,
-  getUser,
   leaveLobby,
 } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
@@ -16,31 +15,30 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
-  const userPromise = getUser(chatId);
-  const checkResults = await Promise.all([lobbyPromise, existingChatPromise, userPromise]);
+  const checkResults = await Promise.all([lobbyPromise, existingChatPromise]);
 
   const lobby = checkResults[0];
   if (lobby) {
-    await ctx.reply(`Waiting in the lobby. You can exit lobby via /${commandEnum.cancelFind} command.`);
+    await ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
     return;
   }
 
   const existingChat = checkResults[1];
   if (existingChat) {
-    await ctx.reply(`You are in an active chat. To exit current chat type /${commandEnum.exitChat} and try again.`);
+    await ctx.reply(ctx.i18n.t('active_chat', { exitChatCommand: commandEnum.exitChat }));
     return;
   }
 
-  const user = checkResults[2];
+  const user = ctx.user;
   if (!user) {
-    await ctx.reply(`User not found. Type /${commandEnum.start} to initialize user.`);
+    await ctx.reply(ctx.i18n.t('user_not_found', { startCommand: commandEnum.start }));
     return;
   }
 
   const opponent = await findOpponentInLobby(chatId, user.languageCode);
 
   if (opponent) {
-    const chatStartMessage = `Chat started. You can exit chat via /${commandEnum.exitChat} command. Have fun.`;
+    const chatStartMessage = ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat });
 
     const leaveCurrentUserLobbyPromise = leaveLobby(chatId);
     const leaveOpponentUserLobbyPromise = leaveLobby(opponent.chatId);
@@ -57,9 +55,7 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
     ]);
   } else {
     const addToLobbyPromise = addToLobby(chatId, user.languageCode);
-    const lobbyMessagePromise = ctx.reply(
-      `Waiting in the lobby. You can exit lobby via /${commandEnum.cancelFind} command.`,
-    );
+    const lobbyMessagePromise = ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
 
     return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }

@@ -8,13 +8,13 @@ const onPhotoMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messagePhoto = ctx.message?.photo;
   if (!messagePhoto) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.photo);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.photo);
   }
 
   const photoSize = messagePhoto.length;
   const biggestPhoto = messagePhoto[photoSize - 1];
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
 };
 

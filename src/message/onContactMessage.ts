@@ -9,10 +9,10 @@ const onContactMessage = () => async (ctx: any) => {
   const chatId = getChatId(ctx);
   const messageContact = ctx.message?.contact;
   if (!messageContact) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.contact);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.contact);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendContact(
     opponentChatId,
     messageContact.phone_number,

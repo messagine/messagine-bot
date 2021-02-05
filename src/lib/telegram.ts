@@ -1,5 +1,6 @@
 import Debug from 'debug';
 import Telegraf, { Extra } from 'telegraf';
+import TelegrafI18n from 'telegraf-i18n';
 // tslint:disable-next-line: no-var-requires
 const TelegrafMixpanel = require('telegraf-mixpanel');
 import { BotCommand } from 'telegraf/typings/telegram-types';
@@ -30,14 +31,20 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import { IMessagineContext } from './common';
-import { connect } from './dataHandler';
+import { getChatId, IMessagineContext } from './common';
+import { connect, getUser } from './dataHandler';
 import { commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
+import path from 'path';
 
-export const bot = new Telegraf(config.BOT_TOKEN);
-export const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
+const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
+const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
+const i18n = new TelegrafI18n({
+  defaultLanguage: config.DEFAULT_LANGUAGE_CODE,
+  defaultLanguageOnMissing: true, // implies allowMissing = true
+  directory: path.resolve(__dirname, '../locales'),
+});
 
 async function botUtils() {
   await connect();
@@ -45,6 +52,8 @@ async function botUtils() {
 
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
+  bot.use(i18n.middleware());
+  bot.use(userMiddleware);
   bot.use(languageMenu);
   bot.use(catcher);
   bot.use(logger);
@@ -194,6 +203,16 @@ const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
   } catch (e) {
     await ctx.reply(e.message);
   }
+};
+
+const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
+  const chatId = getChatId(ctx);
+  const user = await getUser(chatId);
+  if (user) {
+    ctx.user = user;
+    ctx.i18n.locale(user.languageCode);
+  }
+  await next();
 };
 
 if (config.IS_DEV) {

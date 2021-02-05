@@ -8,10 +8,10 @@ const onVideoNoteMessage = () => async (ctx: IMessagineContext) => {
   const chatId = getChatId(ctx);
   const messageVideoNote = ctx.message?.video_note;
   if (!messageVideoNote) {
-    throw new MessageTypeNotFoundError(chatId, messageTypeEnum.videoNote);
+    throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.videoNote);
   }
 
-  const opponentChatId = await getOpponentChatId(chatId);
+  const opponentChatId = await getOpponentChatId(ctx, chatId);
   return await ctx.tg.sendVideoNote(opponentChatId, messageVideoNote.file_id);
 };
 

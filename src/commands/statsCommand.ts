@@ -19,10 +19,10 @@ const statsCommand = () => async (ctx: IMessagineContext) => {
   ]);
 
   const messageParts = [
-    `Users: ${result[0]}`,
-    `Chats: ${result[1]}`,
-    `Previous Chats: ${result[2]}`,
-    `Your Previous Chats: ${result[3]}`,
+    ctx.i18n.t('user_stats', { numberOfUsers: result[0] }),
+    ctx.i18n.t('all_chat_stats', { numberOfChats: result[1] }),
+    ctx.i18n.t('previous_chat_stats', { numberOfPreviousChats: result[2] }),
+    ctx.i18n.t('my_previous_chat_stats', { numberOfMyPreviousChats: result[3] }),
   ];
 
   const message = messageParts.join('\n');
