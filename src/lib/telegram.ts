@@ -38,7 +38,7 @@ import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
 
-const bot = new Telegraf(config.BOT_TOKEN);
+const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
 const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
 const i18n = new TelegrafI18n({
   defaultLanguage: config.DEFAULT_LANGUAGE_CODE,

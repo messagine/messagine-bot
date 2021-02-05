@@ -10,10 +10,9 @@ import { IUser } from './models/User';
 
 export function getLanguage(ctx: IMessagineContext): ILanguage {
   const languageCode = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
-  const languages: ILanguage[] = languageFile;
-  const language = _.find(languages, l => l.lang === languageCode);
-  const defaultLanguage = _.find(languages, l => l.lang === config.DEFAULT_LANGUAGE_CODE);
+  const language = findLanguage(languageCode);
   if (!language) {
+    const defaultLanguage = findLanguageSafe(config.DEFAULT_LANGUAGE_CODE);
     if (!defaultLanguage) {
       throw new Error(ctx.i18n.t('default_language_not_found'));
     }
@@ -21,6 +20,19 @@ export function getLanguage(ctx: IMessagineContext): ILanguage {
   } else {
     return language;
   }
+}
+
+export function findLanguage(code: string) {
+  const languages: ILanguage[] = languageFile;
+  return _.find(languages, l => l.lang === code);
+}
+
+export function findLanguageSafe(code: string) {
+  const language = findLanguage(code);
+  if (!language) {
+    throw new Error('Language not found.');
+  }
+  return language;
 }
 
 export function extractOpponentChatId(ctx: IMessagineContext, chat: IChat, chatId: number): number {

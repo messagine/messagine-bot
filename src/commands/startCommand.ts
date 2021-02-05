@@ -6,9 +6,12 @@ const startCommand = () => async (ctx: IMessagineContext) => {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
   ctx.mixpanel.people.set({
     first_name: ctx.from?.first_name,
-    language_code: ctx.from?.language_code,
     last_name: ctx.from?.last_name,
     username: ctx.from?.username,
+  });
+  ctx.mixpanel.people.setOnce({
+    language_code: ctx.from?.language_code,
+    signup_date: new Date(),
   });
 
   const user = ctx.user;

@@ -24,3 +24,4 @@ message_edited: 'Message Edited: ${newMessage}'
 default_language_not_found: Default language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
+language_selected: 'Selected Language: ${selectedLanguage}'
