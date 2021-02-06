@@ -10,6 +10,7 @@ export function connect() {
     return;
   }
   return mongoose.connect(config.DB_URL, {
+    useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -70,17 +71,17 @@ export function createPreviousChat(chat: IChat, closedBy: number) {
 }
 
 export function getUserCount(): Promise<number> {
-  return User.count({}).exec();
+  return User.estimatedDocumentCount({}).exec();
 }
 
 export function getChatCount(): Promise<number> {
-  return Chat.count({}).exec();
+  return Chat.estimatedDocumentCount({}).exec();
 }
 
 export function getPreviousChatCount(): Promise<number> {
-  return PreviousChat.count({}).exec();
+  return PreviousChat.estimatedDocumentCount({}).exec();
 }
 
 export function getUserPreviousChatCount(chatId: number): Promise<number> {
-  return PreviousChat.count({ chatIds: chatId }).exec();
+  return PreviousChat.countDocuments({ chatIds: chatId }).exec();
 }
