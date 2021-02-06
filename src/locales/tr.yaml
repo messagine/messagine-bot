@@ -12,12 +12,8 @@ help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
 lobby_wait: Lobide bekleniyor. Lobiden çıkmak için /${cancelFindCommand} komutunu kullanabilirsiniz.
 set_language_command_desc: Dil Değiştir
-stats_command_desc: Bot İstatistikleri
+about_command_desc: Bot Hakkında & İstatistikler
 user_not_found: Kullanıcı bulunamadı. /${startCommand} komutu ile kullanıcınızı oluşturabilirsiniz.
-user_stats: 'Kullanıcılar: ${numberOfUsers}'
-all_chat_stats: 'Tüm Konuşmalar: ${numberOfChats}'
-previous_chat_stats: 'Geçmiş Konuşmalar: ${numberOfPreviousChats}'
-my_previous_chat_stats: 'Geçmiş Konuşmalarım: ${numberOfMyPreviousChats}'
 welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
 new_user: Messagine Bot'a hoş geldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} komutunu kullanabilirsiniz.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
@@ -25,3 +21,4 @@ default_language_not_found: Varsayılan dil bulunamadı.
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
 language_selected: 'Seçilen Dil: ${selectedLanguage}'
+about_reply: '<b>Bot Hakkında</b>\nBu bir <a href="https://github.com/messagine/messagine-bot">açık kaynak projedir</a> ve projenin amacı insanların sosyalleşmesidir. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">mail gönderin</a>.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}'

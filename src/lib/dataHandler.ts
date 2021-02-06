@@ -69,7 +69,7 @@ export function createPreviousChat(chat: IChat, closedBy: number) {
   });
 }
 
-export function getUserCount() {
+export function getUserCount(): Promise<number> {
   return User.count({}).exec();
 }
 

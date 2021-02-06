@@ -5,6 +5,7 @@ import TelegrafI18n from 'telegraf-i18n';
 const TelegrafMixpanel = require('telegraf-mixpanel');
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
+  aboutCommand,
   cancelFindCommand,
   exitChatCommand,
   findChatCommand,
@@ -12,7 +13,6 @@ import {
   languageMenuMiddleware,
   setLanguageCommand,
   startCommand,
-  statsCommand,
 } from '../commands';
 import config from '../config';
 import {
@@ -60,12 +60,12 @@ async function botUtils() {
 
   bot
     .command(commandEnum.start, startCommand())
+    .command(commandEnum.about, aboutCommand())
     .command(commandEnum.findChat, findChatCommand())
     .command(commandEnum.setLanguage, setLanguageCommand(languageMenu))
     .command(commandEnum.exitChat, exitChatCommand())
     .command(commandEnum.cancelFind, cancelFindCommand())
     .command(commandEnum.help, helpCommand())
-    .command(commandEnum.stats, statsCommand())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
@@ -141,7 +141,7 @@ const commands: BotCommand[] = [
   { command: commandEnum.setLanguage, description: resource.SET_LANGUAGE_COMMAND_DESC },
   { command: commandEnum.cancelFind, description: resource.CANCEL_FIND_COMMAND_DESC },
   { command: commandEnum.help, description: resource.HELP_COMMAND_DESC },
-  { command: commandEnum.stats, description: resource.STATS_COMMAND_DESC },
+  { command: commandEnum.about, description: resource.ABOUT_COMMAND_DESC },
 ];
 
 function checkCommands(existingCommands: BotCommand[]) {
@@ -218,12 +218,12 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
 if (config.IS_DEV) {
   // tslint:disable-next-line: no-console
   console.log('isDev', config.IS_DEV);
+  startDevelopment();
+}
 
-  localBot().then(() => {
-    // call bot commands and middlware
-    botUtils().then(() => {
-      // launch bot
-      bot.launch();
-    });
-  });
+async function startDevelopment() {
+  await syncCommands();
+  await localBot();
+  await botUtils();
+  await bot.launch();
 }

@@ -12,12 +12,8 @@ help_command_desc: Get Help
 invalid_opponent_error: Invalid number of opponents found.
 lobby_wait: Waiting in the lobby. You can exit lobby via /${cancelFindCommand} command.
 set_language_command_desc: Set Language
-stats_command_desc: Bot Statistics
+about_command_desc: About Bot & Statistics
 user_not_found: User not found. Type /${startCommand} to initialize user.
-user_stats: 'Users: ${numberOfUsers}'
-all_chat_stats: 'All Chats: ${numberOfChats}'
-previous_chat_stats: 'Previous Chats: ${numberOfPreviousChats}'
-my_previous_chat_stats: 'My Previous Chats: ${numberOfMyPreviousChats}'
 welcome_back: Welcome back. To find new chat, type /${findChatCommand} command.
 new_user: Welcome to Messagine Bot. To find new chat, type /${findChatCommand} command. Your language is ${languageNativeName}, to change your language type /${setLanguageCommand}.
 message_edited: 'Message Edited: ${newMessage}'
@@ -25,3 +21,4 @@ default_language_not_found: Default language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
 language_selected: 'Selected Language: ${selectedLanguage}'
+about_reply: '<b>About Bot</b>\nThis is an <a href="https://github.com/messagine/messagine-bot">open source project</a> and the aim is to socialize people. If you have any issue please send an <a href="mailto:messaginebot@gmail.com">email</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}'
