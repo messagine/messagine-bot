@@ -9,7 +9,7 @@ const helpCommand = () => async (ctx: IMessagineContext) => {
     `/${commandEnum.setLanguage}: ${ctx.i18n.t('set_language_command_desc')}`,
     `/${commandEnum.cancelFind}: ${ctx.i18n.t('cancel_find_command_desc')}`,
     `/${commandEnum.help}: ${ctx.i18n.t('help_command_desc')}`,
-    `/${commandEnum.stats}: ${ctx.i18n.t('stats_command_desc')}`,
+    `/${commandEnum.about}: ${ctx.i18n.t('about_command_desc')}`,
   ];
   const message = messageParts.join('\n');
   return ctx.reply(message);
