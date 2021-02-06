@@ -21,4 +21,4 @@ default_language_not_found: Varsayılan dil bulunamadı.
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
 language_selected: 'Seçilen Dil: ${selectedLanguage}'
-about_reply: '<b>Bot Hakkında</b>\nBu bir <a href="https://github.com/messagine/messagine-bot">açık kaynak projedir</a> ve projenin amacı insanların sosyalleşmesidir. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">mail gönderin</a>.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}'
+about_reply: '<b>Bot Hakkında</b>\nBu bir <a href="https://github.com/messagine/messagine-bot">açık kaynak projedir</a> ve projenin amacı insanların sosyalleşmesidir. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}'

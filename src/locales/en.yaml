@@ -21,4 +21,4 @@ default_language_not_found: Default language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
 language_selected: 'Selected Language: ${selectedLanguage}'
-about_reply: '<b>About Bot</b>\nThis is an <a href="https://github.com/messagine/messagine-bot">open source project</a> and the aim is to socialize people. If you have any issue please send an <a href="mailto:messaginebot@gmail.com">email</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}'
+about_reply: '<b>About Bot</b>\nThis is an <a href="https://github.com/messagine/messagine-bot">open source project</a> and the aim is to socialize people. If you have any issue please send an e-mail to <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}'
