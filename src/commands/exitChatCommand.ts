@@ -6,8 +6,8 @@ const exitChatCommand = () => async (ctx: IMessagineContext) => {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
 
   const chatId = getChatId(ctx);
-  const existingChat = await getExistingChat(ctx, chatId);
-  const opponentChatId = extractOpponentChatId(ctx, existingChat, chatId);
+  const existingChat = await getExistingChat(ctx);
+  const opponentChatId = extractOpponentChatId(ctx, existingChat);
   const sendMessagePromise = ctx.reply(ctx.i18n.t('exit_chat', { findChatCommand: commandEnum.findChat }));
 
   const deleteChatPromise = deleteChat(existingChat.id);

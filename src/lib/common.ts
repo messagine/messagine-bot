@@ -3,6 +3,7 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import * as languageFile from '../../languages.json';
 import config from '../config';
 import { ChatIdNotFoundError, ChatNotExistError, InvalidNumberOfOpponentError } from '../error';
+import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
 import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
@@ -12,7 +13,7 @@ export function getLanguage(ctx: IMessagineContext): ILanguage {
   const languageCode = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
   const language = findLanguage(languageCode);
   if (!language) {
-    const defaultLanguage = findLanguageSafe(config.DEFAULT_LANGUAGE_CODE);
+    const defaultLanguage = findLanguageSafe(ctx, config.DEFAULT_LANGUAGE_CODE);
     return defaultLanguage;
   } else {
     return language;
@@ -24,15 +25,17 @@ export function findLanguage(code: string) {
   return _.find(languages, l => l.lang === code);
 }
 
-export function findLanguageSafe(code: string) {
+export function findLanguageSafe(ctx: IMessagineContext, code: string) {
+  const chatId = getChatId(ctx);
   const language = findLanguage(code);
   if (!language) {
-    throw new Error('Language not found.');
+    throw new LanguageNotFoundError(ctx, chatId, code);
   }
   return language;
 }
 
-export function extractOpponentChatId(ctx: IMessagineContext, chat: IChat, chatId: number): number {
+export function extractOpponentChatId(ctx: IMessagineContext, chat: IChat): number {
+  const chatId = getChatId(ctx);
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
   if (opponentChatIds.length !== 1) {
@@ -70,7 +73,8 @@ export function getChatId(ctx: IMessagineContext): number {
   return chatId;
 }
 
-export async function getExistingChat(ctx: IMessagineContext, chatId: number): Promise<IChat> {
+export async function getExistingChat(ctx: IMessagineContext): Promise<IChat> {
+  const chatId = getChatId(ctx);
   const existingChat = await findExistingChat(chatId);
   if (!existingChat) {
     throw new ChatNotExistError(ctx, chatId);
@@ -78,9 +82,9 @@ export async function getExistingChat(ctx: IMessagineContext, chatId: number): P
   return existingChat;
 }
 
-export async function getOpponentChatId(ctx: IMessagineContext, chatId: number): Promise<number> {
-  const existingChat = await getExistingChat(ctx, chatId);
-  const opponentChatId = extractOpponentChatId(ctx, existingChat, chatId);
+export async function getOpponentChatId(ctx: IMessagineContext): Promise<number> {
+  const existingChat = await getExistingChat(ctx);
+  const opponentChatId = extractOpponentChatId(ctx, existingChat);
   return opponentChatId;
 }
 

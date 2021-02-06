@@ -47,7 +47,7 @@ function generateMenuTemplate(actionPrefix: string, title: string, languages: IL
     buttonText: (_ctx, key) => languageRecords[key],
     columns: 2,
     do: async (context, key) => {
-      const language = findLanguageSafe(key);
+      const language = findLanguageSafe(context, key);
       await languageSelected(context, language);
       return false;
     },

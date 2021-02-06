@@ -11,7 +11,7 @@ const onAnimationMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.animation);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
 };
 

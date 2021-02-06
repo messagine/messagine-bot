@@ -11,7 +11,7 @@ const onTextMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.text);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendMessage(opponentChatId, messageText);
 };
 

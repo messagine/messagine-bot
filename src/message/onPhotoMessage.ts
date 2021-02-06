@@ -14,7 +14,7 @@ const onPhotoMessage = () => async (ctx: IMessagineContext) => {
   const photoSize = messagePhoto.length;
   const biggestPhoto = messagePhoto[photoSize - 1];
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
 };
 
