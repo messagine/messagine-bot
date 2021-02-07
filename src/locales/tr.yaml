@@ -10,7 +10,7 @@ exit_chat_opponent: Konuşma sonlandırıldı. Yeni konuşma bulmak için /${fin
 find_chat_command_desc: Konuşma ara
 help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Lobide bekleniyor. Lobiden çıkmak için /${cancelFindCommand} komutunu kullanabilirsiniz.
+lobby_wait: Lobide bekleniyor. Sohbet edebileceğiniz birini bulduğumuzda konuşmayı başlatıp size haber vereceğiz. Lobiden çıkmak için /${cancelFindCommand} komutunu kullanabilirsiniz.
 set_language_command_desc: Dil Değiştir
 about_command_desc: Bot Hakkında & İstatistikler
 user_not_found: Kullanıcı bulunamadı. /${startCommand} komutu ile kullanıcınızı oluşturabilirsiniz.

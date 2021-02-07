@@ -10,7 +10,7 @@ exit_chat_opponent: Conversation closed by opponent. To find new chat, type /${f
 find_chat_command_desc: Find Chat
 help_command_desc: Get Help
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: Waiting in the lobby. You can exit lobby via /${cancelFindCommand} command.
+lobby_wait: Waiting in the lobby. When we find someone you can chat with, we will start the conversation and let you know. You can exit lobby via /${cancelFindCommand} command.
 set_language_command_desc: Set Language
 about_command_desc: About Bot & Statistics
 user_not_found: User not found. Type /${startCommand} to initialize user.
