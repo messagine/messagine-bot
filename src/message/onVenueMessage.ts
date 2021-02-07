@@ -12,7 +12,7 @@ const onVenueMessage = () => async (ctx: any) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.venue);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendVenue(
     opponentChatId,
     messageVenue.location.latitude,

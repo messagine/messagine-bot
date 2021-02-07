@@ -17,7 +17,7 @@ user_not_found: User not found. Type /${startCommand} to initialize user.
 welcome_back: Welcome back. To find new chat, type /${findChatCommand} command.
 new_user: Welcome to Messagine Bot. To find new chat, type /${findChatCommand} command. Your language is ${languageNativeName}, to change your language type /${setLanguageCommand}.
 message_edited: 'Message Edited: ${newMessage}'
-default_language_not_found: Default language not found.
+language_not_found: Language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
 language_selected: 'Selected Language: ${selectedLanguage}'

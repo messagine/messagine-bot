@@ -17,7 +17,7 @@ user_not_found: Kullanıcı bulunamadı. /${startCommand} komutu ile kullanıcı
 welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
 new_user: Messagine Bot'a hoş geldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} komutunu kullanabilirsiniz.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
-default_language_not_found: Varsayılan dil bulunamadı.
+language_not_found: Dil bulunamadı.
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
 language_selected: 'Seçilen Dil: ${selectedLanguage}'

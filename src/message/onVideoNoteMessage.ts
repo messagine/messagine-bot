@@ -11,7 +11,7 @@ const onVideoNoteMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.videoNote);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendVideoNote(opponentChatId, messageVideoNote.file_id);
 };
 

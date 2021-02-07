@@ -12,7 +12,7 @@ const onContactMessage = () => async (ctx: any) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.contact);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx, chatId);
+  const opponentChatId = await getOpponentChatId(ctx);
   return await ctx.tg.sendContact(
     opponentChatId,
     messageContact.phone_number,
