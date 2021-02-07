@@ -4,20 +4,17 @@ import { commandEnum, eventTypeEnum } from '../lib/enums';
 
 const startCommand = () => async (ctx: IMessagineContext) => {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
-  ctx.mixpanel.people.set({
-    first_name: ctx.from?.first_name,
-    last_name: ctx.from?.last_name,
-    username: ctx.from?.username,
-  });
-  ctx.mixpanel.people.setOnce({
-    language_code: ctx.from?.language_code,
-    signup_date: new Date(),
-  });
-
   const user = ctx.user;
   if (!user) {
     const chatId = getChatId(ctx);
     const language = getLanguage(ctx);
+    ctx.mixpanel.people.set({
+      first_name: ctx.from?.first_name,
+      language_code: language.lang,
+      last_name: ctx.from?.last_name,
+      signup_date: new Date(),
+      username: ctx.from?.username,
+    });
     const addUserPromise = addUser(chatId, language.lang);
     const replyPromise = ctx.reply(
       ctx.i18n.t('new_user', {
