@@ -1,5 +1,11 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import { getChatCount, getPreviousChatCount, getUserCount, getUserPreviousChatCount } from '../lib/dataHandler';
+import {
+  getChatCount,
+  getLobbyCount,
+  getPreviousChatCount,
+  getUserCount,
+  getUserPreviousChatCount,
+} from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 
 const aboutCommand = () => async (ctx: IMessagineContext) => {
@@ -10,20 +16,29 @@ const aboutCommand = () => async (ctx: IMessagineContext) => {
   const chatCountPromise = getChatCount();
   const previousChatCountPromise = getPreviousChatCount();
   const userPreviousChatCountPromise = getUserPreviousChatCount(chatId);
+  const lobbyCountPromise = getLobbyCount();
 
   const result = await Promise.all([
     userCountPromise,
     chatCountPromise,
     previousChatCountPromise,
     userPreviousChatCountPromise,
+    lobbyCountPromise,
   ]);
   const numberOfUsers = result[0];
   const numberOfActiveChats = result[1];
   const numberOfPreviousChats = result[2];
   const numberOfMyPreviousChats = result[3];
+  const numberOfLobbyUsers = result[4];
 
   return await ctx.replyWithHTML(
-    ctx.i18n.t('about_reply', { numberOfUsers, numberOfActiveChats, numberOfPreviousChats, numberOfMyPreviousChats }),
+    ctx.i18n.t('about_reply', {
+      numberOfActiveChats,
+      numberOfLobbyUsers,
+      numberOfMyPreviousChats,
+      numberOfPreviousChats,
+      numberOfUsers,
+    }),
   );
 };
 

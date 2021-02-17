@@ -1,4 +1,5 @@
 import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
+import { Message } from 'telegraf/typings/telegram-types';
 import {
   findLanguageSafe,
   getAllLanguages,
@@ -7,7 +8,7 @@ import {
   IMessagineContext,
   mapLanguagesToRecords,
 } from '../lib/common';
-import { setLanguage } from '../lib/dataHandler';
+import { findExistingChat, findLobby, setLanguage } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
 
@@ -56,13 +57,48 @@ function generateMenuTemplate(actionPrefix: string, title: string, languages: IL
   return menuTemplate;
 }
 
+async function getReplyPromise(ctx: IMessagineContext, selectedLanguage: string): Promise<Message> {
+  const chatId = getChatId(ctx);
+  const lobbyPromise = findLobby(chatId);
+  const existingChatPromise = findExistingChat(chatId);
+  const checkResults = await Promise.all([lobbyPromise, existingChatPromise]);
+
+  const lobby = checkResults[0];
+  const existingChat = checkResults[1];
+
+  if (lobby) {
+    return ctx.reply(
+      ctx.i18n.t('language_selected_lobby', {
+        cancelFindCommand: commandEnum.cancelFind,
+        findChatCommand: commandEnum.findChat,
+        selectedLanguage,
+      }),
+    );
+  }
+  if (existingChat) {
+    return ctx.reply(
+      ctx.i18n.t('language_selected_chat', {
+        exitChatCommand: commandEnum.exitChat,
+        findChatCommand: commandEnum.findChat,
+        selectedLanguage,
+      }),
+    );
+  }
+  return ctx.reply(
+    ctx.i18n.t('language_selected_idle', {
+      findChatCommand: commandEnum.findChat,
+      selectedLanguage,
+    }),
+  );
+}
+
 async function languageSelected(ctx: IMessagineContext, language: ILanguage) {
   const chatId = getChatId(ctx);
   ctx.i18n.locale(language.lang);
   ctx.mixpanel.people.set({ language_code: language.lang });
   const setLanguagePromise = setLanguage(chatId, language.lang);
   const answerQueryPromise = ctx.answerCbQuery();
-  const replyPromise = ctx.reply(ctx.i18n.t('language_selected', { selectedLanguage: language.native_name }));
+  const replyPromise = getReplyPromise(ctx, language.native_name);
   const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
   await Promise.all(promises);
 }

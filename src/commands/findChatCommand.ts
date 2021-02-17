@@ -19,7 +19,12 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
 
   const lobby = checkResults[0];
   if (lobby) {
-    await ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
+    await ctx.reply(
+      ctx.i18n.t('lobby_wait', {
+        cancelFindCommand: commandEnum.cancelFind,
+        setLanguageCommand: commandEnum.setLanguage,
+      }),
+    );
     return;
   }
 
@@ -55,7 +60,12 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
     ]);
   } else {
     const addToLobbyPromise = addToLobby(chatId, user.languageCode);
-    const lobbyMessagePromise = ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
+    const lobbyMessagePromise = ctx.reply(
+      ctx.i18n.t('lobby_wait', {
+        cancelFindCommand: commandEnum.cancelFind,
+        setLanguageCommand: commandEnum.setLanguage,
+      }),
+    );
 
     return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }

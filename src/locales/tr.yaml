@@ -3,22 +3,24 @@ cancel_find: Konuşma arama iptal edildi. Yeni konuşma bulmak için /${findChat
 cancel_find_command_desc: Konuşma aramayı iptal et
 chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarınızı kontrol ediniz.
 chat_not_exist: Konuşmada değilsiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
-chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsiniz. İyi eğlenceler.
+chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsiniz. Konuşma sonlandırılırsa size haber vereceğiz. İyi eğlenceler.
 exit_chat: Konuşmayı sonlandırdınız. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
 exit_chat_command_desc: Konuşmayı sonlandır
 exit_chat_opponent: Konuşma sonlandırıldı. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
 find_chat_command_desc: Konuşma ara
 help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Lobide bekleniyor. Sohbet edebileceğiniz birini bulduğumuzda konuşmayı başlatıp size haber vereceğiz. Lobiden çıkmak için /${cancelFindCommand} komutunu kullanabilirsiniz.
+lobby_wait: Lobide bekleniyor. Sohbet edebileceğiniz birini bulduğumuzda konuşmayı başlatıp size haber vereceğiz. Eğer lobide uzun süre kalırsanız /${cancelFindCommand} komutuyla lobiden çıkıp /${setLanguageCommand} komutuyla dilinizi değiştirdikten sonra tekrar deneyebilirsiniz.
 set_language_command_desc: Dil Değiştir
 about_command_desc: Bot Hakkında & İstatistikler
 user_not_found: Kullanıcı bulunamadı. /${startCommand} komutu ile kullanıcınızı oluşturabilirsiniz.
 welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
-new_user: Messagine Bot'a hoş geldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} komutunu kullanabilirsiniz.
+new_user: '<b>Messagine Bot</b>\nAramıza hoşgeldin. Hemen konuşma başlatmak için /${findChatCommand} komutunu kullanabilirsiniz.\n\nDiliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} komutunu kullanabilirsiniz.\n\nTüm komutları görmek için /${helpCommand} komutunu kullanabilirsiniz.'
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
 language_not_found: Dil bulunamadı.
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
-language_selected: 'Seçilen Dil: ${selectedLanguage}'
-about_reply: '<b>Bot Hakkında</b>\nBu bir <a href="https://github.com/messagine/messagine-bot">açık kaynak projedir</a> ve projenin amacı insanların sosyalleşmesidir. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}'
+language_selected_lobby: 'Seçilen Dil: ${selectedLanguage}. Lobide eski seçilen dilde bekleniyor. Lobiye ${selectedLanguage} diliyle girmek için /${cancelFindCommand} komutuyla lobiden çıkıp /${findChatCommand} komutuyla tekrar konuşma arayabilirsiniz.'
+language_selected_chat: 'Seçilen Dil: ${selectedLanguage}. Konuşmanızda bir değişiklik yapmadık. /${exitChatCommand} komutu ile konuşmayı sonlandırıp /${findChatCommand} komutuyla tekrar konuşma arayabilirsiniz.'
+language_selected_idle: 'Seçilen Dil: ${selectedLanguage}. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.'
+about_reply: '<b>Bot Hakkında</b>\nBu projenin amacı insanların sosyalleşmesidir. Detaylı bilgi için <a href="https://messaginebot.com">web sayfamızı</a> ziyaret edebilirsiniz. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}\nLobidekiler: ${numberOfLobbyUsers}'

@@ -78,6 +78,10 @@ export function getChatCount(): Promise<number> {
   return Chat.estimatedDocumentCount({}).exec();
 }
 
+export function getLobbyCount(): Promise<number> {
+  return Lobby.estimatedDocumentCount({}).exec();
+}
+
 export function getPreviousChatCount(): Promise<number> {
   return PreviousChat.estimatedDocumentCount({}).exec();
 }

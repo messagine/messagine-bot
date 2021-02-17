@@ -16,9 +16,10 @@ const startCommand = () => async (ctx: IMessagineContext) => {
       username: ctx.from?.username,
     });
     const addUserPromise = addUser(chatId, language.lang);
-    const replyPromise = ctx.reply(
+    const replyPromise = ctx.replyWithHTML(
       ctx.i18n.t('new_user', {
         findChatCommand: commandEnum.findChat,
+        helpCommand: commandEnum.help,
         languageNativeName: language.native_name,
         setLanguageCommand: commandEnum.setLanguage,
       }),
