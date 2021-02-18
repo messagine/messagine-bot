@@ -24,9 +24,9 @@ const startCommand = () => async (ctx: IMessagineContext) => {
         setLanguageCommand: commandEnum.setLanguage,
       }),
     );
-    return await Promise.all([addUserPromise, replyPromise]);
+    return Promise.all([addUserPromise, replyPromise]);
   } else {
-    return await ctx.reply(ctx.i18n.t('welcome_back', { findChatCommand: commandEnum.findChat }));
+    return ctx.reply(ctx.i18n.t('welcome_back', { findChatCommand: commandEnum.findChat }));
   }
 };
 

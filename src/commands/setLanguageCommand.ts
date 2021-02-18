@@ -24,8 +24,7 @@ function languageMenuMiddleware() {
   const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
   const topLanguagesMenuTemplate = getTopLanguagesMenuTemplate(allLanguagesMenuTemplate);
 
-  const middleware = new MenuMiddleware('/', topLanguagesMenuTemplate);
-  return middleware;
+  return new MenuMiddleware('/', topLanguagesMenuTemplate);
 }
 
 function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<IMessagineContext>) {

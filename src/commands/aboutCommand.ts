@@ -31,7 +31,7 @@ const aboutCommand = () => async (ctx: IMessagineContext) => {
   const numberOfMyPreviousChats = result[3];
   const numberOfLobbyUsers = result[4];
 
-  return await ctx.replyWithHTML(
+  return ctx.replyWithHTML(
     ctx.i18n.t('about_reply', {
       numberOfActiveChats,
       numberOfLobbyUsers,

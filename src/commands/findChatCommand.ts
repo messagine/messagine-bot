@@ -51,7 +51,7 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
     const chatStartToCurrentUserPromise = ctx.reply(chatStartMessage);
     const chatStartToOpponentUserPromise = ctx.tg.sendMessage(opponent.chatId, chatStartMessage);
 
-    return await Promise.all([
+    return Promise.all([
       leaveCurrentUserLobbyPromise,
       leaveOpponentUserLobbyPromise,
       createChatPromise,
@@ -67,7 +67,7 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
       }),
     );
 
-    return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
+    return Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }
 };
 
