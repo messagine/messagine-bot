@@ -19,7 +19,6 @@ const setLanguageCommand = (languageMenu: MenuMiddleware<IMessagineContext>) => 
   return languageMenu.replyToContext(ctx);
 };
 
-// TODO: context geçir, localization ayarla
 function languageMenuMiddleware() {
   const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
   const topLanguagesMenuTemplate = getTopLanguagesMenuTemplate(allLanguagesMenuTemplate);
