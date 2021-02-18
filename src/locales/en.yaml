@@ -21,7 +21,7 @@ language_not_found: Language not found.
 language_not_changed: Language not changed.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
-language_selected_lobby: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. To enter the lobby in ${selectedLanguage}, you can exit the lobby via /${cancelFindCommand} and find new chat via /${findChatCommand}.'
-language_selected_chat: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. We did not make any changes in your chat. To start a new chat in ${selectedLanguage}, you can end the current chat via /${exitChatCommand} and find new chat via /${findChatCommand}.'
+language_selected_lobby: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. To find a new chat in ${selectedLanguage}, you can exit the lobby via /${cancelFindCommand} and find new chat via /${findChatCommand}.'
+language_selected_chat: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. We did not make any changes in your chat. To find a new chat in ${selectedLanguage}, you can end the current chat via /${exitChatCommand} and find new chat via /${findChatCommand}.'
 language_selected_idle: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. To find new chat in ${selectedLanguage}, type /${findChatCommand}.'
 about_reply: '<b>About Bot</b>\nAim of the project is to socialize people. For detailed information, you can visit <a href="https://messaginebot.com">our website</a>. If you have any issue please send an e-mail to <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}\nUsers In Lobby: ${numberOfLobbyUsers}'
