@@ -1,12 +1,12 @@
 active_chat: You are in an active chat. To exit current chat type /${exitChatCommand} and try again.
-cancel_find: Find chat cancelled. To find new chat, type /${findChatCommand} command.
+cancel_find: Find chat cancelled. To find new chat, type /${findChatCommand}.
 cancel_find_command_desc: Cancel Chat Find
 chatid_not_found: Chat Id not found. Check your security settings.
-chat_not_exist: Chat doesn't exist. To find new chat, type /${findChatCommand} command.
-chat_start: Chat started. You can exit chat via /${exitChatCommand} command. We will let you know if the conversation is ended. Have fun.
-exit_chat: You have ended the conversation. To find new chat, type /${findChatCommand} command.
+chat_not_exist: Chat doesn't exist. To find new chat, type /${findChatCommand}.
+chat_start: Chat started. You can exit chat via /${exitChatCommand}. We will let you know if the conversation is ended. Have fun.
+exit_chat: You have ended the conversation. To find new chat, type /${findChatCommand}.
 exit_chat_command_desc: Exit Current Chat
-exit_chat_opponent: Conversation ended by opponent. To find new chat, type /${findChatCommand} command.
+exit_chat_opponent: Conversation ended by opponent. To find new chat, type /${findChatCommand}.
 find_chat_command_desc: Find Chat
 help_command_desc: Get Help
 invalid_opponent_error: Invalid number of opponents found.
@@ -14,13 +14,14 @@ lobby_wait: Waiting in the lobby. When we find someone you can chat with, we wil
 set_language_command_desc: Set Language
 about_command_desc: About Bot & Statistics
 user_not_found: User not found. Type /${startCommand} to initialize user.
-welcome_back: Welcome back. To find new chat, type /${findChatCommand} command.
+welcome_back: Welcome back. To find new chat, type /${findChatCommand}.
 new_user: '<b>Messagine Bot</b>\nWelcome aboard. You can type /${findChatCommand} to start a chat right away.\n\nYour language is set to ${languageNativeName}, to change your language type /${setLanguageCommand}.\n\nTo see all commands type /${helpCommand}.'
 message_edited: 'Message Edited: ${newMessage}'
 language_not_found: Language not found.
+language_not_changed: Language not changed.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
-language_selected_lobby: 'Selected Language: ${selectedLanguage}. Waiting in the lobby in your previous language. To enter the lobby with the ${selectedLanguage} language, you can exit the lobby via /${cancelFindCommand} and find new chat via /${findChatCommand}'
-language_selected_chat: 'Selected Language: ${selectedLanguage}. We did not make any changes in your chat. You can end the chat via /${exitChatCommand} and find new chat via /${findChatCommand}.'
-language_selected_idle: 'Selected Language: ${selectedLanguage}. To find new chat, type /${findChatCommand} command.'
+language_selected_lobby: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. To enter the lobby in ${selectedLanguage}, you can exit the lobby via /${cancelFindCommand} and find new chat via /${findChatCommand}.'
+language_selected_chat: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. We did not make any changes in your chat. To start a new chat in ${selectedLanguage}, you can end the current chat via /${exitChatCommand} and find new chat via /${findChatCommand}.'
+language_selected_idle: 'Your language changed from ${previousLanguage} to ${selectedLanguage}. To find new chat in ${selectedLanguage}, type /${findChatCommand}.'
 about_reply: '<b>About Bot</b>\nAim of the project is to socialize people. For detailed information, you can visit <a href="https://messaginebot.com">our website</a>. If you have any issue please send an e-mail to <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}\nUsers In Lobby: ${numberOfLobbyUsers}'

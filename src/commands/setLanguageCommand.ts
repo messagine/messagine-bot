@@ -1,6 +1,8 @@
 import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
 import { Message } from 'telegraf/typings/telegram-types';
+import config from '../config';
 import {
+  findLanguage,
   findLanguageSafe,
   getAllLanguages,
   getChatId,
@@ -48,8 +50,7 @@ function generateMenuTemplate(actionPrefix: string, title: string, languages: IL
     buttonText: (_ctx, key) => languageRecords[key],
     columns: 2,
     do: async (context, key) => {
-      const language = findLanguageSafe(context, key);
-      await languageSelected(context, language);
+      await languageSelected(context, key);
       return false;
     },
     maxRows: 100,
@@ -57,7 +58,11 @@ function generateMenuTemplate(actionPrefix: string, title: string, languages: IL
   return menuTemplate;
 }
 
-async function getReplyPromise(ctx: IMessagineContext, selectedLanguage: string): Promise<Message> {
+async function getReplyPromise(
+  ctx: IMessagineContext,
+  previousLanguage: string,
+  selectedLanguage: string,
+): Promise<Message> {
   const chatId = getChatId(ctx);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
@@ -71,6 +76,7 @@ async function getReplyPromise(ctx: IMessagineContext, selectedLanguage: string)
       ctx.i18n.t('language_selected_lobby', {
         cancelFindCommand: commandEnum.cancelFind,
         findChatCommand: commandEnum.findChat,
+        previousLanguage,
         selectedLanguage,
       }),
     );
@@ -80,6 +86,7 @@ async function getReplyPromise(ctx: IMessagineContext, selectedLanguage: string)
       ctx.i18n.t('language_selected_chat', {
         exitChatCommand: commandEnum.exitChat,
         findChatCommand: commandEnum.findChat,
+        previousLanguage,
         selectedLanguage,
       }),
     );
@@ -87,18 +94,34 @@ async function getReplyPromise(ctx: IMessagineContext, selectedLanguage: string)
   return ctx.reply(
     ctx.i18n.t('language_selected_idle', {
       findChatCommand: commandEnum.findChat,
+      previousLanguage,
       selectedLanguage,
     }),
   );
 }
 
-async function languageSelected(ctx: IMessagineContext, language: ILanguage) {
+async function languageSelected(ctx: IMessagineContext, newLanguageCode: string) {
   const chatId = getChatId(ctx);
-  ctx.i18n.locale(language.lang);
-  ctx.mixpanel.people.set({ language_code: language.lang });
-  const setLanguagePromise = setLanguage(chatId, language.lang);
+  const previousLanguageCode = ctx.user?.languageCode || config.DEFAULT_LANGUAGE_CODE;
+
+  if (previousLanguageCode === newLanguageCode) {
+    await ctx.reply(ctx.i18n.t('language_not_changed'));
+    return;
+  }
+
+  const previousLanguage = findLanguage(previousLanguageCode);
+  const previousLanguageNativeName = previousLanguage ? previousLanguage.native_name : config.DEFAULT_LANGUAGE_NAME;
+  const newLanguage = findLanguageSafe(ctx, newLanguageCode);
+
+  ctx.i18n.locale(newLanguageCode);
+  if (ctx.user) {
+    ctx.user.languageCode = newLanguageCode;
+  }
+  ctx.mixpanel.people.set({ language_code: newLanguageCode });
+
+  const setLanguagePromise = setLanguage(chatId, newLanguageCode);
   const answerQueryPromise = ctx.answerCbQuery();
-  const replyPromise = getReplyPromise(ctx, language.native_name);
+  const replyPromise = getReplyPromise(ctx, previousLanguageNativeName, newLanguage.native_name);
   const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
   await Promise.all(promises);
 }
