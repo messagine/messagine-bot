@@ -11,12 +11,11 @@ import { setLanguage } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
 
-const setLanguageCommand = (languageMenu: MenuMiddleware<IMessagineContext>) => (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
+const switchLanguageCommand = (languageMenu: MenuMiddleware<IMessagineContext>) => (ctx: IMessagineContext) => {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.switchLanguage}`);
   return languageMenu.replyToContext(ctx);
 };
 
-// TODO: context geçir, localization ayarla
 function languageMenuMiddleware() {
   const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
   const topLanguagesMenuTemplate = getTopLanguagesMenuTemplate(allLanguagesMenuTemplate);
@@ -67,4 +66,4 @@ async function languageSelected(ctx: IMessagineContext, language: ILanguage) {
   await Promise.all(promises);
 }
 
-export { languageMenuMiddleware, setLanguageCommand };
+export { languageMenuMiddleware, switchLanguageCommand as switchLanguageCommand };

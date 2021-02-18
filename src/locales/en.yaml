@@ -1,24 +1,24 @@
 active_chat: You are in an active chat. To exit current chat type /${exitChatCommand} and try again.
-cancel_find: Find chat cancelled. To find new chat, type /${findChatCommand} command.
-cancel_find_command_desc: Cancel Chat Find
+exit_lobby: Exited the lobby. To find new chat, type /${findChatCommand} command.
+exit_lobby_command_desc: Exit Lobby
 chatid_not_found: Chat Id not found. Check your security settings.
 chat_not_exist: Chat doesn't exist. To find new chat, type /${findChatCommand} command.
-chat_start: Chat started. You can exit chat via /${exitChatCommand} command. Have fun.
+chat_start: Chat started. You can exit chat via /${exitChatCommand} command. If the chat is ended, we will let you know. Have fun.
 exit_chat: You have closed the conversation. To find new chat, type /${findChatCommand} command.
 exit_chat_command_desc: Exit Current Chat
 exit_chat_opponent: Conversation closed by opponent. To find new chat, type /${findChatCommand} command.
 find_chat_command_desc: Find Chat
 help_command_desc: Get Help
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: Waiting in the lobby. When we find someone you can chat with, we will start the conversation and let you know. You can exit lobby via /${cancelFindCommand} command.
-set_language_command_desc: Set Language
+lobby_wait: Waiting in the lobby. When we find someone you can chat with, we will start the conversation and let you know. You can exit lobby via /${exitLobbyCommand} command.
+switch_language_command_desc: Switch Language
 about_command_desc: About Bot & Statistics
 user_not_found: User not found. Type /${startCommand} to initialize user.
 welcome_back: Welcome back. To find new chat, type /${findChatCommand} command.
-new_user: Welcome to Messagine Bot. To find new chat, type /${findChatCommand} command. Your language is ${languageNativeName}, to change your language type /${setLanguageCommand}.
+new_user: <b>Messagine Bot</b>\nThe aim of the project is to socialize people anonymously. For detailed information, you can visit <a href="https://messaginebot.com">our website</a>. To find new chat, type /${findChatCommand} command. Your language is ${languageNativeName}, to change your language type /${switchLanguageCommand}. To see all commands type /${helpCommand}.
 message_edited: 'Message Edited: ${newMessage}'
 language_not_found: Language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
 language_selected: 'Selected Language: ${selectedLanguage}'
-about_reply: '<b>About Bot</b>\nThis is an <a href="https://github.com/messagine/messagine-bot">open source project</a> and the aim is to socialize people. If you have any issue please send an e-mail to <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}'
+about_reply: '<b>About Bot</b>\nThe aim of the project is to socialize people anonymously. For detailed information, you can visit <a href="https://messaginebot.com">our website</a>. If you have any issue please send an e-mail to <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a>.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}\nUsers in Lobby: ${numberOfLobbyUsers}'
