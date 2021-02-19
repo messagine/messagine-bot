@@ -19,7 +19,7 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
 
   const lobby = checkResults[0];
   if (lobby) {
-    await ctx.reply(ctx.i18n.t('lobby_wait', { exitLobbyCommand: commandEnum.exitLobby }));
+    await ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
     return;
   }
 
@@ -55,7 +55,7 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
     ]);
   } else {
     const addToLobbyPromise = addToLobby(chatId, user.languageCode);
-    const lobbyMessagePromise = ctx.reply(ctx.i18n.t('lobby_wait', { exitLobbyCommand: commandEnum.exitLobby }));
+    const lobbyMessagePromise = ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
 
     return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }

@@ -6,13 +6,13 @@ const TelegrafMixpanel = require('telegraf-mixpanel');
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
   aboutCommand,
+  cancelFindCommand,
   exitChatCommand,
-  exitLobbyCommand,
   findChatCommand,
   helpCommand,
   languageMenuMiddleware,
+  setLanguageCommand,
   startCommand,
-  switchLanguageCommand,
 } from '../commands';
 import config from '../config';
 import {
@@ -62,9 +62,9 @@ async function botUtils() {
     .command(commandEnum.start, startCommand())
     .command(commandEnum.about, aboutCommand())
     .command(commandEnum.findChat, findChatCommand())
-    .command(commandEnum.switchLanguage, switchLanguageCommand(languageMenu))
+    .command(commandEnum.setLanguage, setLanguageCommand(languageMenu))
     .command(commandEnum.exitChat, exitChatCommand())
-    .command(commandEnum.exitLobby, exitLobbyCommand())
+    .command(commandEnum.cancelFind, cancelFindCommand())
     .command(commandEnum.help, helpCommand())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
@@ -138,8 +138,8 @@ async function syncCommands() {
 const commands: BotCommand[] = [
   { command: commandEnum.findChat, description: resource.FIND_CHAT_COMMAND_DESC },
   { command: commandEnum.exitChat, description: resource.EXIT_CHAT_COMMAND_DESC },
-  { command: commandEnum.switchLanguage, description: resource.SWITCH_LANGUAGE_COMMAND_DESC },
-  { command: commandEnum.exitLobby, description: resource.EXIT_LOBBY_COMMAND_DESC },
+  { command: commandEnum.setLanguage, description: resource.SET_LANGUAGE_COMMAND_DESC },
+  { command: commandEnum.cancelFind, description: resource.CANCEL_FIND_COMMAND_DESC },
   { command: commandEnum.help, description: resource.HELP_COMMAND_DESC },
   { command: commandEnum.about, description: resource.ABOUT_COMMAND_DESC },
 ];

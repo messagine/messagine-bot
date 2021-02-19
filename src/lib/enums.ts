@@ -21,10 +21,10 @@ export const messageTypeEnum = {
 
 export const commandEnum = {
   about: 'about',
+  cancelFind: 'cancel_find',
   exitChat: 'exit_chat',
-  exitLobby: 'exit_lobby',
   findChat: 'find_chat',
   help: 'help',
+  setLanguage: 'set_language',
   start: 'start',
-  switchLanguage: 'switch_language',
 };

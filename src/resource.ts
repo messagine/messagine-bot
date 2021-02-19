@@ -1,8 +1,8 @@
 export default {
   ABOUT_COMMAND_DESC: 'About Bot & Statistics',
+  CANCEL_FIND_COMMAND_DESC: 'Cancel Chat Find',
   EXIT_CHAT_COMMAND_DESC: 'Exit Current Chat',
-  EXIT_LOBBY_COMMAND_DESC: 'Exit Lobby',
   FIND_CHAT_COMMAND_DESC: 'Find Chat',
   HELP_COMMAND_DESC: 'Get Help',
-  SWITCH_LANGUAGE_COMMAND_DESC: 'Switch Language',
+  SET_LANGUAGE_COMMAND_DESC: 'Set Language',
 };

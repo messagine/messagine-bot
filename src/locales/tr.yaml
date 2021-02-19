@@ -1,21 +1,21 @@
-active_chat: Konuşmadasınız. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanıp tekrar deneyin.
-exit_lobby: Lobiden çıktınız. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
-exit_lobby_command_desc: Konuşma aramayı iptal et
+active_chat: Konuşmadasınız. Konuşmayı sonlandırmak için /${exitChatCommand} yazıp tekrar deneyin.
+cancel_find: Lobiden çıktınız. Yeni konuşma bulmak için /${findChatCommand} yazın.
+cancel_find_command_desc: Konuşma aramayı iptal et
 chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarınızı kontrol ediniz.
-chat_not_exist: Konuşmada değilsiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
-chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsiniz. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
-exit_chat: Konuşmayı sonlandırdınız. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
+chat_not_exist: Konuşmada değilsiniz. Yeni konuşma bulmak için /${findChatCommand} yazın.
+chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} yazın. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
+exit_chat: Konuşmayı sonlandırdınız. Yeni konuşma bulmak için /${findChatCommand} yazın.
 exit_chat_command_desc: Konuşmayı sonlandır
-exit_chat_opponent: Konuşma sonlandırıldı. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
+exit_chat_opponent: Konuşma sonlandırıldı. Yeni konuşma bulmak için /${findChatCommand} yazın.
 find_chat_command_desc: Konuşma ara
 help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Lobide bekleniyor. Sohbet edebileceğiniz birini bulduğumuzda konuşmayı başlatıp size haber vereceğiz. Lobiden çıkmak için /${exitLobbyCommand} komutunu kullanabilirsiniz.
-switch_language_command_desc: Dil Değiştir
+lobby_wait: Lobide bekliyorsunuz, konuşma başladığında size haber vereceğiz. Lobiden /${cancelFindCommand} ile çıkabilirsiniz.
+set_language_command_desc: Dil Değiştir
 about_command_desc: Bot Hakkında & İstatistikler
-user_not_found: Kullanıcı bulunamadı. /${startCommand} komutu ile kullanıcınızı oluşturabilirsiniz.
-welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz.
-new_user: <b>Messagine Bot</b>\nProjenin amacı insanların anonim olarak sosyalleşmesidir. Detaylı bilgi için <a href="https://messaginebot.com">web sayfamızı</a> ziyaret edebilirsiniz. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin. Yeni konuşma bulmak için /${findChatCommand} komutunu kullanabilirsiniz. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${switchLanguageCommand} komutunu kullanabilirsiniz. Tüm komutları görmek için /${helpCommand} komutunu kullanabilirsiniz.
+user_not_found: Kullanıcı bulunamadı. /${startCommand} ile kullanıcınızı oluşturabilirsiniz.
+welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} yazın.
+new_user: <b>Messagine Bot</b>\nProjenin amacı insanların anonim olarak sosyalleşmesidir. Detaylı bilgi için <a href="https://messaginebot.com">web sayfamızı</a> ziyaret edebilirsiniz. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin. Yeni konuşma bulmak için /${findChatCommand} yazın. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} yazın. Tüm komutları görmek için /${helpCommand} yazın.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
 language_not_found: Dil bulunamadı.
 invalid_input: Geçersiz metin

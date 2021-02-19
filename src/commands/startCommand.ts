@@ -21,7 +21,7 @@ const startCommand = () => async (ctx: IMessagineContext) => {
         findChatCommand: commandEnum.findChat,
         helpCommand: commandEnum.help,
         languageNativeName: language.native_name,
-        switchLanguageCommand: commandEnum.switchLanguage,
+        setLanguageCommand: commandEnum.setLanguage,
       }),
     );
     return await Promise.all([addUserPromise, replyPromise]);
