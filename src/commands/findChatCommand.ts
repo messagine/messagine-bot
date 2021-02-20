@@ -8,8 +8,21 @@ import {
   leaveLobby,
 } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { activeChatReply, chatStartReply, chatStartToOpponent, lobbyWaitReply, userNotFoundReply } from '../reply';
 
 const findChatCommand = () => async (ctx: IMessagineContext) => {
+  return await onFindChat(ctx);
+};
+
+const findChatAction = () => (ctx: IMessagineContext) => {
+  return Promise.all([
+    ctx.deleteMessage(),
+    onFindChat(ctx),
+    ctx.answerCbQuery(),
+  ]);
+};
+
+async function onFindChat(ctx: IMessagineContext) {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
 
   const chatId = getChatId(ctx);
@@ -19,32 +32,30 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
 
   const lobby = checkResults[0];
   if (lobby) {
-    await ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
+    await lobbyWaitReply(ctx);
     return;
   }
 
   const existingChat = checkResults[1];
   if (existingChat) {
-    await ctx.reply(ctx.i18n.t('active_chat', { exitChatCommand: commandEnum.exitChat }));
+    await activeChatReply(ctx);
     return;
   }
 
   const user = ctx.user;
   if (!user) {
-    await ctx.reply(ctx.i18n.t('user_not_found', { startCommand: commandEnum.start }));
+    await userNotFoundReply(ctx);
     return;
   }
 
   const opponent = await findOpponentInLobby(chatId, user.languageCode);
 
   if (opponent) {
-    const chatStartMessage = ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat });
-
     const leaveCurrentUserLobbyPromise = leaveLobby(chatId);
     const leaveOpponentUserLobbyPromise = leaveLobby(opponent.chatId);
     const createChatPromise = createChat(chatId, opponent.chatId, user.languageCode);
-    const chatStartToCurrentUserPromise = ctx.reply(chatStartMessage);
-    const chatStartToOpponentUserPromise = ctx.tg.sendMessage(opponent.chatId, chatStartMessage);
+    const chatStartToCurrentUserPromise = chatStartReply(ctx);
+    const chatStartToOpponentUserPromise = chatStartToOpponent(ctx, opponent.chatId);
 
     return await Promise.all([
       leaveCurrentUserLobbyPromise,
@@ -55,10 +66,10 @@ const findChatCommand = () => async (ctx: IMessagineContext) => {
     ]);
   } else {
     const addToLobbyPromise = addToLobby(chatId, user.languageCode);
-    const lobbyMessagePromise = ctx.reply(ctx.i18n.t('lobby_wait', { cancelFindCommand: commandEnum.cancelFind }));
+    const lobbyMessagePromise = lobbyWaitReply(ctx);
 
     return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }
-};
+}
 
-export { findChatCommand };
+export { findChatAction, findChatCommand };

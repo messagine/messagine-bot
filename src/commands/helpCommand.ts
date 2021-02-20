@@ -1,18 +1,44 @@
-import { IMessagineContext } from '../lib/common';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { getChatId, IMessagineContext } from '../lib/common';
+import { findExistingChat, findLobby } from '../lib/dataHandler';
+import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
+import { helpReply } from '../reply';
 
 const helpCommand = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
-  const messageParts = [
-    `/${commandEnum.findChat}: ${ctx.i18n.t('find_chat_command_desc')}`,
-    `/${commandEnum.exitChat}: ${ctx.i18n.t('exit_chat_command_desc')}`,
-    `/${commandEnum.setLanguage}: ${ctx.i18n.t('set_language_command_desc')}`,
-    `/${commandEnum.cancelFind}: ${ctx.i18n.t('cancel_find_command_desc')}`,
-    `/${commandEnum.help}: ${ctx.i18n.t('help_command_desc')}`,
-    `/${commandEnum.about}: ${ctx.i18n.t('about_command_desc')}`,
-  ];
-  const message = messageParts.join('\n');
-  return ctx.reply(message);
+  return await onHelp(ctx);
 };
 
-export { helpCommand };
+const helpAction = () => (ctx: IMessagineContext) => {
+  return Promise.all([
+    ctx.deleteMessage(),
+    onHelp(ctx),
+    ctx.answerCbQuery(),
+  ]);
+};
+
+async function onHelp(ctx: IMessagineContext) {
+  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
+  const state = await getUserState(ctx);
+  return helpReply(ctx, state);
+}
+
+// TODO: Move to Context
+async function getUserState(ctx: IMessagineContext): Promise<string> {
+  const chatId = getChatId(ctx);
+  const lobbyPromise = findLobby(chatId);
+  const existingChatPromise = findExistingChat(chatId);
+  const checkResults = await Promise.all([lobbyPromise, existingChatPromise]);
+
+  const lobby = checkResults[0];
+  if (lobby) {
+    return userStateEnum.lobby;
+  }
+
+  const existingChat = checkResults[1];
+  if (existingChat) {
+    return userStateEnum.chat;
+  }
+
+  return userStateEnum.idle;
+}
+
+export { helpAction, helpCommand };

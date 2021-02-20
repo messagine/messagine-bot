@@ -7,8 +7,21 @@ import {
   getUserPreviousChatCount,
 } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { aboutReply } from '../reply';
 
 const aboutCommand = () => async (ctx: IMessagineContext) => {
+  return await onAbout(ctx);
+};
+
+const aboutAction = () => (ctx: IMessagineContext) => {
+  return Promise.all([
+    ctx.deleteMessage(),
+    onAbout(ctx),
+    ctx.answerCbQuery(),
+  ]);
+};
+
+async function onAbout(ctx: IMessagineContext) {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.about}`);
 
   const chatId = getChatId(ctx);
@@ -31,15 +44,14 @@ const aboutCommand = () => async (ctx: IMessagineContext) => {
   const numberOfMyPreviousChats = result[3];
   const numberOfLobbyUsers = result[4];
 
-  return await ctx.replyWithHTML(
-    ctx.i18n.t('about_reply', {
-      numberOfActiveChats,
-      numberOfLobbyUsers,
-      numberOfMyPreviousChats,
-      numberOfPreviousChats,
-      numberOfUsers,
-    }),
+  return await aboutReply(
+    ctx,
+    numberOfActiveChats,
+    numberOfLobbyUsers,
+    numberOfMyPreviousChats,
+    numberOfPreviousChats,
+    numberOfUsers,
   );
-};
+}
 
-export { aboutCommand };
+export { aboutAction, aboutCommand };

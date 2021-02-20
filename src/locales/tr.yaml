@@ -1,24 +1,31 @@
-active_chat: Konuşmadasınız. Konuşmayı sonlandırmak için /${exitChatCommand} yazıp tekrar deneyin.
-cancel_find: Lobiden çıktınız. Yeni konuşma bulmak için /${findChatCommand} yazın.
-cancel_find_command_desc: Konuşma aramayı iptal et
-chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarınızı kontrol ediniz.
-chat_not_exist: Konuşmada değilsiniz. Yeni konuşma bulmak için /${findChatCommand} yazın.
-chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} yazın. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
-exit_chat: Konuşmayı sonlandırdınız. Yeni konuşma bulmak için /${findChatCommand} yazın.
+active_chat: Konuşmadasın
+cancel_find: Lobiden çıktın
+cancel_find_command_desc: Lobiden Çık
+chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarını kontrol et.
+chat_not_exist: Konuşmada değilsiniz.
+chat_start: Konuşma başladı. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
+exit_chat: Konuşmayı sonlandırdın.
 exit_chat_command_desc: Konuşmayı sonlandır
-exit_chat_opponent: Konuşma sonlandırıldı. Yeni konuşma bulmak için /${findChatCommand} yazın.
-find_chat_command_desc: Konuşma ara
+exit_chat_opponent: Konuşma sonlandırıldı
+find_chat_command_desc: Konuşma Ara
 help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Lobide bekliyorsunuz, konuşma başladığında size haber vereceğiz. Lobiden /${cancelFindCommand} ile çıkabilirsiniz.
+lobby_wait: Lobide bekliyorsun, konuşma başladığında haber vereceğiz.
 set_language_command_desc: Dil Değiştir
-about_command_desc: Bot Hakkında & İstatistikler
-user_not_found: Kullanıcı bulunamadı. /${startCommand} ile kullanıcınızı oluşturabilirsiniz.
-welcome_back: Tekrar hoşgeldiniz. Yeni konuşma bulmak için /${findChatCommand} yazın.
-new_user: <b>Messagine Bot</b>\nProjenin amacı insanların anonim olarak sosyalleşmesidir. Detaylı bilgi için <a href="https://messaginebot.com">web sayfamızı</a> ziyaret edebilirsiniz. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin. Yeni konuşma bulmak için /${findChatCommand} yazın. Diliniz ${languageNativeName} olarak belirlendi, dil değişikliği için /${setLanguageCommand} yazın. Tüm komutları görmek için /${helpCommand} yazın.
+about_command_desc: Hakkında
+user_not_found: Kullanıcı bulunamadı
+welcome_back: Tekrar hoşgeldin.
+new_user: <b>Messagine Bot</b>\nProjenin amacı kullanıcıların anonim olarak sosyalleşmesidir. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
-language_not_found: Dil bulunamadı.
+language_not_found: Dil bulunamadı
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
 language_selected: 'Seçilen Dil: ${selectedLanguage}'
-about_reply: '<b>Bot Hakkında</b>\nProjenin amacı insanların anonim olarak sosyalleşmesidir. Detaylı bilgi için <a href="https://messaginebot.com">web sayfamızı</a> ziyaret edebilirsiniz. Eğer bir sorun yaşarsanız lütfen <a href="mailto:messaginebot@gmail.com">messaginebot@gmail.com</a> adresine mail gönderin.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}\nLobideki Kullanıcılar: ${numberOfLobbyUsers}'
+about_reply: '<b>Hakkında</b>\nProjenin amacı kullanıcıların anonim olarak sosyalleşmesidir.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}\nLobideki Kullanıcılar: ${numberOfLobbyUsers}'
+language_not_changed: Dil değişmedi.
+language_not_changed_in_chat: Konuşmada dil değişikliği yapılamaz.
+cancel_find_not_lobby: Lobide değilsin
+help: Yardım
+our_website: Web Sayfamız
+contact: İletişim
+start_command_desc: Kullanıcı Oluştur

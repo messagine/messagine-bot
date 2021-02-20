@@ -5,13 +5,21 @@ import TelegrafI18n from 'telegraf-i18n';
 const TelegrafMixpanel = require('telegraf-mixpanel');
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
+  aboutAction,
   aboutCommand,
+  cancelFindAction,
   cancelFindCommand,
+  changeLanguageAction,
+  exitChatAction,
   exitChatCommand,
+  findChatAction,
   findChatCommand,
+  helpAction,
   helpCommand,
-  languageMenuMiddleware,
-  setLanguageCommand,
+  showAllLanguagesAction,
+  showTopLanguagesAction,
+  showTopLanguagesCommand,
+  startAction,
   startCommand,
 } from '../commands';
 import config from '../config';
@@ -33,7 +41,7 @@ import {
 import resource from '../resource';
 import { getChatId, IMessagineContext } from './common';
 import { connect, getUser } from './dataHandler';
-import { commandEnum } from './enums';
+import { actionEnum, commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
@@ -48,13 +56,11 @@ const i18n = new TelegrafI18n({
 
 async function botUtils() {
   await connect();
-  const languageMenu = languageMenuMiddleware();
 
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
   bot.use(i18n.middleware());
   bot.use(userMiddleware);
-  bot.use(languageMenu);
   bot.use(catcher);
   bot.use(logger);
 
@@ -62,10 +68,19 @@ async function botUtils() {
     .command(commandEnum.start, startCommand())
     .command(commandEnum.about, aboutCommand())
     .command(commandEnum.findChat, findChatCommand())
-    .command(commandEnum.setLanguage, setLanguageCommand(languageMenu))
+    .command(commandEnum.setLanguage, showTopLanguagesCommand())
     .command(commandEnum.exitChat, exitChatCommand())
     .command(commandEnum.cancelFind, cancelFindCommand())
     .command(commandEnum.help, helpCommand())
+    .action(commandEnum.help, helpAction())
+    .action(commandEnum.start, startAction())
+    .action(commandEnum.about, aboutAction())
+    .action(commandEnum.findChat, findChatAction())
+    .action(commandEnum.setLanguage, showTopLanguagesAction())
+    .action(actionEnum.allLanguages, showAllLanguagesAction())
+    .action(/change_language:(.+)/, changeLanguageAction())
+    .action(commandEnum.exitChat, exitChatAction())
+    .action(commandEnum.cancelFind, cancelFindAction())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
@@ -135,6 +150,7 @@ async function syncCommands() {
   }
 }
 
+// TODO: get i18n texts with default language
 const commands: BotCommand[] = [
   { command: commandEnum.findChat, description: resource.FIND_CHAT_COMMAND_DESC },
   { command: commandEnum.exitChat, description: resource.EXIT_CHAT_COMMAND_DESC },
@@ -201,7 +217,7 @@ const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
   try {
     await next();
   } catch (e) {
-    await ctx.reply(e.message);
+    await ctx.reply(e.message, e?.extra);
   }
 };
 

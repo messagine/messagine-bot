@@ -28,3 +28,14 @@ export const commandEnum = {
   setLanguage: 'set_language',
   start: 'start',
 };
+
+export const actionEnum = {
+  allLanguages: 'all_languages',
+  changeLanguage: 'change_language',
+};
+
+export const userStateEnum = {
+  chat: 'chat',
+  idle: 'idle',
+  lobby: 'lobby',
+};

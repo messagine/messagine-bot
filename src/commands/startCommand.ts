@@ -1,8 +1,21 @@
 import { getChatId, getLanguage, IMessagineContext } from '../lib/common';
 import { addUser } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { newUserReply, welcomeBackReply } from '../reply';
 
 const startCommand = () => async (ctx: IMessagineContext) => {
+  return await onStart(ctx);
+};
+
+const startAction = () => (ctx: IMessagineContext) => {
+  return Promise.all([
+    ctx.deleteMessage(),
+    onStart(ctx),
+    ctx.answerCbQuery(),
+  ]);
+};
+
+async function onStart(ctx: IMessagineContext) {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
   const user = ctx.user;
   if (!user) {
@@ -16,18 +29,11 @@ const startCommand = () => async (ctx: IMessagineContext) => {
       username: ctx.from?.username,
     });
     const addUserPromise = addUser(chatId, language.lang);
-    const replyPromise = ctx.replyWithHTML(
-      ctx.i18n.t('new_user', {
-        findChatCommand: commandEnum.findChat,
-        helpCommand: commandEnum.help,
-        languageNativeName: language.native_name,
-        setLanguageCommand: commandEnum.setLanguage,
-      }),
-    );
+    const replyPromise = newUserReply(ctx, language.native_name);
     return await Promise.all([addUserPromise, replyPromise]);
   } else {
-    return await ctx.reply(ctx.i18n.t('welcome_back', { findChatCommand: commandEnum.findChat }));
+    return await welcomeBackReply(ctx);
   }
-};
+}
 
-export { startCommand };
+export { startAction, startCommand };
