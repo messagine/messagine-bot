@@ -3,7 +3,7 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onAnimationMessage = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.animation}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.animation}`);
 
   const chatId = getChatId(ctx);
   const messageAnimation = ctx.message?.animation;
@@ -12,7 +12,7 @@ const onAnimationMessage = () => async (ctx: IMessagineContext) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
-  return await ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
+  return ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
 };
 
 export { onAnimationMessage };

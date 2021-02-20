@@ -29,3 +29,8 @@ help_reply: Yardım için buradayız
 our_website: Web Sayfamız
 contact: İletişim
 start_command_desc: Kullanıcı Oluştur
+all_languages: Tüm Diller
+top_languages: Yaygın Diller
+show_all_languages_button: Tümü >>
+show_top_languages_button: << Yaygın
+invalid_language: Geçersiz Dil

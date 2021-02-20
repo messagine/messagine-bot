@@ -12,7 +12,7 @@ const findChatAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onFindChat(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
 
   if (ctx.userState === userStateEnum.lobby) {
     await lobbyWaitReply(ctx);

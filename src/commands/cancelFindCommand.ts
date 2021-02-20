@@ -12,7 +12,7 @@ const cancelFindAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onCancelFind(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.cancelFind}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.cancelFind}`);
   const chatId = getChatId(ctx);
   if (ctx.userState !== userStateEnum.lobby) {
     await ctx.reply(ctx.i18n.t('cancel_find_not_lobby'));

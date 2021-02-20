@@ -3,7 +3,7 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onEditedMessage = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.editedMessage}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.editedMessage}`);
 
   const chatId = getChatId(ctx);
   const messageText = ctx.editedMessage?.text;
@@ -13,7 +13,7 @@ const onEditedMessage = () => async (ctx: IMessagineContext) => {
 
   const editMessageText = ctx.i18n.t('message_edited', { newMessage: messageText });
   const opponentChatId = getOpponentChatId(ctx);
-  return await ctx.tg.sendMessage(opponentChatId, editMessageText);
+  return ctx.tg.sendMessage(opponentChatId, editMessageText);
 };
 
 export { onEditedMessage };

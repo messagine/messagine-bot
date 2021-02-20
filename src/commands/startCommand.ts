@@ -12,12 +12,12 @@ const startAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onStart(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
   const user = ctx.user;
   if (!user) {
     const chatId = getChatId(ctx);
     const language = getLanguage(ctx);
-    ctx.mixpanel.people.set({
+    await ctx.mixpanel.people.set({
       first_name: ctx.from?.first_name,
       language_code: language.lang,
       last_name: ctx.from?.last_name,

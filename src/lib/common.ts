@@ -13,8 +13,7 @@ export function getLanguage(ctx: IMessagineContext): ILanguage {
   const languageCode = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
   const language = findLanguage(languageCode);
   if (!language) {
-    const defaultLanguage = findLanguageSafe(ctx, config.DEFAULT_LANGUAGE_CODE);
-    return defaultLanguage;
+    return findLanguageSafe(ctx, config.DEFAULT_LANGUAGE_CODE);
   } else {
     return language;
   }
@@ -54,15 +53,13 @@ export function mapLanguagesToRecords(languages: ILanguage[]): Record<string, st
 export function getAllLanguages(): ILanguage[] {
   const languages: ILanguage[] = languageFile;
   const validLanguages = _.filter(languages, l => l.lang !== undefined);
-  const sortedTopLanguages = _.sortBy(validLanguages, l => l.lang);
-  return sortedTopLanguages;
+  return _.sortBy(validLanguages, l => l.lang);
 }
 
 export function getTopLanguages(): ILanguage[] {
   const languages: ILanguage[] = languageFile;
   const favLanguages = _.filter(languages, l => l.fav_order !== undefined);
-  const sortedTopLanguages = _.sortBy(favLanguages, l => l.fav_order);
-  return sortedTopLanguages;
+  return _.sortBy(favLanguages, l => l.fav_order);
 }
 
 export function getChatId(ctx: IMessagineContext): number {
@@ -84,8 +81,7 @@ export function getExistingChat(ctx: IMessagineContext): IChat {
 
 export function getOpponentChatId(ctx: IMessagineContext): number {
   const existingChat = getExistingChat(ctx);
-  const opponentChatId = extractOpponentChatId(ctx, existingChat);
-  return opponentChatId;
+  return extractOpponentChatId(ctx, existingChat);
 }
 
 export interface IMessagineContext extends TelegrafContext {

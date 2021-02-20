@@ -11,7 +11,7 @@ const helpAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onHelp(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
   return helpReply(ctx, ctx.userState || userStateEnum.idle);
 }
 

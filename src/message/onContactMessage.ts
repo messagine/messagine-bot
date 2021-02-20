@@ -4,7 +4,7 @@ import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 // TODO: Fix after telegraf v4 upgrade
 const onContactMessage = () => async (ctx: any) => {
-  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.contact}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.contact}`);
 
   const chatId = getChatId(ctx);
   const messageContact = ctx.message?.contact;
@@ -13,12 +13,7 @@ const onContactMessage = () => async (ctx: any) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
-  return await ctx.tg.sendContact(
-    opponentChatId,
-    messageContact.phone_number,
-    messageContact.first_name,
-    messageContact,
-  );
+  return ctx.tg.sendContact(opponentChatId, messageContact.phone_number, messageContact.first_name, messageContact);
 };
 
 export { onContactMessage };

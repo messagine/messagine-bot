@@ -18,7 +18,7 @@ const aboutAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onAbout(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.about}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.about}`);
 
   const chatId = getChatId(ctx);
   const userCountPromise = getUserCount();

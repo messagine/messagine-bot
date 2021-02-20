@@ -12,10 +12,10 @@ const exitChatAction = () => (ctx: IMessagineContext) => {
 };
 
 async function onExitChat(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
 
   const chatId = getChatId(ctx);
-  const existingChat = await getExistingChat(ctx);
+  const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
   const sendMessagePromise = exitChatReply(ctx);
 

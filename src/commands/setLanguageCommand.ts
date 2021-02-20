@@ -5,7 +5,7 @@ import { findLanguageSafe, getAllLanguages, getChatId, getTopLanguages, IMessagi
 import { setLanguage } from '../lib/dataHandler';
 import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
-import { languageNotChangedInChatReply } from '../reply';
+import { findChatCallbackButton, helpCallbackButton, languageNotChangedInChatReply } from '../reply';
 
 const showTopLanguagesCommand = () => (ctx: IMessagineContext) => {
   return showTopLanguages(ctx);
@@ -33,12 +33,12 @@ function mapLanguagesToButtons(languages: ILanguage[]): InlineKeyboardButton[][]
 }
 
 async function showTopLanguages(ctx: IMessagineContext) {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
+  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
   const languages = getTopLanguages();
   const buttons = mapLanguagesToButtons(languages);
-  buttons.push([Markup.callbackButton('All >>', actionEnum.allLanguages)]);
+  buttons.push([Markup.callbackButton(ctx.i18n.t('show_all_languages_button'), actionEnum.allLanguages)]);
 
-  return ctx.reply('Top Languages', Markup.inlineKeyboard(buttons).extra());
+  return ctx.reply(ctx.i18n.t('top_languages'), Markup.inlineKeyboard(buttons).extra());
 }
 
 const showAllLanguagesAction = () => (ctx: IMessagineContext) => {
@@ -48,9 +48,9 @@ const showAllLanguagesAction = () => (ctx: IMessagineContext) => {
 async function showAllLanguages(ctx: IMessagineContext) {
   const languages = getAllLanguages();
   const buttons = mapLanguagesToButtons(languages);
-  buttons.push([Markup.callbackButton('<< Top', commandEnum.setLanguage)]);
+  buttons.push([Markup.callbackButton(ctx.i18n.t('show_top_languages_button'), commandEnum.setLanguage)]);
 
-  return ctx.reply('All Languages', Markup.inlineKeyboard(buttons).extra());
+  return ctx.reply(ctx.i18n.t('all_languages'), Markup.inlineKeyboard(buttons).extra());
 }
 
 const changeLanguageAction = () => (ctx: IMessagineContext) => {
@@ -59,7 +59,7 @@ const changeLanguageAction = () => (ctx: IMessagineContext) => {
 
 async function changeLanguage(ctx: IMessagineContext) {
   if (ctx?.match === undefined || ctx?.match?.length !== 2) {
-    await ctx.reply('Invalid language');
+    await ctx.reply(ctx.i18n.t('invalid_language'));
     return;
   }
 
@@ -80,12 +80,15 @@ async function changeLanguage(ctx: IMessagineContext) {
     ctx.user.languageCode = newLanguageCode;
   }
   ctx.i18n.locale(newLanguageCode);
-  ctx.mixpanel.people.set({ language_code: newLanguageCode });
+  await ctx.mixpanel.people.set({ language_code: newLanguageCode });
 
   const newLanguage = findLanguageSafe(ctx, newLanguageCode);
   const setLanguagePromise = setLanguage(chatId, newLanguageCode);
   const answerQueryPromise = ctx.answerCbQuery();
-  const replyPromise = ctx.reply(ctx.i18n.t('language_selected', { selectedLanguage: newLanguage.native_name }));
+  const replyPromise = ctx.reply(
+    ctx.i18n.t('language_selected', { selectedLanguage: newLanguage.native_name }),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+  );
   const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
   await Promise.all(promises);
 }
