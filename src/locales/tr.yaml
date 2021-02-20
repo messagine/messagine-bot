@@ -5,24 +5,24 @@ chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarını kontrol et.
 chat_not_exist: Konuşmada değilsiniz.
 chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsin. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
 exit_chat_are_you_sure: Konuşma sonlandırılacak. Emin misin?
-exit_chat: Konuşmayı sonlandırdın.
+exit_chat: Konuşmayı sonlandırdın. Yenisini bulmaya ne dersin?
 exit_chat_command_desc: Konuşmayı sonlandır
-exit_chat_opponent: Konuşma sonlandırıldı
+exit_chat_opponent: Karşı taraf konuşmayı sonlandırdı. Yenisini bulmaya ne dersin?
 find_chat_command_desc: Konuşma Ara
 help_command_desc: Yardım
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Lobide bekliyorsun, konuşma başladığında haber vereceğiz.
+lobby_wait: Messagine senin gerçek insanlarla mesajlaşman için elinden geleni yapıyor. Şimdi lobide biraz bekle, konuşma başladığında haber vereceğiz.
 set_language_command_desc: Dil Değiştir
 about_command_desc: Hakkında
 user_not_found: Kullanıcı bulunamadı
 welcome_back: Tekrar hoşgeldin.
-new_user: <b>Messagine Bot</b>\nProjenin amacı kullanıcıların anonim olarak sosyalleşmesidir. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
+new_user: <b>Messagine Bot</b>\nMessagine ile gerçek insanlarla konuşursun, hem de hiçbir bilgini paylaşmadan. Arkada bir bot yok, gerçek insanlar var. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
 language_not_found: Dil bulunamadı
 invalid_input: Geçersiz metin
 message_type_not_found: 'Mesaj tipi: ${messageType} bulunamadı.'
 language_selected: 'Seçilen Dil: ${selectedLanguage}'
-about_reply: '<b>Hakkında</b>\nProjenin amacı kullanıcıların anonim olarak sosyalleşmesidir.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}\nLobideki Kullanıcılar: ${numberOfLobbyUsers}'
+about_reply: '<b>Hakkında</b>\nMessagine ile gerçek insanlarla konuşursun, hem de hiçbir bilgini paylaşmadan. Arkada bir bot yok, gerçek insanlar var.\n\n<b>İstatistikler</b>\nKullanıcılar: ${numberOfUsers}\nAktif Konuşmalar: ${numberOfActiveChats}\nGeçmiş Konuşmalar: ${numberOfPreviousChats}\nGeçmiş Konuşmalarım: ${numberOfMyPreviousChats}\nLobideki Kullanıcılar: ${numberOfLobbyUsers}'
 language_not_changed: Dil değişmedi.
 language_not_changed_in_chat: Konuşmada dil değişikliği yapılamaz.
 cancel_find_not_lobby: Lobide değilsin

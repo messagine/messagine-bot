@@ -5,24 +5,24 @@ chatid_not_found: Chat Id not found. Check your security settings.
 chat_not_exist: Chat doesn't exist.
 chat_start: Chat started. You can exit chat via /${exitChatCommand}. If the chat is ended, we will let you know. Have fun.
 exit_chat_are_you_sure: Are you sure to close the chat?
-exit_chat: You have closed the chat.
+exit_chat: You have closed the chat. How about finding a new one?
 exit_chat_command_desc: Exit Current Chat
-exit_chat_opponent: Chat closed by opponent.
+exit_chat_opponent: Chat closed by opponent. How about finding a new one?
 find_chat_command_desc: Find Chat
 help_command_desc: Get Help
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: You are waiting in the lobby, we will let you know when the chat starts.
-set_language_command_desc: Set Language
+lobby_wait: Messagine does its best to get you chat with real people. Now wait a little in the lobby, we will let you know when the chat starts.
+set_language_command_desc: Change Language
 about_command_desc: About
 user_not_found: User not found.
 welcome_back: Welcome back.
-new_user: <b>Messagine Bot</b>\nThe aim of the project is to socialize people anonymously. Your language is ${languageNativeName}. To see all commands type /${helpCommand}.
+new_user: <b>Messagine Bot</b>\nWith Messagine you chat with real people, even without sharing any information. There is no bot in the back, there are real people. Your language is ${languageNativeName}. To see all commands type /${helpCommand}.
 message_edited: 'Message Edited: ${newMessage}'
 language_not_found: Language not found.
 invalid_input: Invalid input
 message_type_not_found: Message ${messageType} not found.
 language_selected: 'Selected Language: ${selectedLanguage}'
-about_reply: '<b>About</b>\nThe aim of the project is to socialize people anonymously.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}\nUsers in Lobby: ${numberOfLobbyUsers}'
+about_reply: '<b>About</b>\nWith Messagine you chat with real people, even without sharing any information. There is no bot in the back, there are real people.\n\n<b>Statistics</b>\nUsers: ${numberOfUsers}\nActive Chats: ${numberOfActiveChats}\nPrevious Chats: ${numberOfPreviousChats}\nMy Previous Chats: ${numberOfMyPreviousChats}\nUsers in Lobby: ${numberOfLobbyUsers}'
 language_not_changed: Language not changed.
 language_not_changed_in_chat: Language change in chat is not allowed.
 cancel_find_not_lobby: You are not in the lobby.
