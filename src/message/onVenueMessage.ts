@@ -3,8 +3,8 @@ import { getChatId, getOpponentChatId } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 // TODO: Fix after telegraf v4 upgrade
-const onVenueMessage = () => async (ctx: any) => {
-  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.venue}`);
+const onVenueMessage = () => (ctx: any) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.venue}`);
 
   const chatId = getChatId(ctx);
   const messageVenue = ctx.message?.venue;
@@ -13,7 +13,7 @@ const onVenueMessage = () => async (ctx: any) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
-  return ctx.tg.sendVenue(
+  const sendMessagePromise = ctx.tg.sendVenue(
     opponentChatId,
     messageVenue.location.latitude,
     messageVenue.location.longitude,
@@ -22,6 +22,7 @@ const onVenueMessage = () => async (ctx: any) => {
     messageVenue.foursquare_id,
     messageVenue.foursquare_type,
   );
+  return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
 export { onVenueMessage };

@@ -4,16 +4,16 @@ import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatReply, exitChatToOpponent } from '../reply';
 
 const exitChatCommand = () => (ctx: IMessagineContext) => {
-  return onExitChat(ctx);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
+  return Promise.all([mixPanelPromise, onExitChat(ctx)]);
 };
 
 const exitChatAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.exitChat}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
 };
 
 async function onExitChat(ctx: IMessagineContext) {
-  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
-
   const chatId = getChatId(ctx);
   const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);

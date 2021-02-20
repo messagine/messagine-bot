@@ -3,15 +3,16 @@ import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { helpReply } from '../reply';
 
 const helpCommand = () => (ctx: IMessagineContext) => {
-  return onHelp(ctx);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
+  return Promise.all([mixPanelPromise, onHelp(ctx)]);
 };
 
 const helpAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([ctx.deleteMessage(), onHelp(ctx), ctx.answerCbQuery()]);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.help}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onHelp(ctx), ctx.answerCbQuery()]);
 };
 
 async function onHelp(ctx: IMessagineContext) {
-  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.help}`);
   return helpReply(ctx, ctx.userState || userStateEnum.idle);
 }
 

@@ -2,8 +2,8 @@ import { MessageTypeNotFoundError } from '../error';
 import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onStickerMessage = () => async (ctx: IMessagineContext) => {
-  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.sticker}`);
+const onStickerMessage = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.sticker}`);
 
   const chatId = getChatId(ctx);
   const messageSticker = ctx.message?.sticker;
@@ -12,7 +12,8 @@ const onStickerMessage = () => async (ctx: IMessagineContext) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
-  return ctx.tg.sendMessage(opponentChatId, messageSticker.file_id);
+  const sendMessagePromise = ctx.tg.sendSticker(opponentChatId, messageSticker.file_id);
+  return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
 export { onStickerMessage };

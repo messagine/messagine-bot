@@ -10,16 +10,16 @@ import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { aboutReply } from '../reply';
 
 const aboutCommand = () => (ctx: IMessagineContext) => {
-  return onAbout(ctx);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.about}`);
+  return Promise.all([mixPanelPromise, onAbout(ctx)]);
 };
 
 const aboutAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([ctx.deleteMessage(), onAbout(ctx), ctx.answerCbQuery()]);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.about}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onAbout(ctx), ctx.answerCbQuery()]);
 };
 
 async function onAbout(ctx: IMessagineContext) {
-  await ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.about}`);
-
   const chatId = getChatId(ctx);
   const userCountPromise = getUserCount();
   const chatCountPromise = getChatCount();

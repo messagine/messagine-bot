@@ -2,8 +2,8 @@ import { MessageTypeNotFoundError } from '../error';
 import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onPhotoMessage = () => async (ctx: IMessagineContext) => {
-  await ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`);
+const onPhotoMessage = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`);
 
   const chatId = getChatId(ctx);
   const messagePhoto = ctx.message?.photo;
@@ -15,7 +15,8 @@ const onPhotoMessage = () => async (ctx: IMessagineContext) => {
   const biggestPhoto = messagePhoto[photoSize - 1];
 
   const opponentChatId = getOpponentChatId(ctx);
-  return ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
+  const sendMessagePromise = ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
+  return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
 export { onPhotoMessage };

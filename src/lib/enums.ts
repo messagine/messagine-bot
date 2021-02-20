@@ -1,4 +1,5 @@
 export const eventTypeEnum = {
+  action: 'action',
   command: 'command',
   error: 'error',
   message: 'message',
