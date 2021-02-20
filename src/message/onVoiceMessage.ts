@@ -2,8 +2,8 @@ import { MessageTypeNotFoundError } from '../error';
 import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onVoiceMessage = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.voice}`);
+const onVoiceMessage = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.voice}`);
 
   const chatId = getChatId(ctx);
   const messageVoice = ctx.message?.voice;
@@ -11,8 +11,9 @@ const onVoiceMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.voice);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx);
-  return await ctx.tg.sendVoice(opponentChatId, messageVoice.file_id);
+  const opponentChatId = getOpponentChatId(ctx);
+  const sendMessagePromise = ctx.tg.sendVoice(opponentChatId, messageVoice.file_id);
+  return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
 export { onVoiceMessage };

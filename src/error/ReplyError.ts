@@ -1,5 +1,8 @@
+import { ExtraReplyMessage } from 'telegraf/typings/telegram-types';
+
 export class ReplyError extends Error {
   protected data: {};
+  protected extra: ExtraReplyMessage | undefined;
   constructor(message: string) {
     super(message);
     // Ensure the name of this error is the same as the class name

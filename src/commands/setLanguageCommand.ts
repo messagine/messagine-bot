@@ -1,70 +1,70 @@
-import { createBackMainMenuButtons, MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
-import {
-  findLanguageSafe,
-  getAllLanguages,
-  getChatId,
-  getTopLanguages,
-  IMessagineContext,
-  mapLanguagesToRecords,
-} from '../lib/common';
+import { findLanguageSafe, getChatId, IMessagineContext } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
-import { ILanguage } from '../lib/models/Language';
+import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
+import {
+  invalidInputReply,
+  languageNotChangedInChatReply,
+  languageNotChangedReply,
+  languageSelectedReply,
+  showAllLanguagesReply,
+  showTopLanguagesReply,
+} from '../reply';
 
-const setLanguageCommand = (languageMenu: MenuMiddleware<IMessagineContext>) => (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
-  return languageMenu.replyToContext(ctx);
+const showTopLanguagesCommand = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.setLanguage}`);
+  return Promise.all([mixPanelPromise, showTopLanguages(ctx)]);
 };
 
-// TODO: context geçir, localization ayarla
-function languageMenuMiddleware() {
-  const allLanguagesMenuTemplate = getAllLanguagesMenuTemplate();
-  const topLanguagesMenuTemplate = getTopLanguagesMenuTemplate(allLanguagesMenuTemplate);
+const showTopLanguagesAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.setLanguage}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), showTopLanguages(ctx), ctx.answerCbQuery()]);
+};
 
-  const middleware = new MenuMiddleware('/', topLanguagesMenuTemplate);
-  return middleware;
+function showTopLanguages(ctx: IMessagineContext) {
+  return showTopLanguagesReply(ctx);
 }
 
-function getTopLanguagesMenuTemplate(allLanguagesMenuTemplate: MenuTemplate<IMessagineContext>) {
-  const languages = getTopLanguages();
-  const menuTemplate = generateMenuTemplate('topLanguages', 'Top Languages', languages);
-  menuTemplate.chooseIntoSubmenu('topLanguages', ['All >>'], allLanguagesMenuTemplate);
-  return menuTemplate;
+const showAllLanguagesAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.allLanguages}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), showAllLanguages(ctx), ctx.answerCbQuery()]);
+};
+
+function showAllLanguages(ctx: IMessagineContext) {
+  return showAllLanguagesReply(ctx);
 }
 
-function getAllLanguagesMenuTemplate() {
-  const languages = getAllLanguages();
-  const menuTemplate = generateMenuTemplate('allLanguages', 'All Languages', languages);
-  menuTemplate.manualRow(createBackMainMenuButtons('<< Top', '<< Top'));
-  return menuTemplate;
-}
+const changeLanguageAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.changeLanguage}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), changeLanguage(ctx), ctx.answerCbQuery()]);
+};
 
-function generateMenuTemplate(actionPrefix: string, title: string, languages: ILanguage[]) {
-  const menuTemplate = new MenuTemplate<IMessagineContext>(() => title);
-  const languageRecords = mapLanguagesToRecords(languages);
-  menuTemplate.choose(actionPrefix, languageRecords, {
-    // tslint:disable-next-line: variable-name
-    buttonText: (_ctx, key) => languageRecords[key],
-    columns: 2,
-    do: async (context, key) => {
-      const language = findLanguageSafe(context, key);
-      await languageSelected(context, language);
-      return false;
-    },
-    maxRows: 100,
-  });
-  return menuTemplate;
-}
+function changeLanguage(ctx: IMessagineContext) {
+  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
+    return invalidInputReply(ctx);
+  }
 
-async function languageSelected(ctx: IMessagineContext, language: ILanguage) {
+  const newLanguageCode: string = ctx?.match[1];
   const chatId = getChatId(ctx);
-  ctx.i18n.locale(language.lang);
-  ctx.mixpanel.people.set({ language_code: language.lang });
-  const setLanguagePromise = setLanguage(chatId, language.lang);
+  const previousLanguageCode = ctx.user?.languageCode;
+  if (newLanguageCode === previousLanguageCode) {
+    return languageNotChangedReply(ctx);
+  }
+
+  if (ctx.userState === userStateEnum.chat) {
+    return languageNotChangedInChatReply(ctx);
+  }
+
+  if (ctx.user) {
+    ctx.user.languageCode = newLanguageCode;
+  }
+  ctx.i18n.locale(newLanguageCode);
+  const mixpanelPeopleSetPromise = ctx.mixpanel.people.set({ language_code: newLanguageCode });
+
+  const newLanguage = findLanguageSafe(ctx, newLanguageCode);
+  const setLanguagePromise = setLanguage(chatId, newLanguageCode);
   const answerQueryPromise = ctx.answerCbQuery();
-  const replyPromise = ctx.reply(ctx.i18n.t('language_selected', { selectedLanguage: language.native_name }));
-  const promises = [setLanguagePromise, answerQueryPromise, replyPromise];
-  await Promise.all(promises);
+  const replyPromise = languageSelectedReply(ctx, newLanguage.native_name);
+  return Promise.all([mixpanelPeopleSetPromise, setLanguagePromise, answerQueryPromise, replyPromise]);
 }
 
-export { languageMenuMiddleware, setLanguageCommand };
+export { showTopLanguagesCommand, showTopLanguagesAction, showAllLanguagesAction, changeLanguageAction };

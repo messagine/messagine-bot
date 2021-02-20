@@ -1,21 +1,37 @@
 import { extractOpponentChatId, getChatId, getExistingChat, IMessagineContext } from '../lib/common';
 import { createPreviousChat, deleteChat } from '../lib/dataHandler';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
+import { exitChatAreYouSureReply, exitChatReply, exitChatToOpponent } from '../reply';
 
-const exitChatCommand = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
+const exitChatCommand = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
+  return Promise.all([mixPanelPromise, onExitChat(ctx)]);
+};
 
+const exitChatAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.exitChat}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
+};
+
+function onExitChat(ctx: IMessagineContext) {
+  getExistingChat(ctx);
+  return exitChatAreYouSureReply(ctx);
+}
+
+const exitChatSureAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.exitChatSure}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChatSure(ctx), ctx.answerCbQuery()]);
+};
+
+function onExitChatSure(ctx: IMessagineContext) {
   const chatId = getChatId(ctx);
-  const existingChat = await getExistingChat(ctx);
+  const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
-  const sendMessagePromise = ctx.reply(ctx.i18n.t('exit_chat', { findChatCommand: commandEnum.findChat }));
+  const sendMessagePromise = exitChatReply(ctx);
 
   const deleteChatPromise = deleteChat(existingChat.id);
   const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
-  const sendMessageToOpponentPromise = ctx.tg.sendMessage(
-    opponentChatId,
-    ctx.i18n.t('exit_chat_opponent', { findChatCommand: commandEnum.findChat }),
-  );
+  const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
 
   const promises: Promise<any>[] = [
     sendMessagePromise,
@@ -24,7 +40,7 @@ const exitChatCommand = () => async (ctx: IMessagineContext) => {
     sendMessageToOpponentPromise,
   ];
 
-  return await Promise.all(promises);
-};
+  return Promise.all(promises);
+}
 
-export { exitChatCommand };
+export { exitChatAction, exitChatCommand, exitChatSureAction };

@@ -1,4 +1,5 @@
 export const eventTypeEnum = {
+  action: 'action',
   command: 'command',
   error: 'error',
   message: 'message',
@@ -27,4 +28,17 @@ export const commandEnum = {
   help: 'help',
   setLanguage: 'set_language',
   start: 'start',
+};
+
+export const actionEnum = {
+  allLanguages: 'all_languages',
+  changeLanguage: 'change_language',
+  deleteMessage: 'delete_message',
+  exitChatSure: 'exit_chat_sure',
+};
+
+export const userStateEnum = {
+  chat: 'chat',
+  idle: 'idle',
+  lobby: 'lobby',
 };

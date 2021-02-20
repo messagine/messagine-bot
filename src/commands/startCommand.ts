@@ -1,14 +1,24 @@
 import { getChatId, getLanguage, IMessagineContext } from '../lib/common';
 import { addUser } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { newUserReply, welcomeBackReply } from '../reply';
 
-const startCommand = () => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
+const startCommand = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.start}`);
+  return Promise.all([mixPanelPromise, onStart(ctx)]);
+};
+
+const startAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.start}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onStart(ctx), ctx.answerCbQuery()]);
+};
+
+function onStart(ctx: IMessagineContext) {
   const user = ctx.user;
   if (!user) {
     const chatId = getChatId(ctx);
     const language = getLanguage(ctx);
-    ctx.mixpanel.people.set({
+    const mixpanelPeopleSetPromise = ctx.mixpanel.people.set({
       first_name: ctx.from?.first_name,
       language_code: language.lang,
       last_name: ctx.from?.last_name,
@@ -16,17 +26,11 @@ const startCommand = () => async (ctx: IMessagineContext) => {
       username: ctx.from?.username,
     });
     const addUserPromise = addUser(chatId, language.lang);
-    const replyPromise = ctx.reply(
-      ctx.i18n.t('new_user', {
-        findChatCommand: commandEnum.findChat,
-        languageNativeName: language.native_name,
-        setLanguageCommand: commandEnum.setLanguage,
-      }),
-    );
-    return await Promise.all([addUserPromise, replyPromise]);
+    const replyPromise = newUserReply(ctx, language.native_name);
+    return Promise.all([mixpanelPeopleSetPromise, addUserPromise, replyPromise]);
   } else {
-    return await ctx.reply(ctx.i18n.t('welcome_back', { findChatCommand: commandEnum.findChat }));
+    return welcomeBackReply(ctx);
   }
-};
+}
 
-export { startCommand };
+export { startAction, startCommand };

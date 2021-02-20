@@ -4,17 +4,16 @@ import * as languageFile from '../../languages.json';
 import config from '../config';
 import { ChatIdNotFoundError, ChatNotExistError, InvalidNumberOfOpponentError } from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
-import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
+import { ILobby } from './models/Lobby';
 import { IUser } from './models/User';
 
 export function getLanguage(ctx: IMessagineContext): ILanguage {
   const languageCode = ctx.from?.language_code || config.DEFAULT_LANGUAGE_CODE;
   const language = findLanguage(languageCode);
   if (!language) {
-    const defaultLanguage = findLanguageSafe(ctx, config.DEFAULT_LANGUAGE_CODE);
-    return defaultLanguage;
+    return findLanguageSafe(ctx, config.DEFAULT_LANGUAGE_CODE);
   } else {
     return language;
   }
@@ -54,15 +53,13 @@ export function mapLanguagesToRecords(languages: ILanguage[]): Record<string, st
 export function getAllLanguages(): ILanguage[] {
   const languages: ILanguage[] = languageFile;
   const validLanguages = _.filter(languages, l => l.lang !== undefined);
-  const sortedTopLanguages = _.sortBy(validLanguages, l => l.lang);
-  return sortedTopLanguages;
+  return _.sortBy(validLanguages, l => l.lang);
 }
 
 export function getTopLanguages(): ILanguage[] {
   const languages: ILanguage[] = languageFile;
   const favLanguages = _.filter(languages, l => l.fav_order !== undefined);
-  const sortedTopLanguages = _.sortBy(favLanguages, l => l.fav_order);
-  return sortedTopLanguages;
+  return _.sortBy(favLanguages, l => l.fav_order);
 }
 
 export function getChatId(ctx: IMessagineContext): number {
@@ -73,23 +70,25 @@ export function getChatId(ctx: IMessagineContext): number {
   return chatId;
 }
 
-export async function getExistingChat(ctx: IMessagineContext): Promise<IChat> {
+export function getExistingChat(ctx: IMessagineContext): IChat {
   const chatId = getChatId(ctx);
-  const existingChat = await findExistingChat(chatId);
+  const existingChat = ctx.currentChat;
   if (!existingChat) {
     throw new ChatNotExistError(ctx, chatId);
   }
   return existingChat;
 }
 
-export async function getOpponentChatId(ctx: IMessagineContext): Promise<number> {
-  const existingChat = await getExistingChat(ctx);
-  const opponentChatId = extractOpponentChatId(ctx, existingChat);
-  return opponentChatId;
+export function getOpponentChatId(ctx: IMessagineContext): number {
+  const existingChat = getExistingChat(ctx);
+  return extractOpponentChatId(ctx, existingChat);
 }
 
 export interface IMessagineContext extends TelegrafContext {
   i18n?: any;
   mixpanel?: any;
   user?: IUser;
+  userState?: string;
+  lobby?: ILobby;
+  currentChat?: IChat;
 }

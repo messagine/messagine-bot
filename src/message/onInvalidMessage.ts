@@ -1,9 +1,11 @@
 import { IMessagineContext } from '../lib/common';
 import { eventTypeEnum } from '../lib/enums';
+import { invalidInputReply } from '../reply';
 
-const onInvalidMessage = (type: string) => async (ctx: IMessagineContext) => {
-  ctx.mixpanel.track(`${eventTypeEnum.message}.invalid.${type}`);
-  return await ctx.reply(ctx.i18n.t('invalid_input'));
+const onInvalidMessage = (type: string) => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.invalid.${type}`);
+  const sendMessagePromise = invalidInputReply(ctx);
+  return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
 export { onInvalidMessage };

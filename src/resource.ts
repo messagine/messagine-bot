@@ -1,5 +1,5 @@
 export default {
-  ABOUT_COMMAND_DESC: 'About Bot & Statistics',
+  ABOUT_COMMAND_DESC: 'About Bot',
   CANCEL_FIND_COMMAND_DESC: 'Cancel Chat Find',
   EXIT_CHAT_COMMAND_DESC: 'Exit Current Chat',
   FIND_CHAT_COMMAND_DESC: 'Find Chat',
