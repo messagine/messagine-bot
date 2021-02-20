@@ -3,8 +3,8 @@ import { addUser } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { newUserReply, welcomeBackReply } from '../reply';
 
-const startCommand = () => async (ctx: IMessagineContext) => {
-  return await onStart(ctx);
+const startCommand = () => (ctx: IMessagineContext) => {
+  return onStart(ctx);
 };
 
 const startAction = () => (ctx: IMessagineContext) => {
@@ -26,9 +26,9 @@ async function onStart(ctx: IMessagineContext) {
     });
     const addUserPromise = addUser(chatId, language.lang);
     const replyPromise = newUserReply(ctx, language.native_name);
-    return await Promise.all([addUserPromise, replyPromise]);
+    return Promise.all([addUserPromise, replyPromise]);
   } else {
-    return await welcomeBackReply(ctx);
+    return welcomeBackReply(ctx);
   }
 }
 
