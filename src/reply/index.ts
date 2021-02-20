@@ -124,7 +124,8 @@ export function languageNotChangedInChatReply(ctx: IMessagineContext) {
 export function newUserReply(ctx: IMessagineContext, languageNativeName: string) {
   const buttons: InlineKeyboardButton[][] = [
     [findChatCallbackButton(ctx), setLanguageCallbackButton(ctx)],
-    [aboutCallbackButton(ctx), websiteUrlButton(ctx), contactUrlButton(ctx)],
+    [aboutCallbackButton(ctx), helpCallbackButton(ctx)],
+    [websiteUrlButton(ctx), contactUrlButton(ctx)],
   ];
 
   return ctx.replyWithHTML(
