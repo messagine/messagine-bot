@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { Markup } from 'telegraf';
 import { InlineKeyboardButton } from 'telegraf/typings/markup';
 import { findLanguageSafe, getAllLanguages, getChatId, getTopLanguages, IMessagineContext } from '../lib/common';
-import { findExistingChat, setLanguage } from '../lib/dataHandler';
-import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
+import { setLanguage } from '../lib/dataHandler';
+import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
 import { languageNotChangedInChatReply } from '../reply';
 
@@ -71,8 +71,7 @@ async function changeLanguage(ctx: IMessagineContext) {
     return;
   }
 
-  const existingChat = await findExistingChat(chatId);
-  if (existingChat) {
+  if (ctx.userState === userStateEnum.chat) {
     await languageNotChangedInChatReply(ctx);
     return;
   }

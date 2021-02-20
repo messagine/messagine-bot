@@ -1,6 +1,6 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import { findLobby, leaveLobby } from '../lib/dataHandler';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { leaveLobby } from '../lib/dataHandler';
+import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { cancelFindReply } from '../reply';
 
 const cancelFindCommand = () => (ctx: IMessagineContext) => {
@@ -14,8 +14,7 @@ const cancelFindAction = () => (ctx: IMessagineContext) => {
 async function onCancelFind(ctx: IMessagineContext) {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.cancelFind}`);
   const chatId = getChatId(ctx);
-  const lobby = await findLobby(chatId);
-  if (!lobby) {
+  if (ctx.userState !== userStateEnum.lobby) {
     await ctx.reply(ctx.i18n.t('cancel_find_not_lobby'));
     return;
   }

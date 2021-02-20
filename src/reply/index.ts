@@ -99,7 +99,7 @@ function helpButtons(ctx: IMessagineContext, userState: string) {
 
 export function helpReply(ctx: IMessagineContext, userState: string) {
   const buttons = helpButtons(ctx, userState);
-  return ctx.reply(ctx.i18n.t('help'), Markup.inlineKeyboard(buttons).extra());
+  return ctx.reply(ctx.i18n.t('help_reply'), Markup.inlineKeyboard(buttons).extra());
 }
 
 export function languageNotChangedInChatReply(ctx: IMessagineContext) {

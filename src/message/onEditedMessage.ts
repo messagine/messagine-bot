@@ -12,7 +12,7 @@ const onEditedMessage = () => async (ctx: IMessagineContext) => {
   }
 
   const editMessageText = ctx.i18n.t('message_edited', { newMessage: messageText });
-  const opponentChatId = await getOpponentChatId(ctx);
+  const opponentChatId = getOpponentChatId(ctx);
   return await ctx.tg.sendMessage(opponentChatId, editMessageText);
 };
 

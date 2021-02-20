@@ -2,7 +2,7 @@ import { Document, model, Model, Schema } from 'mongoose';
 
 export interface ILobby extends Document {
   chatId: number;
-  entranceDate: Date;
+  entranceDate?: Date;
   languageCode: string;
 }
 

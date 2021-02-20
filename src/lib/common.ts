@@ -4,9 +4,9 @@ import * as languageFile from '../../languages.json';
 import config from '../config';
 import { ChatIdNotFoundError, ChatNotExistError, InvalidNumberOfOpponentError } from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
-import { findExistingChat } from './dataHandler';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
+import { ILobby } from './models/Lobby';
 import { IUser } from './models/User';
 
 export function getLanguage(ctx: IMessagineContext): ILanguage {
@@ -73,17 +73,17 @@ export function getChatId(ctx: IMessagineContext): number {
   return chatId;
 }
 
-export async function getExistingChat(ctx: IMessagineContext): Promise<IChat> {
+export function getExistingChat(ctx: IMessagineContext): IChat {
   const chatId = getChatId(ctx);
-  const existingChat = await findExistingChat(chatId);
+  const existingChat = ctx.currentChat;
   if (!existingChat) {
     throw new ChatNotExistError(ctx, chatId);
   }
   return existingChat;
 }
 
-export async function getOpponentChatId(ctx: IMessagineContext): Promise<number> {
-  const existingChat = await getExistingChat(ctx);
+export function getOpponentChatId(ctx: IMessagineContext): number {
+  const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
   return opponentChatId;
 }
@@ -92,4 +92,7 @@ export interface IMessagineContext extends TelegrafContext {
   i18n?: any;
   mixpanel?: any;
   user?: IUser;
+  userState?: string;
+  lobby?: ILobby;
+  currentChat?: IChat;
 }

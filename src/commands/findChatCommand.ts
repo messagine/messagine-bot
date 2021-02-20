@@ -1,13 +1,6 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import {
-  addToLobby,
-  createChat,
-  findExistingChat,
-  findLobby,
-  findOpponentInLobby,
-  leaveLobby,
-} from '../lib/dataHandler';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
+import { addToLobby, createChat, findOpponentInLobby, leaveLobby } from '../lib/dataHandler';
+import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { activeChatReply, chatStartReply, chatStartToOpponent, lobbyWaitReply, userNotFoundReply } from '../reply';
 
 const findChatCommand = () => (ctx: IMessagineContext) => {
@@ -21,19 +14,12 @@ const findChatAction = () => (ctx: IMessagineContext) => {
 async function onFindChat(ctx: IMessagineContext) {
   ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
 
-  const chatId = getChatId(ctx);
-  const lobbyPromise = findLobby(chatId);
-  const existingChatPromise = findExistingChat(chatId);
-  const checkResults = await Promise.all([lobbyPromise, existingChatPromise]);
-
-  const lobby = checkResults[0];
-  if (lobby) {
+  if (ctx.userState === userStateEnum.lobby) {
     await lobbyWaitReply(ctx);
     return;
   }
 
-  const existingChat = checkResults[1];
-  if (existingChat) {
+  if (ctx.userState === userStateEnum.chat) {
     await activeChatReply(ctx);
     return;
   }
@@ -44,6 +30,7 @@ async function onFindChat(ctx: IMessagineContext) {
     return;
   }
 
+  const chatId = getChatId(ctx);
   const opponent = await findOpponentInLobby(chatId, user.languageCode);
 
   if (opponent) {

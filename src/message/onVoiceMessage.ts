@@ -11,7 +11,7 @@ const onVoiceMessage = () => async (ctx: IMessagineContext) => {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.voice);
   }
 
-  const opponentChatId = await getOpponentChatId(ctx);
+  const opponentChatId = getOpponentChatId(ctx);
   return await ctx.tg.sendVoice(opponentChatId, messageVoice.file_id);
 };
 

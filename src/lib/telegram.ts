@@ -40,8 +40,8 @@ import {
 } from '../message';
 import resource from '../resource';
 import { getChatId, IMessagineContext } from './common';
-import { connect, getUser } from './dataHandler';
-import { actionEnum, commandEnum } from './enums';
+import { connect, findExistingChat, findLobby, getUser } from './dataHandler';
+import { actionEnum, commandEnum, userStateEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
@@ -64,6 +64,8 @@ async function botUtils() {
   bot.use(catcher);
   bot.use(logger);
 
+  const changeLanguageRegex = new RegExp(`${actionEnum.changeLanguage}:(.+)`);
+
   bot
     .command(commandEnum.start, startCommand())
     .command(commandEnum.about, aboutCommand())
@@ -78,7 +80,7 @@ async function botUtils() {
     .action(commandEnum.findChat, findChatAction())
     .action(commandEnum.setLanguage, showTopLanguagesAction())
     .action(actionEnum.allLanguages, showAllLanguagesAction())
-    .action(/change_language:(.+)/, changeLanguageAction())
+    .action(changeLanguageRegex, changeLanguageAction())
     .action(commandEnum.exitChat, exitChatAction())
     .action(commandEnum.cancelFind, cancelFindAction())
     .on('animation', onAnimationMessage())
@@ -223,7 +225,24 @@ const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
 
 const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
   const chatId = getChatId(ctx);
-  const user = await getUser(chatId);
+  const userPromise = getUser(chatId);
+  const lobbyPromise = findLobby(chatId);
+  const existingChatPromise = findExistingChat(chatId);
+  const checkResults = await Promise.all([userPromise, lobbyPromise, existingChatPromise]);
+
+  const user = checkResults[0];
+  const lobby = checkResults[1];
+  const currentChat = checkResults[2];
+  if (lobby) {
+    ctx.lobby = lobby;
+    ctx.userState = userStateEnum.lobby;
+  } else if (currentChat) {
+    ctx.currentChat = currentChat;
+    ctx.userState = userStateEnum.chat;
+  } else {
+    ctx.userState = userStateEnum.idle;
+  }
+
   if (user) {
     ctx.user = user;
     ctx.i18n.locale(user.languageCode);
