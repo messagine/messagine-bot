@@ -3,16 +3,12 @@ import { createPreviousChat, deleteChat } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatReply, exitChatToOpponent } from '../reply';
 
-const exitChatCommand = () => async (ctx: IMessagineContext) => {
-  return await onExitChat(ctx);
+const exitChatCommand = () => (ctx: IMessagineContext) => {
+  return onExitChat(ctx);
 };
 
 const exitChatAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onExitChat(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
 };
 
 async function onExitChat(ctx: IMessagineContext) {
@@ -34,7 +30,7 @@ async function onExitChat(ctx: IMessagineContext) {
     sendMessageToOpponentPromise,
   ];
 
-  return await Promise.all(promises);
+  return Promise.all(promises);
 }
 
 export { exitChatAction, exitChatCommand };

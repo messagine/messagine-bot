@@ -8,11 +8,7 @@ const startCommand = () => async (ctx: IMessagineContext) => {
 };
 
 const startAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onStart(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onStart(ctx), ctx.answerCbQuery()]);
 };
 
 async function onStart(ctx: IMessagineContext) {

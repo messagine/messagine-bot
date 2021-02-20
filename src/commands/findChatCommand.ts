@@ -10,16 +10,12 @@ import {
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { activeChatReply, chatStartReply, chatStartToOpponent, lobbyWaitReply, userNotFoundReply } from '../reply';
 
-const findChatCommand = () => async (ctx: IMessagineContext) => {
-  return await onFindChat(ctx);
+const findChatCommand = () => (ctx: IMessagineContext) => {
+  return onFindChat(ctx);
 };
 
 const findChatAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onFindChat(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onFindChat(ctx), ctx.answerCbQuery()]);
 };
 
 async function onFindChat(ctx: IMessagineContext) {
@@ -57,7 +53,7 @@ async function onFindChat(ctx: IMessagineContext) {
     const chatStartToCurrentUserPromise = chatStartReply(ctx);
     const chatStartToOpponentUserPromise = chatStartToOpponent(ctx, opponent.chatId);
 
-    return await Promise.all([
+    return Promise.all([
       leaveCurrentUserLobbyPromise,
       leaveOpponentUserLobbyPromise,
       createChatPromise,
@@ -68,7 +64,7 @@ async function onFindChat(ctx: IMessagineContext) {
     const addToLobbyPromise = addToLobby(chatId, user.languageCode);
     const lobbyMessagePromise = lobbyWaitReply(ctx);
 
-    return await Promise.all([addToLobbyPromise, lobbyMessagePromise]);
+    return Promise.all([addToLobbyPromise, lobbyMessagePromise]);
   }
 }
 

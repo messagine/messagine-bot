@@ -9,16 +9,12 @@ import {
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { aboutReply } from '../reply';
 
-const aboutCommand = () => async (ctx: IMessagineContext) => {
-  return await onAbout(ctx);
+const aboutCommand = () => (ctx: IMessagineContext) => {
+  return onAbout(ctx);
 };
 
 const aboutAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onAbout(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onAbout(ctx), ctx.answerCbQuery()]);
 };
 
 async function onAbout(ctx: IMessagineContext) {
@@ -44,7 +40,7 @@ async function onAbout(ctx: IMessagineContext) {
   const numberOfMyPreviousChats = result[3];
   const numberOfLobbyUsers = result[4];
 
-  return await aboutReply(
+  return aboutReply(
     ctx,
     numberOfActiveChats,
     numberOfLobbyUsers,

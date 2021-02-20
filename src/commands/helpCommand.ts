@@ -3,16 +3,12 @@ import { findExistingChat, findLobby } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { helpReply } from '../reply';
 
-const helpCommand = () => async (ctx: IMessagineContext) => {
-  return await onHelp(ctx);
+const helpCommand = () => (ctx: IMessagineContext) => {
+  return onHelp(ctx);
 };
 
 const helpAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onHelp(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onHelp(ctx), ctx.answerCbQuery()]);
 };
 
 async function onHelp(ctx: IMessagineContext) {

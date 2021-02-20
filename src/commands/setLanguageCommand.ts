@@ -7,16 +7,12 @@ import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
 import { languageNotChangedInChatReply } from '../reply';
 
-const showTopLanguagesCommand = () => async (ctx: IMessagineContext) => {
-  return await showTopLanguages(ctx);
+const showTopLanguagesCommand = () => (ctx: IMessagineContext) => {
+  return showTopLanguages(ctx);
 };
 
 const showTopLanguagesAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    showTopLanguages(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), showTopLanguages(ctx), ctx.answerCbQuery()]);
 };
 
 function mapLanguagesToButtons(languages: ILanguage[]): InlineKeyboardButton[][] {
@@ -42,18 +38,11 @@ async function showTopLanguages(ctx: IMessagineContext) {
   const buttons = mapLanguagesToButtons(languages);
   buttons.push([Markup.callbackButton('All >>', actionEnum.allLanguages)]);
 
-  return ctx.reply(
-    'Top Languages',
-    Markup.inlineKeyboard(buttons).extra(),
-  );
+  return ctx.reply('Top Languages', Markup.inlineKeyboard(buttons).extra());
 }
 
 const showAllLanguagesAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    showAllLanguages(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), showAllLanguages(ctx), ctx.answerCbQuery()]);
 };
 
 async function showAllLanguages(ctx: IMessagineContext) {
@@ -61,18 +50,11 @@ async function showAllLanguages(ctx: IMessagineContext) {
   const buttons = mapLanguagesToButtons(languages);
   buttons.push([Markup.callbackButton('<< Top', commandEnum.setLanguage)]);
 
-  return ctx.reply(
-    'All Languages',
-    Markup.inlineKeyboard(buttons).extra(),
-  );
+  return ctx.reply('All Languages', Markup.inlineKeyboard(buttons).extra());
 }
 
 const changeLanguageAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    changeLanguage(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), changeLanguage(ctx), ctx.answerCbQuery()]);
 };
 
 async function changeLanguage(ctx: IMessagineContext) {

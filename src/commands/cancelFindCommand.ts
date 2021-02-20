@@ -3,16 +3,12 @@ import { findLobby, leaveLobby } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { cancelFindReply } from '../reply';
 
-const cancelFindCommand = () => async (ctx: IMessagineContext) => {
-  return await onCancelFind(ctx);
+const cancelFindCommand = () => (ctx: IMessagineContext) => {
+  return onCancelFind(ctx);
 };
 
 const cancelFindAction = () => (ctx: IMessagineContext) => {
-  return Promise.all([
-    ctx.deleteMessage(),
-    onCancelFind(ctx),
-    ctx.answerCbQuery(),
-  ]);
+  return Promise.all([ctx.deleteMessage(), onCancelFind(ctx), ctx.answerCbQuery()]);
 };
 
 async function onCancelFind(ctx: IMessagineContext) {
@@ -27,7 +23,7 @@ async function onCancelFind(ctx: IMessagineContext) {
   const leaveLobbyPromise = leaveLobby(chatId);
   const cancelFindPromise = cancelFindReply(ctx);
 
-  return await Promise.all([leaveLobbyPromise, cancelFindPromise]);
+  return Promise.all([leaveLobbyPromise, cancelFindPromise]);
 }
 
 export { cancelFindAction, cancelFindCommand };
