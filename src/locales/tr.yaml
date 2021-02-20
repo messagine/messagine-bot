@@ -34,6 +34,5 @@ all_languages: Tüm Diller
 top_languages: Yaygın Diller
 show_all_languages_button: Tümü >>
 show_top_languages_button: << Yaygın
-invalid_language: Geçersiz Dil
 yes: Evet
 no: Hayır

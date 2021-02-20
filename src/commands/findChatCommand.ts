@@ -15,19 +15,16 @@ const findChatAction = () => (ctx: IMessagineContext) => {
 
 async function onFindChat(ctx: IMessagineContext) {
   if (ctx.userState === userStateEnum.lobby) {
-    await lobbyWaitReply(ctx);
-    return;
+    return lobbyWaitReply(ctx);
   }
 
   if (ctx.userState === userStateEnum.chat) {
-    await activeChatReply(ctx);
-    return;
+    return activeChatReply(ctx);
   }
 
   const user = ctx.user;
   if (!user) {
-    await userNotFoundReply(ctx);
-    return;
+    return userNotFoundReply(ctx);
   }
 
   const chatId = getChatId(ctx);

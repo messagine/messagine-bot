@@ -13,7 +13,7 @@ const startAction = () => (ctx: IMessagineContext) => {
   return Promise.all([mixPanelPromise, ctx.deleteMessage(), onStart(ctx), ctx.answerCbQuery()]);
 };
 
-async function onStart(ctx: IMessagineContext) {
+function onStart(ctx: IMessagineContext) {
   const user = ctx.user;
   if (!user) {
     const chatId = getChatId(ctx);

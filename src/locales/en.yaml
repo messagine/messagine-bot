@@ -34,6 +34,5 @@ all_languages: All Languages
 top_languages: Top Languages
 show_all_languages_button: All >>
 show_top_languages_button: << Top
-invalid_language: Invalid Language
 yes: Yes
 no: No

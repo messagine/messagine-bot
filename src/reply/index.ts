@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import { Markup } from 'telegraf';
 import { InlineKeyboardButton } from 'telegraf/typings/markup';
-import { IMessagineContext } from '../lib/common';
+import { getAllLanguages, getTopLanguages, IMessagineContext } from '../lib/common';
 import { actionEnum, commandEnum, userStateEnum } from '../lib/enums';
+import { ILanguage } from '../lib/models/Language';
 
 export const startCallbackButton = (ctx: IMessagineContext) =>
   Markup.callbackButton(ctx.i18n.t('start_command_desc'), commandEnum.start);
@@ -163,4 +165,56 @@ export function userNotFoundReply(ctx: IMessagineContext) {
     ctx.i18n.t('user_not_found'),
     Markup.inlineKeyboard([[startCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
   );
+}
+
+function mapLanguagesToButtons(languages: ILanguage[]): InlineKeyboardButton[][] {
+  const languageChunks = _.chunk(languages, 2);
+
+  const buttons: InlineKeyboardButton[][] = [];
+  languageChunks.forEach(languageChunk => {
+    const buttonChunk: InlineKeyboardButton[] = [];
+    languageChunk.forEach(language => {
+      const buttonText = language.lang + ' - ' + language.native_name;
+      const buttonData = actionEnum.changeLanguage + ':' + language.lang;
+      buttonChunk.push(Markup.callbackButton(buttonText, buttonData));
+    });
+    buttons.push(buttonChunk);
+  });
+
+  return buttons;
+}
+
+export function showTopLanguagesReply(ctx: IMessagineContext) {
+  const languages = getTopLanguages();
+  const buttons = mapLanguagesToButtons(languages);
+  buttons.push([Markup.callbackButton(ctx.i18n.t('show_all_languages_button'), actionEnum.allLanguages)]);
+
+  return ctx.reply(ctx.i18n.t('top_languages'), Markup.inlineKeyboard(buttons).extra());
+}
+
+export function showAllLanguagesReply(ctx: IMessagineContext) {
+  const languages = getAllLanguages();
+  const buttons = mapLanguagesToButtons(languages);
+  buttons.push([Markup.callbackButton(ctx.i18n.t('show_top_languages_button'), commandEnum.setLanguage)]);
+
+  return ctx.reply(ctx.i18n.t('all_languages'), Markup.inlineKeyboard(buttons).extra());
+}
+
+export function languageSelectedReply(ctx: IMessagineContext, selectedLanguage: string) {
+  return ctx.reply(
+    ctx.i18n.t('language_selected', { selectedLanguage }),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+  );
+}
+
+export function invalidInputReply(ctx: IMessagineContext) {
+  return ctx.reply(ctx.i18n.t('invalid_input'));
+}
+
+export function languageNotChangedReply(ctx: IMessagineContext) {
+  return ctx.reply(ctx.i18n.t('language_not_changed'));
+}
+
+export function cancelFindNotLobbyReply(ctx: IMessagineContext) {
+  return ctx.reply(ctx.i18n.t('cancel_find_not_lobby'));
 }

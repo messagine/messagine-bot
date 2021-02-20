@@ -23,7 +23,7 @@ const exitChatSureAction = () => (ctx: IMessagineContext) => {
   return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChatSure(ctx), ctx.answerCbQuery()]);
 };
 
-async function onExitChatSure(ctx: IMessagineContext) {
+function onExitChatSure(ctx: IMessagineContext) {
   const chatId = getChatId(ctx);
   const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);

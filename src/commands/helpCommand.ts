@@ -12,7 +12,7 @@ const helpAction = () => (ctx: IMessagineContext) => {
   return Promise.all([mixPanelPromise, ctx.deleteMessage(), onHelp(ctx), ctx.answerCbQuery()]);
 };
 
-async function onHelp(ctx: IMessagineContext) {
+function onHelp(ctx: IMessagineContext) {
   return helpReply(ctx, ctx.userState || userStateEnum.idle);
 }
 
