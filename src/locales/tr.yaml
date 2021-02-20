@@ -3,7 +3,8 @@ cancel_find: Lobiden çıktın
 cancel_find_command_desc: Lobiden Çık
 chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarını kontrol et.
 chat_not_exist: Konuşmada değilsiniz.
-chat_start: Konuşma başladı. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
+chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsin. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
+exit_chat_are_you_sure: Konuşma sonlandırılacak. Emin misin?
 exit_chat: Konuşmayı sonlandırdın.
 exit_chat_command_desc: Konuşmayı sonlandır
 exit_chat_opponent: Konuşma sonlandırıldı
@@ -34,3 +35,5 @@ top_languages: Yaygın Diller
 show_all_languages_button: Tümü >>
 show_top_languages_button: << Yaygın
 invalid_language: Geçersiz Dil
+yes: Evet
+no: Hayır

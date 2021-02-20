@@ -1,7 +1,7 @@
 import { extractOpponentChatId, getChatId, getExistingChat, IMessagineContext } from '../lib/common';
 import { createPreviousChat, deleteChat } from '../lib/dataHandler';
-import { commandEnum, eventTypeEnum } from '../lib/enums';
-import { exitChatReply, exitChatToOpponent } from '../reply';
+import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
+import { exitChatAreYouSureReply, exitChatReply, exitChatToOpponent } from '../reply';
 
 const exitChatCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
@@ -13,7 +13,17 @@ const exitChatAction = () => (ctx: IMessagineContext) => {
   return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
 };
 
-async function onExitChat(ctx: IMessagineContext) {
+function onExitChat(ctx: IMessagineContext) {
+  getExistingChat(ctx);
+  return exitChatAreYouSureReply(ctx);
+}
+
+const exitChatSureAction = () => (ctx: IMessagineContext) => {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.exitChatSure}`);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChatSure(ctx), ctx.answerCbQuery()]);
+};
+
+async function onExitChatSure(ctx: IMessagineContext) {
   const chatId = getChatId(ctx);
   const existingChat = getExistingChat(ctx);
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
@@ -33,4 +43,4 @@ async function onExitChat(ctx: IMessagineContext) {
   return Promise.all(promises);
 }
 
-export { exitChatAction, exitChatCommand };
+export { exitChatAction, exitChatCommand, exitChatSureAction };

@@ -10,8 +10,10 @@ import {
   cancelFindAction,
   cancelFindCommand,
   changeLanguageAction,
+  deleteMessageAction,
   exitChatAction,
   exitChatCommand,
+  exitChatSureAction,
   findChatAction,
   findChatCommand,
   helpAction,
@@ -82,7 +84,9 @@ async function botUtils() {
     .action(actionEnum.allLanguages, showAllLanguagesAction())
     .action(changeLanguageRegex, changeLanguageAction())
     .action(commandEnum.exitChat, exitChatAction())
+    .action(actionEnum.exitChatSure, exitChatSureAction())
     .action(commandEnum.cancelFind, cancelFindAction())
+    .action(actionEnum.deleteMessage, deleteMessageAction())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())

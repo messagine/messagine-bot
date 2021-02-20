@@ -1,7 +1,7 @@
 import { Markup } from 'telegraf';
 import { InlineKeyboardButton } from 'telegraf/typings/markup';
 import { IMessagineContext } from '../lib/common';
-import { commandEnum, userStateEnum } from '../lib/enums';
+import { actionEnum, commandEnum, userStateEnum } from '../lib/enums';
 
 export const startCallbackButton = (ctx: IMessagineContext) =>
   Markup.callbackButton(ctx.i18n.t('start_command_desc'), commandEnum.start);
@@ -51,6 +51,16 @@ export function cancelFindReply(ctx: IMessagineContext) {
   );
 }
 
+export function exitChatAreYouSureReply(ctx: IMessagineContext) {
+  return ctx.reply(
+    ctx.i18n.t('exit_chat_are_you_sure'),
+    Markup.inlineKeyboard([
+      Markup.callbackButton(ctx.i18n.t('yes'), actionEnum.exitChatSure),
+      Markup.callbackButton(ctx.i18n.t('no'), actionEnum.deleteMessage),
+    ]).extra(),
+  );
+}
+
 export function exitChatReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('exit_chat'),
@@ -68,7 +78,7 @@ export function exitChatToOpponent(ctx: IMessagineContext, opponentChatId: numbe
 
 export function chatStartReply(ctx: IMessagineContext) {
   return ctx.reply(
-    ctx.i18n.t('chat_start'),
+    ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
     Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
   );
 }
@@ -76,7 +86,7 @@ export function chatStartReply(ctx: IMessagineContext) {
 export function chatStartToOpponent(ctx: IMessagineContext, opponentChatId: number) {
   return ctx.tg.sendMessage(
     opponentChatId,
-    ctx.i18n.t('chat_start'),
+    ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
     Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
   );
 }

@@ -2,7 +2,7 @@ import { MessageTypeNotFoundError } from '../error';
 import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
-const onVoiceMessage = () =>  (ctx: IMessagineContext) => {
+const onVoiceMessage = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.voice}`);
 
   const chatId = getChatId(ctx);

@@ -33,6 +33,8 @@ export const commandEnum = {
 export const actionEnum = {
   allLanguages: 'all_languages',
   changeLanguage: 'change_language',
+  deleteMessage: 'delete_message',
+  exitChatSure: 'exit_chat_sure',
 };
 
 export const userStateEnum = {
