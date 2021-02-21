@@ -16,7 +16,7 @@ set_language_command_desc: Dil Değiştir
 about_command_desc: Hakkında
 user_not_found: Kullanıcı bulunamadı
 welcome_back: Tekrar hoş geldin
-new_user: <b>Messagine Bot</b>\nMessagine ile gerçek insanlarla konuşursun, hem de hiçbir bilgini paylaşmadan. Arkada bir bot yok, gerçek insanlar var. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
+new_user: <b>Messagine</b>\nMessagine ile gerçek insanlarla konuşursun, hem de hiçbir bilgini paylaşmadan. Arkada bir bot yok, gerçek insanlar var. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
 message_edited: 'Mesaj düzenlendi: ${newMessage}'
 language_not_found: Dil bulunamadı
 invalid_input: Geçersiz metin
