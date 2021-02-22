@@ -2,7 +2,8 @@ active_chat: You are in an active chat.
 cancel_find: Exited the lobby.
 cancel_find_command_desc: Exit Lobby
 chatid_not_found: Chat Id not found. Check your security settings.
-chat_not_exist: Chat doesn't exist
+chat_not_exist_idle: Chat doesn't exist. How about finding chat?
+chat_not_exist_in_lobby: Chat doesn't exist. Wait in the lobby, we will let you know when the chat starts.
 chat_start: Chat started. You can exit chat via /${exitChatCommand}. If the chat is ended, we will let you know. Have fun.
 exit_chat_are_you_sure: Are you sure to close the chat?
 exit_chat: You have closed the chat. How about finding a new one?

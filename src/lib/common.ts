@@ -2,7 +2,12 @@ import _ from 'lodash';
 import { TelegrafContext } from 'telegraf/typings/context';
 import * as languageFile from '../../languages.json';
 import config from '../config';
-import { ChatIdNotFoundError, ChatNotExistError, InvalidNumberOfOpponentError } from '../error';
+import {
+  ChatIdNotFoundError,
+  ChatNotExistIdleError,
+  ChatNotExistInLobbyError,
+  InvalidNumberOfOpponentError,
+} from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
@@ -74,7 +79,11 @@ export function getExistingChat(ctx: IMessagineContext): IChat {
   const chatId = getChatId(ctx);
   const existingChat = ctx.currentChat;
   if (!existingChat) {
-    throw new ChatNotExistError(ctx, chatId);
+    if (ctx.lobby) {
+      throw new ChatNotExistInLobbyError(ctx, chatId);
+    } else {
+      throw new ChatNotExistIdleError(ctx, chatId);
+    }
   }
   return existingChat;
 }
