@@ -35,6 +35,7 @@ export const actionEnum = {
   changeLanguage: 'change_language',
   deleteMessage: 'delete_message',
   exitChatSure: 'exit_chat_sure',
+  sayHi: 'say_hi',
 };
 
 export const userStateEnum = {

@@ -18,6 +18,7 @@ import {
   findChatCommand,
   helpAction,
   helpCommand,
+  sayHiAction,
   showAllLanguagesAction,
   showTopLanguagesAction,
   showTopLanguagesCommand,
@@ -87,6 +88,7 @@ async function botUtils() {
     .action(actionEnum.exitChatSure, exitChatSureAction())
     .action(commandEnum.cancelFind, cancelFindAction())
     .action(actionEnum.deleteMessage, deleteMessageAction())
+    .action(actionEnum.sayHi, sayHiAction())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())

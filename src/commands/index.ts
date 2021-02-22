@@ -4,5 +4,6 @@ export * from './deleteMessageAction';
 export * from './exitChatCommand';
 export * from './findChatCommand';
 export * from './helpCommand';
+export * from './sayHiCommand';
 export * from './setLanguageCommand';
 export * from './startCommand';

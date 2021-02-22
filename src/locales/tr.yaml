@@ -4,7 +4,7 @@ cancel_find_command_desc: Lobiden Çık 🛎️
 chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarını kontrol et.
 chat_not_exist_idle: Konuşmada değilsin. Konuşma bulmaya ne dersin?
 chat_not_exist_in_lobby: Lobide bekliyorsun. Konuşma başladığında haber vereceğiz.
-chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsin. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
+chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsin. İyi eğlenceler.
 exit_chat_are_you_sure: Konuşma sonlandırılacak. Emin misin?
 exit_chat: Konuşmayı sonlandırdın. Yenisini bulmaya ne dersin?
 exit_chat_command_desc: Konuşmayı sonlandır 👋
@@ -12,7 +12,7 @@ exit_chat_opponent: Karşı taraf konuşmayı sonlandırdı. Yenisini bulmaya ne
 find_chat_command_desc: Konuşma Ara 💬
 help_command_desc: Yardım 🆘
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Messagine senin gerçek insanlarla mesajlaşman için elinden geleni yapıyor. Şimdi lobide bekle, konuşma başladığında haber vereceğiz.
+lobby_wait: Lobide bekle, konuşma başladığında haber vereceğiz.
 set_language_command_desc: Dil 🌐
 about_command_desc: Hakkında ℹ️
 user_not_found: Kullanıcı bulunamadı
@@ -37,3 +37,6 @@ show_all_languages_button: Tümü >>
 show_top_languages_button: << Yaygın
 yes: Evet ✅
 no: Hayır ❌
+say_hi: Selam yaz 👋
+hi_message: Selam
+said_hi: Selam yazdın

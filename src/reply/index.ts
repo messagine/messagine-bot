@@ -82,7 +82,23 @@ export function chatStartReply(ctx: IMessagineContext, chatId: number) {
   return ctx.tg.sendMessage(
     chatId,
     ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[
+      Markup.callbackButton(ctx.i18n.t('say_hi'), actionEnum.sayHi),
+      exitChatCallbackButton(ctx),
+    ]]).extra(),
+  );
+}
+
+export function hiSendReply(ctx: IMessagineContext) {
+  return ctx.reply(
+    ctx.i18n.t('said_hi', { exitChatCommand: commandEnum.exitChat }),
+  );
+}
+
+export function sayHiReply(ctx: IMessagineContext, chatId: number) {
+  return ctx.tg.sendMessage(
+    chatId,
+    ctx.i18n.t('hi_message', { exitChatCommand: commandEnum.exitChat }),
   );
 }
 

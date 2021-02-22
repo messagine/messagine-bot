@@ -4,7 +4,7 @@ cancel_find_command_desc: Exit Lobby 🛎️
 chatid_not_found: Chat Id not found. Check your security settings.
 chat_not_exist_idle: Chat doesn't exist. How about finding chat?
 chat_not_exist_in_lobby: You are waiting in the lobby. We will let you know when the chat starts.
-chat_start: Chat started. You can exit chat via /${exitChatCommand}. If the chat is ended, we will let you know. Have fun.
+chat_start: Chat started. You can exit chat via /${exitChatCommand}. Have fun.
 exit_chat_are_you_sure: Are you sure to close the chat?
 exit_chat: You have closed the chat. How about finding a new one?
 exit_chat_command_desc: Exit Chat 👋
@@ -12,7 +12,7 @@ exit_chat_opponent: Chat closed by opponent. How about finding a new one?
 find_chat_command_desc: Find Chat 💬
 help_command_desc: Help 🆘
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: Messagine does its best to get you chat with real people. Now wait in the lobby, we will let you know when the chat starts.
+lobby_wait: Wait in the lobby, we will let you know when the chat starts.
 set_language_command_desc: Language 🌐
 about_command_desc: About ℹ️
 user_not_found: User not found
@@ -37,3 +37,6 @@ show_all_languages_button: All >>
 show_top_languages_button: << Top
 yes: Yes ✅
 no: No ❌
+say_hi: Say Hi 👋
+hi_message: Hi
+said_hi: You said hi
