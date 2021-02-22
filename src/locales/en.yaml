@@ -1,20 +1,20 @@
 active_chat: You are in an active chat.
 cancel_find: Exited the lobby.
-cancel_find_command_desc: Exit Lobby
+cancel_find_command_desc: Exit Lobby 🛎️
 chatid_not_found: Chat Id not found. Check your security settings.
 chat_not_exist: Chat doesn't exist
 chat_start: Chat started. You can exit chat via /${exitChatCommand}. If the chat is ended, we will let you know. Have fun.
 exit_chat_are_you_sure: Are you sure to close the chat?
 exit_chat: You have closed the chat. How about finding a new one?
-exit_chat_command_desc: Exit Current Chat
+exit_chat_command_desc: Exit Chat 👋
 exit_chat_opponent: Chat closed by opponent. How about finding a new one?
-find_chat_command_desc: Find Chat
-help_command_desc: Get Help
+find_chat_command_desc: Find Chat 💬
+help_command_desc: Help 🆘
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: Messagine does its best to get you chat with real people. Now wait a little in the lobby, we will let you know when the chat starts.
-set_language_command_desc: Change Language
-about_command_desc: About
-user_not_found: User not found.
+lobby_wait: Messagine does its best to get you chat with real people. Now wait in the lobby, we will let you know when the chat starts.
+set_language_command_desc: Language 🌐
+about_command_desc: About ℹ️
+user_not_found: User not found
 welcome_back: Welcome back.
 new_user: <b>Messagine</b>\nWith Messagine you chat with real people, even without sharing any information. There is no bot in the back, there are real people. Your language is ${languageNativeName}. To see all commands type /${helpCommand}.
 message_edited: 'Message Edited: ${newMessage}'
@@ -27,12 +27,12 @@ language_not_changed: Language not changed.
 language_not_changed_in_chat: Language change in chat is not allowed.
 cancel_find_not_lobby: You are not in the lobby.
 help_reply: We are here to help
-our_website: Our Website
-contact: Contact
+our_website: Our Website 📱
+contact: Contact 📪
 start_command_desc: Initialize User
 all_languages: All Languages
 top_languages: Top Languages
 show_all_languages_button: All >>
 show_top_languages_button: << Top
-yes: Yes
-no: No
+yes: Yes ✅
+no: No ❌
