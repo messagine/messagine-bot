@@ -10,7 +10,7 @@ const exitChatCommand = () => (ctx: IMessagineContext) => {
 
 const exitChatAction = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${commandEnum.exitChat}`);
-  return Promise.all([mixPanelPromise, ctx.deleteMessage(), onExitChat(ctx), ctx.answerCbQuery()]);
+  return Promise.all([mixPanelPromise, onExitChat(ctx), ctx.answerCbQuery()]);
 };
 
 function onExitChat(ctx: IMessagineContext) {

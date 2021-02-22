@@ -1,20 +1,20 @@
 active_chat: Konuşmadasın
 cancel_find: Lobiden çıktın
-cancel_find_command_desc: Lobiden Çık
+cancel_find_command_desc: Lobiden Çık 🛎️
 chatid_not_found: Konuşma Id bulunamadı. Güvenlik ayarlarını kontrol et.
 chat_not_exist_idle: Konuşmada değilsin. Konuşma bulmaya ne dersin?
 chat_not_exist_in_lobby: Konuşmada değilsin. Şimdi lobide bekle, konuşma başladığında haber vereceğiz.
 chat_start: Konuşma başladı. Konuşmayı sonlandırmak için /${exitChatCommand} komutunu kullanabilirsin. Konuşma sonlandırılırsa haber vereceğiz. İyi eğlenceler.
 exit_chat_are_you_sure: Konuşma sonlandırılacak. Emin misin?
 exit_chat: Konuşmayı sonlandırdın. Yenisini bulmaya ne dersin?
-exit_chat_command_desc: Konuşmayı sonlandır
+exit_chat_command_desc: Konuşmayı sonlandır 👋
 exit_chat_opponent: Karşı taraf konuşmayı sonlandırdı. Yenisini bulmaya ne dersin?
-find_chat_command_desc: Konuşma Ara
-help_command_desc: Yardım
+find_chat_command_desc: Konuşma Ara 💬
+help_command_desc: Yardım 🆘
 invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
-lobby_wait: Messagine senin gerçek insanlarla mesajlaşman için elinden geleni yapıyor. Şimdi lobide biraz bekle, konuşma başladığında haber vereceğiz.
-set_language_command_desc: Dil Değiştir
-about_command_desc: Hakkında
+lobby_wait: Messagine senin gerçek insanlarla mesajlaşman için elinden geleni yapıyor. Şimdi lobide bekle, konuşma başladığında haber vereceğiz.
+set_language_command_desc: Dil 🌐
+about_command_desc: Hakkında ℹ️
 user_not_found: Kullanıcı bulunamadı
 welcome_back: Tekrar hoş geldin
 new_user: <b>Messagine</b>\nMessagine ile gerçek insanlarla konuşursun, hem de hiçbir bilgini paylaşmadan. Arkada bir bot yok, gerçek insanlar var. Dilin ${languageNativeName} olarak belirlendi. Tüm komutları görmek için /${helpCommand} yaz.
@@ -28,12 +28,12 @@ language_not_changed: Dil değişmedi.
 language_not_changed_in_chat: Konuşmada dil değişikliği yapılamaz.
 cancel_find_not_lobby: Lobide değilsin
 help_reply: Yardım için buradayız
-our_website: Web Sayfamız
-contact: İletişim
+our_website: Web Sayfamız 📱
+contact: İletişim 📪
 start_command_desc: Kullanıcı Oluştur
 all_languages: Tüm Diller
 top_languages: Yaygın Diller
 show_all_languages_button: Tümü >>
 show_top_languages_button: << Yaygın
-yes: Evet
-no: Hayır
+yes: Evet ✅
+no: Hayır ❌
