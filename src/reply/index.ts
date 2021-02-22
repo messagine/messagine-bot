@@ -78,16 +78,9 @@ export function exitChatToOpponent(ctx: IMessagineContext, opponentChatId: numbe
   );
 }
 
-export function chatStartReply(ctx: IMessagineContext) {
-  return ctx.reply(
-    ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
-  );
-}
-
-export function chatStartToOpponent(ctx: IMessagineContext, opponentChatId: number) {
+export function chatStartReply(ctx: IMessagineContext, chatId: number) {
   return ctx.tg.sendMessage(
-    opponentChatId,
+    chatId,
     ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
     Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
