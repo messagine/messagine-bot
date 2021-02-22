@@ -11,7 +11,7 @@ exit_chat_opponent: Chat closed by opponent. How about finding a new one?
 find_chat_command_desc: Find Chat 💬
 help_command_desc: Help 🆘
 invalid_opponent_error: Invalid number of opponents found.
-lobby_wait: Messagine does its best to get you chat with real people. Now wait a little in the lobby, we will let you know when the chat starts.
+lobby_wait: Messagine does its best to get you chat with real people. Now wait in the lobby, we will let you know when the chat starts.
 set_language_command_desc: Language 🌐
 about_command_desc: About ℹ️
 user_not_found: User not found
