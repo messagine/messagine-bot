@@ -1,7 +1,7 @@
 import { getChatId, IMessagineContext } from '../lib/common';
 import { addToLobby, createChat, findOpponentInLobby, leaveLobby } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
-import { activeChatReply, chatStartReply, chatStartToOpponent, lobbyWaitReply, userNotFoundReply } from '../reply';
+import { activeChatReply, chatStartReply, lobbyWaitReply, userNotFoundReply } from '../reply';
 
 const findChatCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.findChat}`);
@@ -34,8 +34,8 @@ async function onFindChat(ctx: IMessagineContext) {
     const leaveCurrentUserLobbyPromise = leaveLobby(chatId);
     const leaveOpponentUserLobbyPromise = leaveLobby(opponent.chatId);
     const createChatPromise = createChat(chatId, opponent.chatId, user.languageCode);
-    const chatStartToCurrentUserPromise = chatStartReply(ctx);
-    const chatStartToOpponentUserPromise = chatStartToOpponent(ctx, opponent.chatId);
+    const chatStartToCurrentUserPromise = chatStartReply(ctx, chatId);
+    const chatStartToOpponentUserPromise = chatStartReply(ctx, opponent.chatId);
 
     return Promise.all([
       leaveCurrentUserLobbyPromise,
