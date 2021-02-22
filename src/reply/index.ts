@@ -35,21 +35,21 @@ export const contactUrlButton = (ctx: IMessagineContext) =>
 export function lobbyWaitReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('lobby_wait'),
-    Markup.inlineKeyboard([[cancelFindCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[cancelFindCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
 export function activeChatReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('active_chat'),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
 export function cancelFindReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('cancel_find'),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -66,7 +66,7 @@ export function exitChatAreYouSureReply(ctx: IMessagineContext) {
 export function exitChatReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('exit_chat'),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -74,14 +74,14 @@ export function exitChatToOpponent(ctx: IMessagineContext, opponentChatId: numbe
   return ctx.tg.sendMessage(
     opponentChatId,
     ctx.i18n.t('exit_chat_opponent'),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
 export function chatStartReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -89,7 +89,7 @@ export function chatStartToOpponent(ctx: IMessagineContext, opponentChatId: numb
   return ctx.tg.sendMessage(
     opponentChatId,
     ctx.i18n.t('chat_start', { exitChatCommand: commandEnum.exitChat }),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -104,8 +104,7 @@ function helpButtons(ctx: IMessagineContext, userState: string) {
   if (userState === userStateEnum.chat) {
     buttons.push([exitChatCallbackButton(ctx)]);
   }
-  buttons.push([setLanguageCallbackButton(ctx)]);
-  buttons.push([aboutCallbackButton(ctx)]);
+  buttons.push([setLanguageCallbackButton(ctx), aboutCallbackButton(ctx)]);
   return buttons;
 }
 
@@ -117,7 +116,7 @@ export function helpReply(ctx: IMessagineContext, userState: string) {
 export function languageNotChangedInChatReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('language_not_changed_in_chat'),
-    Markup.inlineKeyboard([[exitChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[exitChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -137,7 +136,7 @@ export function newUserReply(ctx: IMessagineContext, languageNativeName: string)
 export function welcomeBackReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('welcome_back'),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -164,7 +163,7 @@ export function aboutReply(
 export function userNotFoundReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('user_not_found'),
-    Markup.inlineKeyboard([[startCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[startCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -204,7 +203,7 @@ export function showAllLanguagesReply(ctx: IMessagineContext) {
 export function languageSelectedReply(ctx: IMessagineContext, selectedLanguage: string) {
   return ctx.reply(
     ctx.i18n.t('language_selected', { selectedLanguage }),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx)], [helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
@@ -213,7 +212,10 @@ export function invalidInputReply(ctx: IMessagineContext) {
 }
 
 export function languageNotChangedReply(ctx: IMessagineContext) {
-  return ctx.reply(ctx.i18n.t('language_not_changed'));
+  return ctx.reply(
+    ctx.i18n.t('language_not_changed'),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
+  );
 }
 
 export function cancelFindNotLobbyReply(ctx: IMessagineContext) {
