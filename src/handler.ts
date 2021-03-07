@@ -14,6 +14,8 @@ export const statusHandler: Handler = async () => {
 
 export const webhookHandler: Handler = async (event: any) => {
   try {
+    // tslint:disable-next-line: no-console
+    console.debug(event);
     return await webhook(event);
   } catch (e) {
     // tslint:disable-next-line: no-console
