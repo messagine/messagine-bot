@@ -9,13 +9,7 @@ const sayHiAction = () => (ctx: IMessagineContext) => {
   const hiSendPromise = hiSendReply(ctx);
   const sayHiPromise = sayHiReply(ctx, opponentChatId);
 
-  return Promise.all([
-    mixPanelPromise,
-    ctx.deleteMessage(),
-    ctx.answerCbQuery(),
-    hiSendPromise,
-    sayHiPromise,
-  ]);
+  return Promise.all([mixPanelPromise, ctx.deleteMessage(), ctx.answerCbQuery(), hiSendPromise, sayHiPromise]);
 };
 
 export { sayHiAction };

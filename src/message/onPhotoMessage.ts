@@ -3,8 +3,6 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onPhotoMessage = () => (ctx: IMessagineContext) => {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`);
-
   const chatId = getChatId(ctx);
   const messagePhoto = ctx.message?.photo;
   if (!messagePhoto) {
@@ -13,9 +11,15 @@ const onPhotoMessage = () => (ctx: IMessagineContext) => {
 
   const photoSize = messagePhoto.length;
   const biggestPhoto = messagePhoto[photoSize - 1];
+  const fileId = biggestPhoto.file_id;
 
   const opponentChatId = getOpponentChatId(ctx);
-  const sendMessagePromise = ctx.tg.sendPhoto(opponentChatId, biggestPhoto.file_id);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`, {
+    chatId,
+    fileId,
+    opponentChatId,
+  });
+  const sendMessagePromise = ctx.tg.sendPhoto(opponentChatId, fileId);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
