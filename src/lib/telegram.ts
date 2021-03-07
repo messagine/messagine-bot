@@ -252,7 +252,9 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
   if (user) {
     ctx.user = user;
     ctx.i18n.locale(user.languageCode);
-    if (ctx.user.blocked) { return; }
+    if (ctx.user.blocked) {
+      return;
+    }
   }
   await next();
 };

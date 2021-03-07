@@ -11,7 +11,11 @@ const onTextMessage = () => (ctx: IMessagineContext) => {
 
   const opponentChatId = getOpponentChatId(ctx);
 
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.text}`, {chatId, opponentChatId, messageText});
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.text}`, {
+    chatId,
+    messageText,
+    opponentChatId,
+  });
   const sendMessagePromise = ctx.tg.sendMessage(opponentChatId, messageText);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };

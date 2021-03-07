@@ -3,8 +3,6 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onAnimationMessage = () => (ctx: IMessagineContext) => {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.animation}`);
-
   const chatId = getChatId(ctx);
   const messageAnimation = ctx.message?.animation;
   if (!messageAnimation) {
@@ -12,7 +10,13 @@ const onAnimationMessage = () => (ctx: IMessagineContext) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
-  const sendMessagePromise = ctx.tg.sendAnimation(opponentChatId, messageAnimation.file_id);
+  const fileId = messageAnimation.file_id;
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.animation}`, {
+    chatId,
+    fileId,
+    opponentChatId,
+  });
+  const sendMessagePromise = ctx.tg.sendAnimation(opponentChatId, fileId);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 

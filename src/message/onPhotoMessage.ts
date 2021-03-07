@@ -14,7 +14,11 @@ const onPhotoMessage = () => (ctx: IMessagineContext) => {
   const fileId = biggestPhoto.file_id;
 
   const opponentChatId = getOpponentChatId(ctx);
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`, {chatId, opponentChatId, fileId});
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.photo}`, {
+    chatId,
+    fileId,
+    opponentChatId,
+  });
   const sendMessagePromise = ctx.tg.sendPhoto(opponentChatId, fileId);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
