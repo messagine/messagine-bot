@@ -62,9 +62,9 @@ const i18n = new TelegrafI18n({
 async function botUtils() {
   await connect();
   const limitConfig = {
-    limit: 1,
+    limit: 3,
     onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
-    window: 1000,
+    window: 3000,
   };
 
   bot.use(Telegraf.log());
