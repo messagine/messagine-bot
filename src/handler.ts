@@ -5,7 +5,7 @@ import { status, webhook } from './lib';
 import { internalServerError } from './lib/responses';
 
 export const statusHandler: Handler = async () => {
-  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 1.0 });
+  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2 });
   const transaction = Sentry.startTransaction({
     name: 'Status Transaction',
     op: 'status',
@@ -23,7 +23,7 @@ export const statusHandler: Handler = async () => {
 };
 
 export const webhookHandler: Handler = async (event: any) => {
-  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 1.0 });
+  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2 });
   const transaction = Sentry.startTransaction({
     name: 'Webhook Transaction',
     op: 'webhook',
