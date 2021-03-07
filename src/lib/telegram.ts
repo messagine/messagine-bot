@@ -3,6 +3,8 @@ import Telegraf, { Extra } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
 // tslint:disable-next-line: no-var-requires
 const TelegrafMixpanel = require('telegraf-mixpanel');
+// tslint:disable-next-line: no-var-requires
+const rateLimit = require('telegraf-ratelimit');
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
   aboutAction,
@@ -59,6 +61,11 @@ const i18n = new TelegrafI18n({
 
 async function botUtils() {
   await connect();
+  const limitConfig = {
+    limit: 1,
+    onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
+    window: 1000,
+  };
 
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
@@ -66,6 +73,7 @@ async function botUtils() {
   bot.use(userMiddleware);
   bot.use(catcher);
   bot.use(logger);
+  bot.use(rateLimit(limitConfig));
 
   const changeLanguageRegex = new RegExp(`${actionEnum.changeLanguage}:(.+)`);
 

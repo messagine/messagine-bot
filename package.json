@@ -18,7 +18,8 @@
 		"mongoose": "^5.11.13",
 		"telegraf": "^3.38.0",
 		"telegraf-i18n": "^6.6.0",
-		"telegraf-mixpanel": "^1.0.0"
+		"telegraf-mixpanel": "^1.0.0",
+		"telegraf-ratelimit": "^2.0.0"
 	},
 	"devDependencies": {
 		"@types/aws-lambda": "^8.10.71",
