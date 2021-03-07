@@ -3,16 +3,20 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onVideoMessage = () => (ctx: IMessagineContext) => {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.video}`);
-
   const chatId = getChatId(ctx);
   const messageVideo = ctx.message?.video;
   if (!messageVideo) {
     throw new MessageTypeNotFoundError(ctx, chatId, messageTypeEnum.video);
   }
 
+  const fileId = messageVideo.file_id;
   const opponentChatId = getOpponentChatId(ctx);
-  const sendMessagePromise = ctx.tg.sendVideo(opponentChatId, messageVideo.file_id);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.video}`, {
+    chatId,
+    fileId,
+    opponentChatId,
+  });
+  const sendMessagePromise = ctx.tg.sendVideo(opponentChatId, fileId);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
 
