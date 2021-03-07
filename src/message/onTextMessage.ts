@@ -3,8 +3,6 @@ import { getChatId, getOpponentChatId, IMessagineContext } from '../lib/common';
 import { eventTypeEnum, messageTypeEnum } from '../lib/enums';
 
 const onTextMessage = () => (ctx: IMessagineContext) => {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.text}`);
-
   const chatId = getChatId(ctx);
   const messageText = ctx.message?.text;
   if (!messageText) {
@@ -12,6 +10,8 @@ const onTextMessage = () => (ctx: IMessagineContext) => {
   }
 
   const opponentChatId = getOpponentChatId(ctx);
+
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.message}.${messageTypeEnum.text}`, {chatId, opponentChatId, messageText});
   const sendMessagePromise = ctx.tg.sendMessage(opponentChatId, messageText);
   return Promise.all([mixPanelPromise, sendMessagePromise]);
 };
