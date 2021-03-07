@@ -12,6 +12,8 @@
 		"tslint": "tslint --project tsconfig.json"
 	},
 	"dependencies": {
+		"@sentry/node": "^6.2.1",
+		"@sentry/tracing": "^6.2.1",
 		"lodash": "^4.17.20",
 		"mongoose": "^5.11.13",
 		"telegraf": "^3.38.0",
