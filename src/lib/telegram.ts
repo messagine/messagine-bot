@@ -3,8 +3,6 @@ import Telegraf, { Extra } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
 // tslint:disable-next-line: no-var-requires
 const TelegrafMixpanel = require('telegraf-mixpanel');
-import * as Sentry from '@sentry/node';
-import * as Tracing from '@sentry/tracing';
 import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
   aboutAction,
@@ -224,11 +222,9 @@ export const logger = async (_: IMessagineContext, next: any): Promise<void> => 
 };
 
 const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
-  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 1.0, });
   try {
     await next();
   } catch (e) {
-    Sentry.captureException(e);
     await ctx.reply(e.message, e?.extra);
   }
 };
