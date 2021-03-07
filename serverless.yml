@@ -27,6 +27,7 @@ functions:
       BOT_TOKEN: ${param:BOT_TOKEN}
       ENDPOINT_URL: ${param:ENDPOINT_URL}
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
+      SENTRY_DSN: ${param:SENTRY_DSN}
       WEBHOOK_PATH: 'api'
   webhook:
     handler: src/handler.webhookHandler
@@ -38,4 +39,5 @@ functions:
       BOT_TOKEN: ${param:BOT_TOKEN}
       DB_URL: ${param:DB_URL}
       ENDPOINT_URL: ${param:ENDPOINT_URL}
+      SENTRY_DSN: ${param:SENTRY_DSN}
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
