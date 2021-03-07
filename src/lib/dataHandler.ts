@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import config from '../config';
 import Chat, { IChat } from './models/Chat';
 import Lobby, { ILobby } from './models/Lobby';
-import PreviousChat from './models/PreviousChat';
+import PreviousChat, { IPreviousChat } from './models/PreviousChat';
 import User, { IUser } from './models/User';
 
 export function connect() {
@@ -40,8 +40,8 @@ export function findLobby(chatId: number): Promise<ILobby | null> {
   return Lobby.findOne({ chatId }).exec();
 }
 
-export function findOpponentInLobby(chatId: number, languageCode: string): Promise<ILobby | null> {
-  return Lobby.findOne({ chatId: { $ne: chatId }, languageCode }).exec();
+export function findOpponentsInLobby(chatId: number, languageCode: string): Promise<ILobby[] | null> {
+  return Lobby.find({ chatId: { $ne: chatId }, languageCode }).exec();
 }
 
 export function leaveLobby(chatId: number) {
@@ -84,6 +84,10 @@ export function getPreviousChatCount(): Promise<number> {
 
 export function getUserPreviousChatCount(chatId: number): Promise<number> {
   return PreviousChat.countDocuments({ chatIds: chatId }).exec();
+}
+
+export function getUserPreviousChats(chatId: number): Promise<IPreviousChat[] | null> {
+  return PreviousChat.find({ chatIds: chatId }).exec();
 }
 
 export function getLobbyCount(): Promise<number> {
