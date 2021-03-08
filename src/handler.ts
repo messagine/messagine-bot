@@ -23,7 +23,9 @@ export const statusHandler: Handler = async () => {
 };
 
 export const webhookHandler: Handler = async (event: any) => {
+  const user = getTelegramUserForSentry(event);
   Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2 });
+  Sentry.setUser(user);
   const transaction = Sentry.startTransaction({
     name: 'Webhook Transaction',
     op: 'webhook',
@@ -41,3 +43,11 @@ export const webhookHandler: Handler = async (event: any) => {
     transaction.finish();
   }
 };
+
+function getTelegramUserForSentry(event: any): Sentry.User | null {
+  const body = JSON.parse(event.body);
+  if (body.message) {
+    return body.message?.from;
+  }
+  return null;
+}
