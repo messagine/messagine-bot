@@ -13,8 +13,6 @@ export const statusHandler: Handler = async () => {
   try {
     return await status();
   } catch (e) {
-    // tslint:disable-next-line: no-console
-    console.error(e.message);
     Sentry.captureException(e);
     return internalServerError();
   } finally {
@@ -35,8 +33,6 @@ export const webhookHandler: Handler = async (event: any) => {
     console.debug(event);
     return await webhook(event);
   } catch (e) {
-    // tslint:disable-next-line: no-console
-    console.error(e.message);
     Sentry.captureException(e);
     return internalServerError();
   } finally {
@@ -48,6 +44,12 @@ function getTelegramUserForSentry(event: any): Sentry.User | null {
   const body = JSON.parse(event.body);
   if (body.message) {
     return body.message?.chat;
+  }
+  if (body.callback_query) {
+    return body.callback_query?.message?.chat;
+  }
+  if (body.edited_message) {
+    return body.edited_message?.chat;
   }
   return null;
 }
