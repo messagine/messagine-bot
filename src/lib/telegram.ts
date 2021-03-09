@@ -255,6 +255,8 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
       await onUserLeft(ctx, chatId);
     } else if (newStatus === 'member') {
       await onUserReturned(ctx, chatId);
+    } else {
+      throw new Error(`Unexpected new chat member status: ${newStatus}`);
     }
     return;
   }
