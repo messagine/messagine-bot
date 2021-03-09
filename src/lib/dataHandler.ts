@@ -32,6 +32,10 @@ export function setLanguage(chatId: number, languageCode: string) {
   return User.updateOne({ chatId }, { $set: { languageCode } }, { upsert: true }).exec();
 }
 
+export function userBlockedChange(chatId: number, blocked: boolean) {
+  return User.updateOne({ chatId }, { $set: { blocked } }).exec();
+}
+
 export function addToLobby(chatId: number, languageCode: string): Promise<ILobby> {
   return Lobby.create({ chatId, languageCode });
 }

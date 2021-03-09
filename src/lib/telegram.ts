@@ -45,7 +45,7 @@ import {
 } from '../message';
 import resource from '../resource';
 import { getChatId, IMessagineContext } from './common';
-import { connect, findExistingChat, findLobby, getUser } from './dataHandler';
+import { connect, findExistingChat, findLobby, getUser, userBlockedChange } from './dataHandler';
 import { actionEnum, commandEnum, userStateEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
@@ -70,6 +70,7 @@ async function botUtils() {
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
   bot.use(i18n.middleware());
+  bot.use(chatMemberMiddleware);
   bot.use(userMiddleware);
   bot.use(catcher);
   bot.use(logger);
@@ -235,6 +236,20 @@ const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
   } catch (e) {
     await ctx.reply(e.message, e?.extra);
   }
+};
+
+const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
+  if (ctx?.update?.my_chat_member) {
+    const chatId = ctx.update.my_chat_member.chat.id;
+    const newStatus = ctx.update.my_chat_member.new_chat_member.status;
+    if (newStatus === 'kicked') {
+      await userBlockedChange(chatId, true);
+    } else if (newStatus === 'member') {
+      await userBlockedChange(chatId, false);
+    }
+    return;
+  }
+  await next();
 };
 
 const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
