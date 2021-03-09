@@ -28,6 +28,7 @@ import {
   startCommand,
 } from '../commands';
 import config from '../config';
+import { InvalidNumberOfOpponentError } from '../error';
 import {
   onAnimationMessage,
   onContactMessage,
@@ -45,13 +46,21 @@ import {
 } from '../message';
 import resource from '../resource';
 import { getChatId, IMessagineContext } from './common';
-import { connect, createPreviousChat, deleteChat, findExistingChat, findLobby, getUser, leaveLobby, userBlockedChange } from './dataHandler';
+import {
+  connect,
+  createPreviousChat,
+  deleteChat,
+  findExistingChat,
+  findLobby,
+  getUser,
+  leaveLobby,
+  userBlockedChange,
+} from './dataHandler';
 import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
 import { exitChatToOpponent } from '../reply';
-import { InvalidNumberOfOpponentError } from '../error';
 
 const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
 const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
@@ -224,8 +233,6 @@ export const hiddenCharacter = '\u200b';
 
 export const logger = async (_: IMessagineContext, next: any): Promise<void> => {
   const logStart = new Date();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   await next();
   const ms = new Date().getTime() - logStart.getTime();
   // tslint:disable-next-line: no-console
@@ -246,7 +253,7 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
     const newStatus = ctx.update.my_chat_member.new_chat_member.status;
     if (newStatus === 'kicked') {
       await onUserLeft(ctx, chatId);
-    } else if (newStatus === 'member') {
+    } else if (newStatus === 'member') {
       await onUserReturned(ctx, chatId);
     }
     return;
@@ -320,6 +327,9 @@ async function getChatIdInfo(chatId: number) {
 }
 
 const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
+  if (ctx.message?.from?.is_bot) {
+    return;
+  }
   const chatId = getChatId(ctx);
   const chatIdInfo = await getChatIdInfo(chatId);
   ctx.userState = chatIdInfo.state;
