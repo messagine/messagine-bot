@@ -28,6 +28,7 @@ import {
   startCommand,
 } from '../commands';
 import config from '../config';
+import { InvalidNumberOfOpponentError } from '../error';
 import {
   onAnimationMessage,
   onContactMessage,
@@ -45,11 +46,21 @@ import {
 } from '../message';
 import resource from '../resource';
 import { getChatId, IMessagineContext } from './common';
-import { connect, findExistingChat, findLobby, getUser, userBlockedChange } from './dataHandler';
-import { actionEnum, commandEnum, userStateEnum } from './enums';
+import {
+  connect,
+  createPreviousChat,
+  deleteChat,
+  findExistingChat,
+  findLobby,
+  getUser,
+  leaveLobby,
+  userBlockedChange,
+} from './dataHandler';
+import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
+import { exitChatToOpponent } from '../reply';
 
 const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
 const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
@@ -222,8 +233,6 @@ export const hiddenCharacter = '\u200b';
 
 export const logger = async (_: IMessagineContext, next: any): Promise<void> => {
   const logStart = new Date();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   await next();
   const ms = new Date().getTime() - logStart.getTime();
   // tslint:disable-next-line: no-console
@@ -243,38 +252,98 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
     const chatId = ctx.update.my_chat_member.chat.id;
     const newStatus = ctx.update.my_chat_member.new_chat_member.status;
     if (newStatus === 'kicked') {
-      await userBlockedChange(chatId, true);
-    } else if (newStatus === 'member') {
-      await userBlockedChange(chatId, false);
+      await onUserLeft(ctx, chatId);
+    } else if (newStatus === 'member') {
+      await onUserReturned(ctx, chatId);
+    } else {
+      throw new Error(`Unexpected new chat member status: ${newStatus}`);
     }
     return;
   }
   await next();
 };
 
-const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
-  const chatId = getChatId(ctx);
+async function onUserLeft(ctx: any, chatId: number) {
+  const chatIdInfo = await getChatIdInfo(chatId);
+  const promises: Promise<any>[] = [];
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`);
+  promises.push(mixPanelPromise);
+  if (chatIdInfo.user) {
+    ctx.i18n.locale(chatIdInfo.user.languageCode);
+    const userBlockPromise = userBlockedChange(chatId, true);
+    promises.push(userBlockPromise);
+  }
+  if (chatIdInfo.lobby) {
+    const leaveLobbyPromise = leaveLobby(chatId);
+    promises.push(leaveLobbyPromise);
+  }
+  if (chatIdInfo.chat) {
+    const chatIds = chatIdInfo.chat.chatIds;
+    const opponentChatIds = chatIds.filter(id => chatId !== id);
+    if (opponentChatIds.length !== 1) {
+      throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
+    }
+    const opponentChatId = opponentChatIds[0];
+    const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
+    const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
+    const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
+    promises.push(deleteChatPromise);
+    promises.push(previousChatCreatePromise);
+    promises.push(sendMessageToOpponentPromise);
+  }
+  return Promise.all(promises);
+}
+
+function onUserReturned(ctx: any, chatId: number) {
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`);
+  const userBlockPromise = userBlockedChange(chatId, false);
+  return Promise.all([mixPanelPromise, userBlockPromise]);
+}
+
+async function getChatIdInfo(chatId: number) {
   const userPromise = getUser(chatId);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
+
   const checkResults = await Promise.all([userPromise, lobbyPromise, existingChatPromise]);
 
   const user = checkResults[0];
   const lobby = checkResults[1];
-  const currentChat = checkResults[2];
+  const chat = checkResults[2];
+
+  let state: string;
   if (lobby) {
-    ctx.lobby = lobby;
-    ctx.userState = userStateEnum.lobby;
-  } else if (currentChat) {
-    ctx.currentChat = currentChat;
-    ctx.userState = userStateEnum.chat;
+    state = userStateEnum.lobby;
+  } else if (chat) {
+    state = userStateEnum.chat;
   } else {
-    ctx.userState = userStateEnum.idle;
+    state = userStateEnum.idle;
   }
 
-  if (user) {
-    ctx.user = user;
-    ctx.i18n.locale(user.languageCode);
+  return {
+    chat,
+    lobby,
+    state,
+    user,
+  };
+}
+
+const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
+  if (ctx.message?.from?.is_bot) {
+    return;
+  }
+  const chatId = getChatId(ctx);
+  const chatIdInfo = await getChatIdInfo(chatId);
+  ctx.userState = chatIdInfo.state;
+  if (chatIdInfo.lobby) {
+    ctx.lobby = chatIdInfo.lobby;
+  } else if (chatIdInfo.chat) {
+    ctx.currentChat = chatIdInfo.chat;
+  }
+
+  if (chatIdInfo.user) {
+    ctx.user = chatIdInfo.user;
+    ctx.i18n.locale(chatIdInfo.user.languageCode);
     if (ctx.user.blocked) {
       return;
     }

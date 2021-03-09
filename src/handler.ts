@@ -40,7 +40,7 @@ export const webhookHandler: Handler = async (event: any) => {
   }
 };
 
-function getTelegramUserForSentry(event: any): Sentry.User | null {
+function getTelegramUserForSentry(event: any): Sentry.User | null {
   const body = JSON.parse(event.body);
   if (body.message) {
     return body.message?.chat;

@@ -36,6 +36,8 @@ export const actionEnum = {
   deleteMessage: 'delete_message',
   exitChatSure: 'exit_chat_sure',
   sayHi: 'say_hi',
+  userLeft: 'user_left',
+  userReturned: 'user_returned',
 };
 
 export const userStateEnum = {
