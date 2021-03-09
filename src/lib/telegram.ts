@@ -289,13 +289,13 @@ async function onUserLeft(ctx: any, chatId: number) {
     promises.push(previousChatCreatePromise);
     promises.push(sendMessageToOpponentPromise);
   }
-  return await Promise.all(promises);
+  return Promise.all(promises);
 }
 
-async function onUserReturned(ctx: any, chatId: number) {
+function onUserReturned(ctx: any, chatId: number) {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`);
   const userBlockPromise = userBlockedChange(chatId, false);
-  return await Promise.all([mixPanelPromise, userBlockPromise]);
+  return Promise.all([mixPanelPromise, userBlockPromise]);
 }
 
 async function getChatIdInfo(chatId: number) {
