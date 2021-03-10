@@ -344,7 +344,7 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
   if (chatIdInfo.user) {
     ctx.user = chatIdInfo.user;
     ctx.i18n.locale(chatIdInfo.user.languageCode);
-    if (ctx.user.blocked) {
+    if (ctx.user.blocked || ctx.user.banned) {
       return;
     }
   }
