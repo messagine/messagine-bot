@@ -266,7 +266,7 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
 async function onUserLeft(ctx: any, chatId: number) {
   const chatIdInfo = await getChatIdInfo(chatId);
   const promises: Promise<any>[] = [];
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
   promises.push(mixPanelPromise);
   if (chatIdInfo.user) {
     ctx.i18n.locale(chatIdInfo.user.languageCode);
@@ -295,7 +295,9 @@ async function onUserLeft(ctx: any, chatId: number) {
 }
 
 function onUserReturned(ctx: any, chatId: number) {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`);
+  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userReturned}`, {
+    distinct_id: chatId,
+  });
   const userBlockPromise = userBlockedChange(chatId, false);
   return Promise.all([mixPanelPromise, userBlockPromise]);
 }
@@ -344,7 +346,7 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
   if (chatIdInfo.user) {
     ctx.user = chatIdInfo.user;
     ctx.i18n.locale(chatIdInfo.user.languageCode);
-    if (ctx.user.blocked || ctx.user.banned) {
+    if (ctx.user.blocked || ctx.user.banned) {
       return;
     }
   }
