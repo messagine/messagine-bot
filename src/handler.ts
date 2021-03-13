@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node';
 import { Handler } from 'aws-lambda';
 import config from './config';
 import { status, webhook } from './lib';
-import { internalServerError } from './lib/responses';
+import { ok } from './lib/responses';
 
 export const statusHandler: Handler = async () => {
   Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2 });
@@ -14,7 +14,7 @@ export const statusHandler: Handler = async () => {
     return await status();
   } catch (e) {
     Sentry.captureException(e);
-    return internalServerError();
+    return ok();
   } finally {
     transaction.finish();
   }
@@ -34,7 +34,7 @@ export const webhookHandler: Handler = async (event: any) => {
     return await webhook(event);
   } catch (e) {
     Sentry.captureException(e);
-    return internalServerError();
+    return ok();
   } finally {
     transaction.finish();
   }
