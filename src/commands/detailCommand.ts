@@ -1,6 +1,6 @@
 import { getChatIdInfo, IMessagineContext } from '../lib/common';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
-import { invalidInputReply, userNotFoundReply } from '../reply';
+import { invalidInputReply } from '../reply';
 
 const detailCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.admin}.${adminCommandEnum.detail}`);
@@ -18,7 +18,7 @@ async function onDetail(ctx: IMessagineContext) {
   const chatId = parseFloat(ctx.match[1]);
   const chatIdInfo = await getChatIdInfo(chatId);
   if (!chatIdInfo.user) {
-    return userNotFoundReply(ctx);
+    return ctx.reply(ctx.i18n.t('user_not_found'));
   }
 
   return ctx.reply(
