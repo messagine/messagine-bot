@@ -1,6 +1,7 @@
 import { Document, model, Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
+  admin?: boolean;
   banned?: boolean;
   chatId: number;
   blocked?: boolean;
@@ -8,6 +9,7 @@ export interface IUser extends Document {
 }
 
 const UserSchema: Schema = new Schema({
+  admin: { type: Boolean },
   banned: { type: Boolean },
   blocked: { type: Boolean },
   chatId: { type: Number, required: true, unique: true },

@@ -36,6 +36,10 @@ export function userBlockedChange(chatId: number, blocked: boolean) {
   return User.updateOne({ chatId }, { $set: { blocked } }).exec();
 }
 
+export function userBannedChange(chatId: number, banned: boolean) {
+  return User.updateOne({ chatId }, { $set: { banned } }).exec();
+}
+
 export function addToLobby(chatId: number, languageCode: string): Promise<ILobby> {
   return Lobby.create({ chatId, languageCode });
 }

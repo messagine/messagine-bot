@@ -9,6 +9,8 @@ import {
   InvalidNumberOfOpponentError,
 } from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
+import { findExistingChat, findLobby, getUser } from './dataHandler';
+import { userStateEnum } from './enums';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
 import { ILobby } from './models/Lobby';
@@ -91,6 +93,34 @@ export function getExistingChat(ctx: IMessagineContext): IChat {
 export function getOpponentChatId(ctx: IMessagineContext): number {
   const existingChat = getExistingChat(ctx);
   return extractOpponentChatId(ctx, existingChat);
+}
+
+export async function getChatIdInfo(chatId: number) {
+  const userPromise = getUser(chatId);
+  const lobbyPromise = findLobby(chatId);
+  const existingChatPromise = findExistingChat(chatId);
+
+  const checkResults = await Promise.all([userPromise, lobbyPromise, existingChatPromise]);
+
+  const user = checkResults[0];
+  const lobby = checkResults[1];
+  const chat = checkResults[2];
+
+  let state: string;
+  if (lobby) {
+    state = userStateEnum.lobby;
+  } else if (chat) {
+    state = userStateEnum.chat;
+  } else {
+    state = userStateEnum.idle;
+  }
+
+  return {
+    chat,
+    lobby,
+    state,
+    user,
+  };
 }
 
 export interface IMessagineContext extends TelegrafContext {
