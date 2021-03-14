@@ -47,8 +47,14 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import { extractOpponentForChatId, getChatId, getChatIdInfo, IMessagineContext } from './common';
-import { connect, createPreviousChat, deleteChat, leaveLobby, userBlockedChange } from './dataHandler';
+import {
+  extractOpponentForChatId,
+  getChatId,
+  getChatIdInfo,
+  IMessagineContext,
+  moveChatToPreviousChats,
+} from './common';
+import { connect, leaveLobby, userBlockedChange } from './dataHandler';
 import { actionEnum, adminCommandEnum, commandEnum, eventTypeEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
@@ -278,11 +284,9 @@ async function onUserLeft(ctx: any, chatId: number) {
   }
   if (chatIdInfo.chat) {
     const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
-    const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
-    const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(chatIdInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
-    promises.push(deleteChatPromise);
-    promises.push(previousChatCreatePromise);
+    promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);
   }
   return Promise.all(promises);

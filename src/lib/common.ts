@@ -9,7 +9,7 @@ import {
   InvalidNumberOfOpponentError,
 } from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
-import { findExistingChat, findLobby, getUser } from './dataHandler';
+import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
 import { userStateEnum } from './enums';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
@@ -125,6 +125,12 @@ export async function getChatIdInfo(chatId: number) {
     state,
     user,
   };
+}
+
+export function moveChatToPreviousChats(chat: IChat, closedBy: number) {
+  const deleteChatPromise = deleteChat(chat.id);
+  const previousChatCreatePromise = createPreviousChat(chat, closedBy);
+  return Promise.all([deleteChatPromise, previousChatCreatePromise]);
 }
 
 export interface IMessagineContext extends TelegrafContext {

@@ -1,5 +1,5 @@
-import { extractOpponentForChatId, getChatIdInfo, IMessagineContext } from '../lib/common';
-import { createPreviousChat, deleteChat, leaveLobby, userBannedChange } from '../lib/dataHandler';
+import { extractOpponentForChatId, getChatIdInfo, IMessagineContext, moveChatToPreviousChats } from '../lib/common';
+import { leaveLobby, userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatToOpponent, invalidInputReply, userNotFoundReply } from '../reply';
 
@@ -36,11 +36,9 @@ async function onBan(ctx: IMessagineContext) {
   }
   if (chatIdInfo.chat) {
     const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
-    const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
-    const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(chatIdInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
-    promises.push(deleteChatPromise);
-    promises.push(previousChatCreatePromise);
+    promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);
   }
 

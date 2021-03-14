@@ -1,5 +1,10 @@
-import { extractOpponentChatId, getChatId, getExistingChat, IMessagineContext } from '../lib/common';
-import { createPreviousChat, deleteChat } from '../lib/dataHandler';
+import {
+  extractOpponentChatId,
+  getChatId,
+  getExistingChat,
+  IMessagineContext,
+  moveChatToPreviousChats,
+} from '../lib/common';
 import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatAreYouSureReply, exitChatReply, exitChatToOpponent } from '../reply';
 
@@ -29,16 +34,10 @@ function onExitChatSure(ctx: IMessagineContext) {
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
   const sendMessagePromise = exitChatReply(ctx);
 
-  const deleteChatPromise = deleteChat(existingChat.id);
-  const previousChatCreatePromise = createPreviousChat(existingChat, chatId);
+  const moveChatToPreviousChatsPromise = moveChatToPreviousChats(existingChat, chatId);
   const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
 
-  const promises: Promise<any>[] = [
-    sendMessagePromise,
-    deleteChatPromise,
-    previousChatCreatePromise,
-    sendMessageToOpponentPromise,
-  ];
+  const promises: Promise<any>[] = [sendMessagePromise, moveChatToPreviousChatsPromise, sendMessageToOpponentPromise];
 
   return Promise.all(promises);
 }
