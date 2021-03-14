@@ -9,10 +9,12 @@ import { BotCommand } from 'telegraf/typings/telegram-types';
 import {
   aboutAction,
   aboutCommand,
+  banCommand,
   cancelFindAction,
   cancelFindCommand,
   changeLanguageAction,
   deleteMessageAction,
+  detailCommand,
   exitChatAction,
   exitChatCommand,
   exitChatSureAction,
@@ -26,9 +28,9 @@ import {
   showTopLanguagesCommand,
   startAction,
   startCommand,
+  unbanCommand,
 } from '../commands';
 import config from '../config';
-import { InvalidNumberOfOpponentError } from '../error';
 import {
   onAnimationMessage,
   onContactMessage,
@@ -45,18 +47,15 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import { getChatId, IMessagineContext } from './common';
 import {
-  connect,
-  createPreviousChat,
-  deleteChat,
-  findExistingChat,
-  findLobby,
-  getUser,
-  leaveLobby,
-  userBlockedChange,
-} from './dataHandler';
-import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from './enums';
+  extractOpponentForChatId,
+  getChatId,
+  getChatIdInfo,
+  IMessagineContext,
+  moveChatToPreviousChats,
+} from './common';
+import { connect, leaveLobby, userBlockedChange } from './dataHandler';
+import { actionEnum, adminCommandEnum, commandEnum, eventTypeEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
@@ -88,6 +87,9 @@ async function botUtils() {
   bot.use(rateLimit(limitConfig));
 
   const changeLanguageRegex = new RegExp(`${actionEnum.changeLanguage}:(.+)`);
+  const banCommandRegex = new RegExp(`/${adminCommandEnum.ban} (.+)`);
+  const detailCommandRegex = new RegExp(`/${adminCommandEnum.detail} (.+)`);
+  const unbanCommandRegex = new RegExp(`/${adminCommandEnum.unban} (.+)`);
 
   bot
     .command(commandEnum.start, startCommand())
@@ -109,6 +111,9 @@ async function botUtils() {
     .action(commandEnum.cancelFind, cancelFindAction())
     .action(actionEnum.deleteMessage, deleteMessageAction())
     .action(actionEnum.sayHi, sayHiAction())
+    .hears(banCommandRegex, banCommand())
+    .hears(detailCommandRegex, detailCommand())
+    .hears(unbanCommandRegex, unbanCommand())
     .on('animation', onAnimationMessage())
     .on('contact', onContactMessage())
     .on('document', onDocumentMessage())
@@ -278,17 +283,10 @@ async function onUserLeft(ctx: any, chatId: number) {
     promises.push(leaveLobbyPromise);
   }
   if (chatIdInfo.chat) {
-    const chatIds = chatIdInfo.chat.chatIds;
-    const opponentChatIds = chatIds.filter(id => chatId !== id);
-    if (opponentChatIds.length !== 1) {
-      throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
-    }
-    const opponentChatId = opponentChatIds[0];
-    const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
-    const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
+    const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(chatIdInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
-    promises.push(deleteChatPromise);
-    promises.push(previousChatCreatePromise);
+    promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);
   }
   return Promise.all(promises);
@@ -300,34 +298,6 @@ function onUserReturned(ctx: any, chatId: number) {
   });
   const userBlockPromise = userBlockedChange(chatId, false);
   return Promise.all([mixPanelPromise, userBlockPromise]);
-}
-
-async function getChatIdInfo(chatId: number) {
-  const userPromise = getUser(chatId);
-  const lobbyPromise = findLobby(chatId);
-  const existingChatPromise = findExistingChat(chatId);
-
-  const checkResults = await Promise.all([userPromise, lobbyPromise, existingChatPromise]);
-
-  const user = checkResults[0];
-  const lobby = checkResults[1];
-  const chat = checkResults[2];
-
-  let state: string;
-  if (lobby) {
-    state = userStateEnum.lobby;
-  } else if (chat) {
-    state = userStateEnum.chat;
-  } else {
-    state = userStateEnum.idle;
-  }
-
-  return {
-    chat,
-    lobby,
-    state,
-    user,
-  };
 }
 
 const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {

@@ -1,5 +1,6 @@
 export const eventTypeEnum = {
   action: 'action',
+  admin: 'admin',
   command: 'command',
   error: 'error',
   message: 'message',
@@ -28,6 +29,12 @@ export const commandEnum = {
   help: 'help',
   setLanguage: 'set_language',
   start: 'start',
+};
+
+export const adminCommandEnum = {
+  ban: 'ban',
+  detail: 'detail',
+  unban: 'unban',
 };
 
 export const actionEnum = {

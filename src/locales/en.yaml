@@ -28,6 +28,9 @@ language_not_changed: Language not changed.
 language_not_changed_in_chat: Language change in chat is not allowed.
 cancel_find_not_lobby: You are not in the lobby.
 help_reply: We are here to help
+detail_reply: 'Language: ${languageCode}\nState: ${state}\nBanned: ${banned}\nBlocked: ${blocked}'
+unban_reply: User Ban removed
+ban_reply: User Banned
 our_website: Our Website 📱
 contact: Contact 📪
 start_command_desc: Initialize User
