@@ -1,5 +1,4 @@
-import { InvalidNumberOfOpponentError } from '../error';
-import { getChatIdInfo, IMessagineContext } from '../lib/common';
+import { extractOpponentForChatId, getChatIdInfo, IMessagineContext } from '../lib/common';
 import { createPreviousChat, deleteChat, leaveLobby, userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatToOpponent, invalidInputReply, userNotFoundReply } from '../reply';
@@ -36,12 +35,7 @@ async function onBan(ctx: IMessagineContext) {
     promises.push(leaveLobbyPromise);
   }
   if (chatIdInfo.chat) {
-    const chatIds = chatIdInfo.chat.chatIds;
-    const opponentChatIds = chatIds.filter(id => chatId !== id);
-    if (opponentChatIds.length !== 1) {
-      throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
-    }
-    const opponentChatId = opponentChatIds[0];
+    const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
     const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
     const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
@@ -50,7 +44,7 @@ async function onBan(ctx: IMessagineContext) {
     promises.push(sendMessageToOpponentPromise);
   }
 
-  return await Promise.all(promises);
+  return Promise.all(promises);
 }
 
 export { banCommand };

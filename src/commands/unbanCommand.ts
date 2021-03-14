@@ -25,7 +25,7 @@ async function onUnban(ctx: IMessagineContext) {
   const userBanPromise = userBannedChange(chatId, false);
   const replyPromise = ctx.reply(ctx.i18n.t('unban_reply'));
 
-  return await Promise.all([userBanPromise, replyPromise]);
+  return Promise.all([userBanPromise, replyPromise]);
 }
 
 export { unbanCommand };

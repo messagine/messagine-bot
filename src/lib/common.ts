@@ -42,6 +42,10 @@ export function findLanguageSafe(ctx: IMessagineContext, code: string) {
 
 export function extractOpponentChatId(ctx: IMessagineContext, chat: IChat): number {
   const chatId = getChatId(ctx);
+  return extractOpponentForChatId(ctx, chatId, chat);
+}
+
+export function extractOpponentForChatId(ctx: IMessagineContext, chatId: number, chat: IChat): number {
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
   if (opponentChatIds.length !== 1) {

@@ -31,7 +31,6 @@ import {
   unbanCommand,
 } from '../commands';
 import config from '../config';
-import { InvalidNumberOfOpponentError } from '../error';
 import {
   onAnimationMessage,
   onContactMessage,
@@ -48,7 +47,7 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import { getChatId, getChatIdInfo, IMessagineContext } from './common';
+import { extractOpponentForChatId, getChatId, getChatIdInfo, IMessagineContext } from './common';
 import { connect, createPreviousChat, deleteChat, leaveLobby, userBlockedChange } from './dataHandler';
 import { actionEnum, adminCommandEnum, commandEnum, eventTypeEnum } from './enums';
 import { ok } from './responses';
@@ -278,12 +277,7 @@ async function onUserLeft(ctx: any, chatId: number) {
     promises.push(leaveLobbyPromise);
   }
   if (chatIdInfo.chat) {
-    const chatIds = chatIdInfo.chat.chatIds;
-    const opponentChatIds = chatIds.filter(id => chatId !== id);
-    if (opponentChatIds.length !== 1) {
-      throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
-    }
-    const opponentChatId = opponentChatIds[0];
+    const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
     const deleteChatPromise = deleteChat(chatIdInfo.chat.id);
     const previousChatCreatePromise = createPreviousChat(chatIdInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
