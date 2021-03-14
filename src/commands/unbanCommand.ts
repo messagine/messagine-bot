@@ -1,7 +1,7 @@
 import { getChatIdInfo, IMessagineContext } from '../lib/common';
 import { userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
-import { invalidInputReply, userNotFoundReply } from '../reply';
+import { invalidInputReply } from '../reply';
 
 const unbanCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.admin}.${adminCommandEnum.unban}`);
@@ -19,7 +19,7 @@ async function onUnban(ctx: IMessagineContext) {
   const chatId = parseFloat(ctx.match[1]);
   const chatIdInfo = await getChatIdInfo(chatId);
   if (!chatIdInfo.user) {
-    return userNotFoundReply(ctx);
+    return ctx.reply(ctx.i18n.t('user_not_found'));
   }
 
   const userBanPromise = userBannedChange(chatId, false);
