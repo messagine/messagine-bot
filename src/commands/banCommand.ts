@@ -1,7 +1,14 @@
-import { extractOpponentForChatId, getChatIdInfo, IMessagineContext, moveChatToPreviousChats } from '../lib/common';
+import {
+  checkAdmin,
+  extractOpponentForChatId,
+  getFloatFromInput,
+  getChatIdInfo,
+  IMessagineContext,
+  moveChatToPreviousChats,
+} from '../lib/common';
 import { leaveLobby, userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
-import { exitChatToOpponent, invalidInputReply } from '../reply';
+import { exitChatToOpponent } from '../reply';
 
 const banCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.admin}.${adminCommandEnum.ban}`);
@@ -9,14 +16,8 @@ const banCommand = () => (ctx: IMessagineContext) => {
 };
 
 async function onBan(ctx: IMessagineContext) {
-  if (!ctx.user?.admin) {
-    return;
-  }
-  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
-    return invalidInputReply(ctx);
-  }
-
-  const chatId = parseFloat(ctx.match[1]);
+  checkAdmin(ctx);
+  const chatId = getFloatFromInput(ctx);
   const chatIdInfo = await getChatIdInfo(chatId);
   if (!chatIdInfo.user) {
     return ctx.reply(ctx.i18n.t('user_not_found'));

@@ -2,6 +2,8 @@ export * from './ChatIdNotFoundError';
 export * from './ChatNotExistIdleError';
 export * from './ChatNotExistInLobbyError';
 export * from './InternalError';
+export * from './InvalidInputError';
 export * from './InvalidNumberOfOpponentError';
 export * from './MessageTypeNotFoundError';
+export * from './NotAdminError';
 export * from './ReplyError';

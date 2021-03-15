@@ -1,8 +1,7 @@
-import { findLanguageSafe, getChatId, IMessagineContext } from '../lib/common';
+import { findLanguageSafe, getChatId, getParamFromInput, IMessagineContext } from '../lib/common';
 import { setLanguage } from '../lib/dataHandler';
 import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import {
-  invalidInputReply,
   languageNotChangedInChatReply,
   languageNotChangedReply,
   languageSelectedReply,
@@ -39,11 +38,7 @@ const changeLanguageAction = () => (ctx: IMessagineContext) => {
 };
 
 function changeLanguage(ctx: IMessagineContext) {
-  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
-    return invalidInputReply(ctx);
-  }
-
-  const newLanguageCode: string = ctx?.match[1];
+  const newLanguageCode = getParamFromInput(ctx);
   const chatId = getChatId(ctx);
   const previousLanguageCode = ctx.user?.languageCode;
   if (newLanguageCode === previousLanguageCode) {

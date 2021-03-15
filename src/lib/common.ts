@@ -6,7 +6,9 @@ import {
   ChatIdNotFoundError,
   ChatNotExistIdleError,
   ChatNotExistInLobbyError,
+  InvalidInputError,
   InvalidNumberOfOpponentError,
+  NotAdminError,
 } from '../error';
 import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
 import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
@@ -131,6 +133,26 @@ export function moveChatToPreviousChats(chat: IChat, closedBy: number) {
   const deleteChatPromise = deleteChat(chat.id);
   const previousChatCreatePromise = createPreviousChat(chat, closedBy);
   return Promise.all([deleteChatPromise, previousChatCreatePromise]);
+}
+
+export function checkAdmin(ctx: IMessagineContext) {
+  if (!ctx.user?.admin) {
+    throw new NotAdminError(ctx);
+  }
+  return true;
+}
+
+export function getFloatFromInput(ctx: IMessagineContext): number {
+  const param = getParamFromInput(ctx);
+  return parseFloat(param);
+}
+
+export function getParamFromInput(ctx: IMessagineContext): string {
+  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
+    throw new InvalidInputError(ctx);
+  }
+
+  return ctx.match[1];
 }
 
 export interface IMessagineContext extends TelegrafContext {
