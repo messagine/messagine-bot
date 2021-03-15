@@ -1,4 +1,4 @@
-import { checkAdmin, getChatIdInfo, getFloatFromInput, IMessagineContext } from '../lib/common';
+import { checkAdmin, getInputUserInfo, IMessagineContext } from '../lib/common';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 
 const detailCommand = () => (ctx: IMessagineContext) => {
@@ -8,18 +8,14 @@ const detailCommand = () => (ctx: IMessagineContext) => {
 
 async function onDetail(ctx: IMessagineContext) {
   checkAdmin(ctx);
-  const chatId = getFloatFromInput(ctx);
-  const chatIdInfo = await getChatIdInfo(chatId);
-  if (!chatIdInfo.user) {
-    return ctx.reply(ctx.i18n.t('user_not_found'));
-  }
+  const inputUserInfo = await getInputUserInfo(ctx);
 
   return ctx.reply(
     ctx.i18n.t('detail_reply', {
-      banned: chatIdInfo.user.banned === true,
-      blocked: chatIdInfo.user.blocked === true,
-      languageCode: chatIdInfo.user.languageCode,
-      state: chatIdInfo.state,
+      banned: inputUserInfo.user.banned === true,
+      blocked: inputUserInfo.user.blocked === true,
+      languageCode: inputUserInfo.user.languageCode,
+      state: inputUserInfo.state,
     }),
   );
 }

@@ -1,8 +1,7 @@
 import {
   checkAdmin,
   extractOpponentForChatId,
-  getChatIdInfo,
-  getFloatFromInput,
+  getInputUserInfo,
   IMessagineContext,
   moveChatToPreviousChats,
 } from '../lib/common';
@@ -17,27 +16,23 @@ const banCommand = () => (ctx: IMessagineContext) => {
 
 async function onBan(ctx: IMessagineContext) {
   checkAdmin(ctx);
-  const chatId = getFloatFromInput(ctx);
-  const chatIdInfo = await getChatIdInfo(chatId);
-  if (!chatIdInfo.user) {
-    return ctx.reply(ctx.i18n.t('user_not_found'));
-  }
+  const inputUserInfo = await getInputUserInfo(ctx);
 
   const promises: Promise<any>[] = [];
   const replyPromise = ctx.reply(ctx.i18n.t('ban_reply'));
   promises.push(replyPromise);
 
-  ctx.i18n.locale(chatIdInfo.user.languageCode);
-  const userBanPromise = userBannedChange(chatId, true);
+  ctx.i18n.locale(inputUserInfo.user.languageCode);
+  const userBanPromise = userBannedChange(inputUserInfo.chatId, true);
   promises.push(userBanPromise);
 
-  if (chatIdInfo.lobby) {
-    const leaveLobbyPromise = leaveLobby(chatId);
+  if (inputUserInfo.lobby) {
+    const leaveLobbyPromise = leaveLobby(inputUserInfo.chatId);
     promises.push(leaveLobbyPromise);
   }
-  if (chatIdInfo.chat) {
-    const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
-    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(chatIdInfo.chat, chatId);
+  if (inputUserInfo.chat) {
+    const opponentChatId = extractOpponentForChatId(ctx, inputUserInfo.chatId, inputUserInfo.chat);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(inputUserInfo.chat, inputUserInfo.chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
     promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);

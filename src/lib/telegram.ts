@@ -269,7 +269,7 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
 };
 
 async function onUserLeft(ctx: any, chatId: number) {
-  const chatIdInfo = await getChatIdInfo(chatId);
+  const chatIdInfo = await getChatIdInfo(ctx, chatId);
   const promises: Promise<any>[] = [];
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
   promises.push(mixPanelPromise);
@@ -305,7 +305,7 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
     return;
   }
   const chatId = getChatId(ctx);
-  const chatIdInfo = await getChatIdInfo(chatId);
+  const chatIdInfo = await getChatIdInfo(ctx, chatId);
   ctx.userState = chatIdInfo.state;
   if (chatIdInfo.lobby) {
     ctx.lobby = chatIdInfo.lobby;
