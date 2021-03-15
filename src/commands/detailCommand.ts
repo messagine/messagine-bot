@@ -1,4 +1,4 @@
-import { checkAdmin, getFloatFromInput, getChatIdInfo, IMessagineContext } from '../lib/common';
+import { checkAdmin, getChatIdInfo, getFloatFromInput, IMessagineContext } from '../lib/common';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 
 const detailCommand = () => (ctx: IMessagineContext) => {

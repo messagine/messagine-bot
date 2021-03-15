@@ -1,4 +1,4 @@
-import { checkAdmin, getFloatFromInput, getChatIdInfo, IMessagineContext } from '../lib/common';
+import { checkAdmin, getChatIdInfo, getFloatFromInput, IMessagineContext } from '../lib/common';
 import { userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 
