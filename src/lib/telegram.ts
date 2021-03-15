@@ -273,11 +273,11 @@ async function onUserLeft(ctx: any, chatId: number) {
   const promises: Promise<any>[] = [];
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
   promises.push(mixPanelPromise);
-  if (chatIdInfo.user) {
-    ctx.i18n.locale(chatIdInfo.user.languageCode);
-    const userBlockPromise = userBlockedChange(chatId, true);
-    promises.push(userBlockPromise);
-  }
+
+  ctx.i18n.locale(chatIdInfo.user.languageCode);
+  const userBlockPromise = userBlockedChange(chatId, true);
+  promises.push(userBlockPromise);
+
   if (chatIdInfo.lobby) {
     const leaveLobbyPromise = leaveLobby(chatId);
     promises.push(leaveLobbyPromise);
@@ -313,12 +313,10 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
     ctx.currentChat = chatIdInfo.chat;
   }
 
-  if (chatIdInfo.user) {
-    ctx.user = chatIdInfo.user;
-    ctx.i18n.locale(chatIdInfo.user.languageCode);
-    if (ctx.user.blocked || ctx.user.banned) {
-      return;
-    }
+  ctx.user = chatIdInfo.user;
+  ctx.i18n.locale(chatIdInfo.user.languageCode);
+  if (ctx.user.blocked || ctx.user.banned) {
+    return;
   }
   await next();
 };

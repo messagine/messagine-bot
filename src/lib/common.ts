@@ -156,14 +156,10 @@ export function getParamFromInput(ctx: IMessagineContext): string {
   return ctx.match[1];
 }
 
-export async function getInputUserInfo(ctx: IMessagineContext) {
+export function getInputUserInfo(ctx: IMessagineContext) {
   const param = getParamFromInput(ctx);
   const chatId = parseFloat(param);
-  const chatIdInfo = await getChatIdInfo(ctx, chatId);
-  if (!chatIdInfo.user) {
-    throw new UserNotFoundError(ctx);
-  }
-  return chatIdInfo;
+  return getChatIdInfo(ctx, chatId);
 }
 
 export interface IMessagineContext extends TelegrafContext {
