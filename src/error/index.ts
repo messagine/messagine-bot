@@ -4,6 +4,8 @@ export * from './ChatNotExistInLobbyError';
 export * from './InternalError';
 export * from './InvalidInputError';
 export * from './InvalidNumberOfOpponentError';
+export * from './LanguageNotFoundError';
 export * from './MessageTypeNotFoundError';
 export * from './NotAdminError';
 export * from './ReplyError';
+export * from './UserNotFoundError';

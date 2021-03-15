@@ -8,10 +8,10 @@ import {
   ChatNotExistInLobbyError,
   InvalidInputError,
   InvalidNumberOfOpponentError,
+  LanguageNotFoundError,
   NotAdminError,
+  UserNotFoundError,
 } from '../error';
-import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
-import { UserNotFoundError } from '../error/UserNotFoundError';
 import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
 import { userStateEnum } from './enums';
 import { IChat } from './models/Chat';
