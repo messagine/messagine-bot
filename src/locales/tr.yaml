@@ -31,6 +31,7 @@ help_reply: Yardım için buradayız
 detail_reply: 'Dil: ${languageCode}\nDurum: ${state}\nBan: ${banned}\nBlok: ${blocked}'
 unban_reply: Kullanıcı Banı Kaldırıldı
 ban_reply: Kullanıcı Banlandı
+not_admin_error: Yönetici Değilsiniz
 our_website: Web Sayfamız 📱
 contact: İletişim 📪
 start_command_desc: Kullanıcı Oluştur

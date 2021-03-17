@@ -6,9 +6,12 @@ import {
   ChatIdNotFoundError,
   ChatNotExistIdleError,
   ChatNotExistInLobbyError,
+  InvalidInputError,
   InvalidNumberOfOpponentError,
+  LanguageNotFoundError,
+  NotAdminError,
+  UserNotFoundError,
 } from '../error';
-import { LanguageNotFoundError } from '../error/LanguageNotFoundError';
 import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
 import { userStateEnum } from './enums';
 import { IChat } from './models/Chat';
@@ -99,7 +102,7 @@ export function getOpponentChatId(ctx: IMessagineContext): number {
   return extractOpponentChatId(ctx, existingChat);
 }
 
-export async function getChatIdInfo(chatId: number) {
+export async function getChatIdInfo(ctx: IMessagineContext, chatId: number) {
   const userPromise = getUser(chatId);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
@@ -109,6 +112,10 @@ export async function getChatIdInfo(chatId: number) {
   const user = checkResults[0];
   const lobby = checkResults[1];
   const chat = checkResults[2];
+
+  if (!user) {
+    throw new UserNotFoundError(ctx);
+  }
 
   let state: string;
   if (lobby) {
@@ -121,6 +128,7 @@ export async function getChatIdInfo(chatId: number) {
 
   return {
     chat,
+    chatId,
     lobby,
     state,
     user,
@@ -131,6 +139,27 @@ export function moveChatToPreviousChats(chat: IChat, closedBy: number) {
   const deleteChatPromise = deleteChat(chat.id);
   const previousChatCreatePromise = createPreviousChat(chat, closedBy);
   return Promise.all([deleteChatPromise, previousChatCreatePromise]);
+}
+
+export function checkAdmin(ctx: IMessagineContext) {
+  if (!ctx.user?.admin) {
+    throw new NotAdminError(ctx);
+  }
+  return true;
+}
+
+export function getParamFromInput(ctx: IMessagineContext): string {
+  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
+    throw new InvalidInputError(ctx);
+  }
+
+  return ctx.match[1];
+}
+
+export function getInputUserInfo(ctx: IMessagineContext) {
+  const param = getParamFromInput(ctx);
+  const chatId = parseFloat(param);
+  return getChatIdInfo(ctx, chatId);
 }
 
 export interface IMessagineContext extends TelegrafContext {

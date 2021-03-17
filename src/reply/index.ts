@@ -210,10 +210,6 @@ export function languageSelectedReply(ctx: IMessagineContext, selectedLanguage: 
   );
 }
 
-export function invalidInputReply(ctx: IMessagineContext) {
-  return ctx.reply(ctx.i18n.t('invalid_input'));
-}
-
 export function languageNotChangedReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('language_not_changed'),

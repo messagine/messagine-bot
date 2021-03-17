@@ -1,6 +1,5 @@
-import { getChatIdInfo, IMessagineContext } from '../lib/common';
+import { checkAdmin, getInputUserInfo, IMessagineContext } from '../lib/common';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
-import { invalidInputReply } from '../reply';
 
 const detailCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.admin}.${adminCommandEnum.detail}`);
@@ -8,25 +7,15 @@ const detailCommand = () => (ctx: IMessagineContext) => {
 };
 
 async function onDetail(ctx: IMessagineContext) {
-  if (!ctx.user?.admin) {
-    return;
-  }
-  if (ctx?.match === undefined || ctx?.match?.length !== 2) {
-    return invalidInputReply(ctx);
-  }
-
-  const chatId = parseFloat(ctx.match[1]);
-  const chatIdInfo = await getChatIdInfo(chatId);
-  if (!chatIdInfo.user) {
-    return ctx.reply(ctx.i18n.t('user_not_found'));
-  }
+  checkAdmin(ctx);
+  const inputUserInfo = await getInputUserInfo(ctx);
 
   return ctx.reply(
     ctx.i18n.t('detail_reply', {
-      banned: chatIdInfo.user.banned === true,
-      blocked: chatIdInfo.user.blocked === true,
-      languageCode: chatIdInfo.user.languageCode,
-      state: chatIdInfo.state,
+      banned: inputUserInfo.user.banned === true,
+      blocked: inputUserInfo.user.blocked === true,
+      languageCode: inputUserInfo.user.languageCode,
+      state: inputUserInfo.state,
     }),
   );
 }

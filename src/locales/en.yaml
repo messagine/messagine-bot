@@ -31,6 +31,7 @@ help_reply: We are here to help
 detail_reply: 'Language: ${languageCode}\nState: ${state}\nBanned: ${banned}\nBlocked: ${blocked}'
 unban_reply: User Ban removed
 ban_reply: User Banned
+not_admin_error: You are not admin
 our_website: Our Website 📱
 contact: Contact 📪
 start_command_desc: Initialize User
