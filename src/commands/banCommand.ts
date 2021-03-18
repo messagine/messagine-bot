@@ -1,3 +1,4 @@
+import { UserNotFoundError } from '../error';
 import {
   checkAdmin,
   extractOpponentForChatId,
@@ -21,6 +22,10 @@ async function onBan(ctx: IMessagineContext) {
   const promises: Promise<any>[] = [];
   const replyPromise = ctx.reply(ctx.i18n.t('ban_reply'));
   promises.push(replyPromise);
+
+  if (!inputUserInfo.user) {
+    throw new UserNotFoundError(ctx);
+  }
 
   ctx.i18n.locale(inputUserInfo.user.languageCode);
   const userBanPromise = userBannedChange(inputUserInfo.chatId, true);

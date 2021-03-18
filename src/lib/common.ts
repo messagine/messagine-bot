@@ -10,7 +10,6 @@ import {
   InvalidNumberOfOpponentError,
   LanguageNotFoundError,
   NotAdminError,
-  UserNotFoundError,
 } from '../error';
 import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
 import { userStateEnum } from './enums';
@@ -102,7 +101,7 @@ export function getOpponentChatId(ctx: IMessagineContext): number {
   return extractOpponentChatId(ctx, existingChat);
 }
 
-export async function getChatIdInfo(ctx: IMessagineContext, chatId: number) {
+export async function getChatIdInfo(chatId: number) {
   const userPromise = getUser(chatId);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
@@ -112,10 +111,6 @@ export async function getChatIdInfo(ctx: IMessagineContext, chatId: number) {
   const user = checkResults[0];
   const lobby = checkResults[1];
   const chat = checkResults[2];
-
-  if (!user) {
-    throw new UserNotFoundError(ctx);
-  }
 
   let state: string;
   if (lobby) {
@@ -159,7 +154,7 @@ export function getParamFromInput(ctx: IMessagineContext): string {
 export function getInputUserInfo(ctx: IMessagineContext) {
   const param = getParamFromInput(ctx);
   const chatId = parseFloat(param);
-  return getChatIdInfo(ctx, chatId);
+  return getChatIdInfo(chatId);
 }
 
 export interface IMessagineContext extends TelegrafContext {
