@@ -1,7 +1,7 @@
 import {
   checkAdmin,
   extractOpponentForChatId,
-  getInputUserInfo,
+  getInputUserInfoSafe,
   IMessagineContext,
   moveChatToPreviousChats,
 } from '../lib/common';
@@ -16,7 +16,7 @@ const banCommand = () => (ctx: IMessagineContext) => {
 
 async function onBan(ctx: IMessagineContext) {
   checkAdmin(ctx);
-  const inputUserInfo = await getInputUserInfo(ctx);
+  const inputUserInfo = await getInputUserInfoSafe(ctx);
 
   const promises: Promise<any>[] = [];
   const replyPromise = ctx.reply(ctx.i18n.t('ban_reply'));
