@@ -10,6 +10,7 @@ import {
   InvalidNumberOfOpponentError,
   LanguageNotFoundError,
   NotAdminError,
+  UserNotFoundError,
 } from '../error';
 import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
 import { userStateEnum } from './enums';
@@ -101,7 +102,23 @@ export function getOpponentChatId(ctx: IMessagineContext): number {
   return extractOpponentChatId(ctx, existingChat);
 }
 
-export async function getChatIdInfo(chatId: number) {
+export async function getUserInfoSafe(ctx: IMessagineContext, chatId: number): Promise<IUserInfoSafe> {
+  const userInfo = await getUserInfo(chatId);
+
+  if (!userInfo.user) {
+    throw new UserNotFoundError(ctx);
+  }
+
+  return {
+    chat: userInfo.chat,
+    chatId: userInfo.chatId,
+    lobby: userInfo.lobby,
+    state: userInfo.state,
+    user: userInfo.user,
+  };
+}
+
+export async function getUserInfo(chatId: number) {
   const userPromise = getUser(chatId);
   const lobbyPromise = findLobby(chatId);
   const existingChatPromise = findExistingChat(chatId);
@@ -151,10 +168,10 @@ export function getParamFromInput(ctx: IMessagineContext): string {
   return ctx.match[1];
 }
 
-export function getInputUserInfo(ctx: IMessagineContext) {
+export function getInputUserInfoSafe(ctx: IMessagineContext) {
   const param = getParamFromInput(ctx);
   const chatId = parseFloat(param);
-  return getChatIdInfo(chatId);
+  return getUserInfoSafe(ctx, chatId);
 }
 
 export interface IMessagineContext extends TelegrafContext {
@@ -164,4 +181,12 @@ export interface IMessagineContext extends TelegrafContext {
   userState?: string;
   lobby?: ILobby;
   currentChat?: IChat;
+}
+
+export interface IUserInfoSafe {
+  chat: IChat | null;
+  chatId: number;
+  lobby: ILobby | null;
+  state: string;
+  user: IUser;
 }

@@ -50,7 +50,8 @@ import resource from '../resource';
 import {
   extractOpponentForChatId,
   getChatId,
-  getChatIdInfo,
+  getUserInfo,
+  getUserInfoSafe,
   IMessagineContext,
   moveChatToPreviousChats,
 } from './common';
@@ -59,7 +60,6 @@ import { actionEnum, adminCommandEnum, commandEnum, eventTypeEnum } from './enum
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
-import { UserNotFoundError } from '../error';
 import { exitChatToOpponent } from '../reply';
 
 const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
@@ -270,14 +270,10 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
 };
 
 async function onUserLeft(ctx: any, chatId: number) {
-  const chatIdInfo = await getChatIdInfo(chatId);
+  const chatIdInfo = await getUserInfoSafe(ctx, chatId);
   const promises: Promise<any>[] = [];
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
   promises.push(mixPanelPromise);
-
-  if (!chatIdInfo.user) {
-    throw new UserNotFoundError(ctx);
-  }
 
   ctx.i18n.locale(chatIdInfo.user.languageCode);
   const userBlockPromise = userBlockedChange(chatId, true);
@@ -310,7 +306,7 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
     return;
   }
   const chatId = getChatId(ctx);
-  const chatIdInfo = await getChatIdInfo(chatId);
+  const chatIdInfo = await getUserInfo(chatId);
   ctx.userState = chatIdInfo.state;
   if (chatIdInfo.lobby) {
     ctx.lobby = chatIdInfo.lobby;
