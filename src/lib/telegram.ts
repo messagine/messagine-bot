@@ -270,22 +270,22 @@ const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
 };
 
 async function onUserLeft(ctx: any, chatId: number) {
-  const chatIdInfo = await getUserInfoSafe(ctx, chatId);
+  const userInfo = await getUserInfoSafe(ctx, chatId);
   const promises: Promise<any>[] = [];
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
   promises.push(mixPanelPromise);
 
-  ctx.i18n.locale(chatIdInfo.user.languageCode);
+  ctx.i18n.locale(userInfo.user.languageCode);
   const userBlockPromise = userBlockedChange(chatId, true);
   promises.push(userBlockPromise);
 
-  if (chatIdInfo.lobby) {
+  if (userInfo.lobby) {
     const leaveLobbyPromise = leaveLobby(chatId);
     promises.push(leaveLobbyPromise);
   }
-  if (chatIdInfo.chat) {
-    const opponentChatId = extractOpponentForChatId(ctx, chatId, chatIdInfo.chat);
-    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(chatIdInfo.chat, chatId);
+  if (userInfo.chat) {
+    const opponentChatId = extractOpponentForChatId(ctx, chatId, userInfo.chat);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(userInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
     promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);
@@ -306,17 +306,17 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
     return;
   }
   const chatId = getChatId(ctx);
-  const chatIdInfo = await getUserInfo(chatId);
-  ctx.userState = chatIdInfo.state;
-  if (chatIdInfo.lobby) {
-    ctx.lobby = chatIdInfo.lobby;
-  } else if (chatIdInfo.chat) {
-    ctx.currentChat = chatIdInfo.chat;
+  const userInfo = await getUserInfo(chatId);
+  ctx.userState = userInfo.state;
+  if (userInfo.lobby) {
+    ctx.lobby = userInfo.lobby;
+  } else if (userInfo.chat) {
+    ctx.currentChat = userInfo.chat;
   }
 
-  if (chatIdInfo.user) {
-    ctx.user = chatIdInfo.user;
-    ctx.i18n.locale(chatIdInfo.user.languageCode);
+  if (userInfo.user) {
+    ctx.user = userInfo.user;
+    ctx.i18n.locale(userInfo.user.languageCode);
     if (ctx.user.blocked || ctx.user.banned) {
       return;
     }
