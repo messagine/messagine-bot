@@ -8,7 +8,7 @@ import { chatStartReply } from '../reply';
 
 const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
   const lobbyUsers = await getAllLobbyUsers();
-  if (!lobbyUsers || lobbyUsers.length === 0) {
+  if (!lobbyUsers || lobbyUsers.length === 0) {
     return;
   }
 
@@ -83,7 +83,9 @@ function getPreviousOpponents(chatId: number, allPreviousChats: IPreviousChat[] 
     return previousOpponents;
   }
   for (const previousChat of allPreviousChats) {
-    if (!_.includes(previousChat.chatIds, chatId)) { continue; }
+    if (!_.includes(previousChat.chatIds, chatId)) {
+      continue;
+    }
     const opponents = _.without(previousChat.chatIds, chatId);
     if (opponents.length === 1) {
       previousOpponents.push(opponents[0]);

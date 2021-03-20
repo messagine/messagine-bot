@@ -44,6 +44,10 @@ export function addToLobby(chatId: number, languageCode: string): Promise<ILobby
   return Lobby.create({ chatId, languageCode });
 }
 
+export function updateLobbyLanguage(chatId: number, languageCode: string) {
+  return Lobby.updateOne({ chatId }, { $set: { languageCode } }).exec();
+}
+
 export function findLobby(chatId: number): Promise<ILobby | null> {
   return Lobby.findOne({ chatId }).exec();
 }

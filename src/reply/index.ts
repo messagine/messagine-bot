@@ -35,7 +35,10 @@ export const contactUrlButton = (ctx: IMessagineContext) =>
 export function lobbyWaitReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('lobby_wait'),
-    Markup.inlineKeyboard([[cancelFindCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([
+      [cancelFindCallbackButton(ctx)],
+      [setLanguageCallbackButton(ctx), helpCallbackButton(ctx)],
+    ]).extra(),
   );
 }
 
