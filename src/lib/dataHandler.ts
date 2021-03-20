@@ -48,16 +48,11 @@ export function findLobby(chatId: number): Promise<ILobby | null> {
   return Lobby.findOne({ chatId }).exec();
 }
 
-export function findOpponentsInLobby(chatId: number, languageCode: string): Promise<ILobby[] | null> {
-  return Lobby.find({ chatId: { $ne: chatId }, languageCode }).exec();
-}
-
 export function leaveLobby(chatId: number) {
   return Lobby.deleteOne({ chatId }).exec();
 }
 
-export function createChat(chatId1: number, chatId2: number, languageCode: string): Promise<IChat> {
-  const chatIds = [chatId1, chatId2];
+export function createChat(chatIds: number[], languageCode: string): Promise<IChat> {
   return Chat.create({ chatIds, languageCode });
 }
 
@@ -94,8 +89,12 @@ export function getUserPreviousChatCount(chatId: number): Promise<number> {
   return PreviousChat.countDocuments({ chatIds: chatId }).exec();
 }
 
-export function getUserPreviousChats(chatId: number): Promise<IPreviousChat[] | null> {
-  return PreviousChat.find({ chatIds: chatId }).exec();
+export function getUsersPreviousChats(chatIdsToSearch: number[]): Promise<IPreviousChat[] | null> {
+  return PreviousChat.find({ chatIds: { $in: chatIdsToSearch } }).exec();
+}
+
+export function getAllLobbyUsers(): Promise<ILobby[] | null> {
+  return Lobby.find({}).exec();
 }
 
 export function getLobbyCount(): Promise<number> {

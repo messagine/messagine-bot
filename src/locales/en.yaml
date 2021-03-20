@@ -11,7 +11,7 @@ exit_chat_command_desc: Exit Chat 👋
 exit_chat_opponent: Chat closed by opponent. How about finding a new one?
 find_chat_command_desc: Find Chat 💬
 help_command_desc: Help 🆘
-invalid_opponent_error: Invalid number of opponents found.
+invalid_people_in_chat_error: The number of people in the chat is incorrect.
 lobby_wait: Wait in the lobby, we will let you know when the chat starts.
 set_language_command_desc: Language 🌐
 about_command_desc: About ℹ️

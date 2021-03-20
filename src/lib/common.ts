@@ -7,7 +7,7 @@ import {
   ChatNotExistIdleError,
   ChatNotExistInLobbyError,
   InvalidInputError,
-  InvalidNumberOfOpponentError,
+  InvalidPeopleInChatError,
   LanguageNotFoundError,
   NotAdminError,
   UserNotFoundError,
@@ -52,7 +52,7 @@ export function extractOpponentForChatId(ctx: IMessagineContext, chatId: number,
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
   if (opponentChatIds.length !== 1) {
-    throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
+    throw new InvalidPeopleInChatError(ctx, chatIds);
   }
   return opponentChatIds[0];
 }

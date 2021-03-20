@@ -8,6 +8,7 @@
 	"homepage": "https://github.com/messagine/messagine-bot#readme",
 	"scripts": {
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
+    "invoke:createChat": "sls invoke local --function createChatJob",
 		"prettier": "prettier --single-quote --trailing-comma all --write 'src/**/*.ts'",
 		"tslint": "tslint --project tsconfig.json"
 	},
