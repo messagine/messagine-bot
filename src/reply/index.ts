@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Markup } from 'telegraf';
-import { InlineKeyboardButton } from 'telegraf/typings/markup';
+import { CallbackButton, InlineKeyboardButton } from 'telegraf/typings/markup';
 import { getAllLanguages, getTopLanguages, IMessagineContext } from '../lib/common';
 import { actionEnum, commandEnum, userStateEnum } from '../lib/enums';
 import { ILanguage } from '../lib/models/Language';
@@ -99,23 +99,28 @@ export function sayHiReply(ctx: IMessagineContext, chatId: number) {
   return ctx.tg.sendMessage(chatId, ctx.i18n.t('hi_message', { exitChatCommand: commandEnum.exitChat }));
 }
 
-function helpButtons(ctx: IMessagineContext, userState: string) {
-  const buttons: InlineKeyboardButton[][] = [];
-  if (userState === userStateEnum.idle) {
-    buttons.push([findChatCallbackButton(ctx)]);
-  }
-  if (userState === userStateEnum.lobby) {
-    buttons.push([cancelFindCallbackButton(ctx)]);
-  }
-  if (userState === userStateEnum.chat) {
-    buttons.push([exitChatCallbackButton(ctx)]);
-  }
-  buttons.push([setLanguageCallbackButton(ctx), aboutCallbackButton(ctx)]);
-  return buttons;
+function helpButtons(ctx: IMessagineContext): InlineKeyboardButton[][] {
+  return [
+    [getStateSpecificButton(ctx)],
+    [setLanguageCallbackButton(ctx), aboutCallbackButton(ctx)],
+  ];
 }
 
-export function helpReply(ctx: IMessagineContext, userState: string) {
-  const buttons = helpButtons(ctx, userState);
+function getStateSpecificButton(ctx: IMessagineContext): CallbackButton {
+  switch (ctx.userState) {
+    case userStateEnum.idle:
+      return findChatCallbackButton(ctx);
+    case userStateEnum.lobby:
+      return cancelFindCallbackButton(ctx);
+    case userStateEnum.chat:
+      return exitChatCallbackButton(ctx);
+    default:
+      throw new Error('Invalid state error.');
+  }
+}
+
+export function helpReply(ctx: IMessagineContext) {
+  const buttons = helpButtons(ctx);
   return ctx.reply(ctx.i18n.t('help_reply'), Markup.inlineKeyboard(buttons).extra());
 }
 
@@ -209,14 +214,14 @@ export function showAllLanguagesReply(ctx: IMessagineContext) {
 export function languageSelectedReply(ctx: IMessagineContext, selectedLanguage: string) {
   return ctx.reply(
     ctx.i18n.t('language_selected', { selectedLanguage }),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[getStateSpecificButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
 export function languageNotChangedReply(ctx: IMessagineContext) {
   return ctx.reply(
     ctx.i18n.t('language_not_changed'),
-    Markup.inlineKeyboard([[findChatCallbackButton(ctx), helpCallbackButton(ctx)]]).extra(),
+    Markup.inlineKeyboard([[getStateSpecificButton(ctx), helpCallbackButton(ctx)]]).extra(),
   );
 }
 
