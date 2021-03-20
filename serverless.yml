@@ -44,7 +44,7 @@ functions:
   createChatJob:
     handler: src/handler.createChatJobHandler
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(${param:CREATE_CHAT_SCHEDULE})
     environment:
       BOT_TOKEN: ${param:BOT_TOKEN}
       DB_URL: ${param:DB_URL}
