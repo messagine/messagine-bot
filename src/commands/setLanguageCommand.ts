@@ -57,9 +57,8 @@ function changeLanguage(ctx: IMessagineContext) {
 
   const newLanguage = findLanguageSafe(ctx, newLanguageCode);
   const setLanguagePromise = setLanguage(chatId, newLanguageCode);
-  const answerQueryPromise = ctx.answerCbQuery();
   const replyPromise = languageSelectedReply(ctx, newLanguage.native_name);
-  return Promise.all([mixpanelPeopleSetPromise, setLanguagePromise, answerQueryPromise, replyPromise]);
+  return Promise.all([mixpanelPeopleSetPromise, setLanguagePromise, replyPromise]);
 }
 
 export { showTopLanguagesCommand, showTopLanguagesAction, showAllLanguagesAction, changeLanguageAction };
