@@ -8,7 +8,7 @@ import { chatStartReply } from '../reply';
 
 const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
   const lobbyUsers = await getAllLobbyUsers();
-  if (!lobbyUsers) {
+  if (!lobbyUsers || lobbyUsers.length === 0) {
     return;
   }
 
