@@ -19,7 +19,6 @@ export class DataHandler {
       useUnifiedTopology: true,
     });
     debug('New database connection complete');
-    return;
   }
 
   public getUser(chatId: number): Promise<IUser | null> {
