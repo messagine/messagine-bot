@@ -1,5 +1,4 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import { addToLobby } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { activeChatReply, lobbyWaitReply, userNotFoundReply } from '../reply';
 
@@ -29,7 +28,7 @@ function onFindChat(ctx: IMessagineContext) {
 
   const chatId = getChatId(ctx);
 
-  const addToLobbyPromise = addToLobby(chatId, user.languageCode);
+  const addToLobbyPromise = ctx.db.addToLobby(chatId, user.languageCode);
   const lobbyMessagePromise = lobbyWaitReply(ctx);
 
   return Promise.all([addToLobbyPromise, lobbyMessagePromise]);

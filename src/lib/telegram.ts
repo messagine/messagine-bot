@@ -48,7 +48,6 @@ import {
 } from '../message';
 import resource from '../resource';
 import { IMessagineContext } from './common';
-import { connect } from './dataHandler';
 import { actionEnum, adminCommandEnum, commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
@@ -57,6 +56,7 @@ import {
   catcherMiddleware,
   chatMemberMiddleware,
   createChatMiddleware,
+  dbMiddleware,
   responseTimeLoggerMiddleware,
   userMiddleware,
 } from '../middlewares';
@@ -70,13 +70,13 @@ const i18n = new TelegrafI18n({
 });
 
 async function botUtils() {
-  await connect();
   const limitConfig = {
     limit: 3,
     onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
     window: 3000,
   };
 
+  bot.use(dbMiddleware);
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
   bot.use(i18n.middleware());
@@ -137,9 +137,7 @@ async function localBot() {
 
   const botInfo = await bot.telegram.getMe();
   bot.options.username = botInfo.username;
-
-  // tslint:disable-next-line: no-console
-  console.info('Server has initialized bot username: ', botInfo.username);
+  debug('Server has initialized bot username: ', botInfo.username);
 
   debug(`deleting webhook`);
   await bot.telegram.deleteWebhook();
@@ -222,7 +220,7 @@ export async function webhook(event: any) {
 }
 
 export async function createChatJob() {
-  await connect();
+  bot.use(dbMiddleware);
   bot.use(i18n.middleware());
   bot.use(createChatMiddleware);
 
@@ -246,8 +244,7 @@ export const NO_PREVIEW = MARKDOWN.webPreview(false);
 export const hiddenCharacter = '\u200b';
 
 if (config.IS_DEV) {
-  // tslint:disable-next-line: no-console
-  console.log('isDev', config.IS_DEV);
+  debug('isDev', config.IS_DEV);
   startDevelopment();
 }
 

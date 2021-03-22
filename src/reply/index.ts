@@ -100,10 +100,7 @@ export function sayHiReply(ctx: IMessagineContext, chatId: number) {
 }
 
 function helpButtons(ctx: IMessagineContext): InlineKeyboardButton[][] {
-  return [
-    [getStateSpecificButton(ctx)],
-    [setLanguageCallbackButton(ctx), aboutCallbackButton(ctx)],
-  ];
+  return [[getStateSpecificButton(ctx)], [setLanguageCallbackButton(ctx), aboutCallbackButton(ctx)]];
 }
 
 function getStateSpecificButton(ctx: IMessagineContext): CallbackButton {

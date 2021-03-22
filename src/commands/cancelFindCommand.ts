@@ -1,5 +1,4 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import { leaveLobby } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import { cancelFindNotLobbyReply, cancelFindReply } from '../reply';
 
@@ -19,7 +18,7 @@ function onCancelFind(ctx: IMessagineContext) {
     return cancelFindNotLobbyReply(ctx);
   }
 
-  const leaveLobbyPromise = leaveLobby(chatId);
+  const leaveLobbyPromise = ctx.db.leaveLobby(chatId);
   const cancelFindPromise = cancelFindReply(ctx);
 
   return Promise.all([leaveLobbyPromise, cancelFindPromise]);

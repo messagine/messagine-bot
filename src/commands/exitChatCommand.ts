@@ -34,7 +34,7 @@ function onExitChatSure(ctx: IMessagineContext) {
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
   const sendMessagePromise = exitChatReply(ctx);
 
-  const moveChatToPreviousChatsPromise = moveChatToPreviousChats(existingChat, chatId);
+  const moveChatToPreviousChatsPromise = moveChatToPreviousChats(ctx, existingChat, chatId);
   const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
 
   const promises: Promise<any>[] = [sendMessagePromise, moveChatToPreviousChatsPromise, sendMessageToOpponentPromise];

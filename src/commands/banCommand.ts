@@ -5,7 +5,6 @@ import {
   IMessagineContext,
   moveChatToPreviousChats,
 } from '../lib/common';
-import { leaveLobby, userBannedChange } from '../lib/dataHandler';
 import { adminCommandEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatToOpponent } from '../reply';
 
@@ -23,16 +22,16 @@ async function onBan(ctx: IMessagineContext) {
   promises.push(replyPromise);
 
   ctx.i18n.locale(inputUserInfo.user.languageCode);
-  const userBanPromise = userBannedChange(inputUserInfo.chatId, true);
+  const userBanPromise = ctx.db.userBannedChange(inputUserInfo.chatId, true);
   promises.push(userBanPromise);
 
   if (inputUserInfo.lobby) {
-    const leaveLobbyPromise = leaveLobby(inputUserInfo.chatId);
+    const leaveLobbyPromise = ctx.db.leaveLobby(inputUserInfo.chatId);
     promises.push(leaveLobbyPromise);
   }
   if (inputUserInfo.chat) {
     const opponentChatId = extractOpponentForChatId(ctx, inputUserInfo.chatId, inputUserInfo.chat);
-    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(inputUserInfo.chat, inputUserInfo.chatId);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(ctx, inputUserInfo.chat, inputUserInfo.chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
     promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);

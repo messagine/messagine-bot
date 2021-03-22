@@ -1,5 +1,4 @@
 import { findLanguageSafe, getChatId, getParamFromInput, IMessagineContext } from '../lib/common';
-import { setLanguage, updateLobbyLanguage } from '../lib/dataHandler';
 import { actionEnum, commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
 import {
   languageNotChangedInChatReply,
@@ -56,13 +55,13 @@ function changeLanguage(ctx: IMessagineContext) {
 
   const newLanguage = findLanguageSafe(ctx, newLanguageCode);
   const mixpanelPeopleSetPromise = ctx.mixpanel.people.set({ language_code: newLanguageCode });
-  const setLanguagePromise = setLanguage(chatId, newLanguageCode);
+  const setLanguagePromise = ctx.db.setLanguage(chatId, newLanguageCode);
   const replyPromise = languageSelectedReply(ctx, newLanguage.native_name);
 
   const promises: Promise<any>[] = [mixpanelPeopleSetPromise, setLanguagePromise, replyPromise];
 
   if (ctx.lobby) {
-    const lobbyUpdatePromise = updateLobbyLanguage(chatId, newLanguageCode);
+    const lobbyUpdatePromise = ctx.db.updateLobbyLanguage(chatId, newLanguageCode);
     promises.push(lobbyUpdatePromise);
   }
 

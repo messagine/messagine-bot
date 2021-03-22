@@ -1,5 +1,4 @@
 import { extractOpponentForChatId, getUserInfoSafe, moveChatToPreviousChats } from '../lib/common';
-import { leaveLobby, userBlockedChange } from '../lib/dataHandler';
 import { actionEnum, eventTypeEnum } from '../lib/enums';
 import { exitChatToOpponent } from '../reply';
 
@@ -26,16 +25,16 @@ async function onUserLeft(ctx: any, chatId: number) {
   promises.push(mixPanelPromise);
 
   ctx.i18n.locale(userInfo.user.languageCode);
-  const userBlockPromise = userBlockedChange(chatId, true);
+  const userBlockPromise = ctx.db.userBlockedChange(chatId, true);
   promises.push(userBlockPromise);
 
   if (userInfo.lobby) {
-    const leaveLobbyPromise = leaveLobby(chatId);
+    const leaveLobbyPromise = ctx.db.leaveLobby(chatId);
     promises.push(leaveLobbyPromise);
   }
   if (userInfo.chat) {
     const opponentChatId = extractOpponentForChatId(ctx, chatId, userInfo.chat);
-    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(userInfo.chat, chatId);
+    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(ctx, userInfo.chat, chatId);
     const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
     promises.push(moveChatToPreviousChatsPromise);
     promises.push(sendMessageToOpponentPromise);
@@ -47,7 +46,7 @@ function onUserReturned(ctx: any, chatId: number) {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userReturned}`, {
     distinct_id: chatId,
   });
-  const userBlockPromise = userBlockedChange(chatId, false);
+  const userBlockPromise = ctx.db.userBlockedChange(chatId, false);
   return Promise.all([mixPanelPromise, userBlockPromise]);
 }
 

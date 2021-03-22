@@ -1,19 +1,18 @@
 import _ from 'lodash';
 import { InvalidPeopleInChatError } from '../error';
 import { IMessagineContext } from '../lib/common';
-import { createChat, getAllLobbyUsers, getUsersPreviousChats, leaveLobby } from '../lib/dataHandler';
 import { ILobby } from '../lib/models/Lobby';
 import { IPreviousChat } from '../lib/models/PreviousChat';
 import { chatStartReply } from '../reply';
 
 const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
-  const lobbyUsers = await getAllLobbyUsers();
+  const lobbyUsers = await ctx.db.getAllLobbyUsers();
   if (!lobbyUsers || lobbyUsers.length === 0) {
     return;
   }
 
   const allChatIds = _.map(lobbyUsers, u => u.chatId);
-  const allPreviousChats = await getUsersPreviousChats(allChatIds);
+  const allPreviousChats = await ctx.db.getUsersPreviousChats(allChatIds);
   const languageGroups = groupLobbyByLanguage(lobbyUsers);
 
   const processedChatIds: number[] = [];
@@ -58,10 +57,10 @@ function createSingleChat(ctx: IMessagineContext, chatIds: number[], languageCod
     throw new InvalidPeopleInChatError(ctx, chatIds);
   }
   ctx.i18n.locale(languageCode);
-  const createChatPromise = createChat(chatIds, languageCode);
+  const createChatPromise = ctx.db.createChat(chatIds, languageCode);
   const promises: Promise<any>[] = [createChatPromise];
   for (const chatId of chatIds) {
-    const leaveLobbyPromise = leaveLobby(chatId);
+    const leaveLobbyPromise = ctx.db.leaveLobby(chatId);
     const chatStartReplyPromise = chatStartReply(ctx, chatId);
     promises.push(leaveLobbyPromise);
     promises.push(chatStartReplyPromise);
