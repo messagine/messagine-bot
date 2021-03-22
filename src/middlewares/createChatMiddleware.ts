@@ -50,8 +50,7 @@ function findOpponent(
   allPreviousChats: IPreviousChat[] | null,
 ) {
   const previousOpponents = getPreviousOpponents(chatId, allPreviousChats);
-  const opponent = _(chatIds).without(chatId).difference(processedChatIds).difference(previousOpponents).head();
-  return opponent;
+  return _(chatIds).without(chatId).difference(processedChatIds).difference(previousOpponents).head();
 }
 
 function createSingleChat(ctx: IMessagineContext, chatIds: number[], languageCode: string): Promise<any[]> {
