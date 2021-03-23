@@ -23,7 +23,7 @@ language_not_found: Sprache nicht gefunden.
 invalid_input: Invalide Eingabe
 message_type_not_found: Nachricht ${messageType} nicht gefunden.
 language_selected: 'Ausgewählte Sprache: ${selectedLanguage}'
-about_reply: '<b>Über</b>\Mit Messagine chattest du mit echten Menschen, ohne Informationen über dich zu verraten. Kein Bots, nur echte Menschen.\n\n<b>Statistiken</b>\nNutzer: ${numberOfUsers}\nAktive Chats: ${numberOfActiveChats}\nFrühere Chats: ${numberOfPreviousChats}\nMeine früheren Chats: ${numberOfMyPreviousChats}\nNutzer in der Lobby: ${numberOfLobbyUsers}'
+about_reply: '<b>Über</b>\nMit Messagine chattest du mit echten Menschen, ohne Informationen über dich zu verraten. Kein Bots, nur echte Menschen.\n\n<b>Statistiken</b>\nNutzer: ${numberOfUsers}\nAktive Chats: ${numberOfActiveChats}\nFrühere Chats: ${numberOfPreviousChats}\nMeine früheren Chats: ${numberOfMyPreviousChats}\nNutzer in der Lobby: ${numberOfLobbyUsers}'
 language_not_changed: Sprache nicht geändert.
 language_not_changed_in_chat: Sprachänderung im Chat ist nicht erlaubt.
 cancel_find_not_lobby: Du bist nicht in der Lobby.
