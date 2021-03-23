@@ -1,0 +1,46 @@
+active_chat: Du bist in einem aktiven Chat.
+cancel_find: Du hast die Lobby verlassen.
+cancel_find_command_desc: Lobby verlassen 🛎️
+chatid_not_found: Chat Id nicht gefunden. Prüfe deine Sicherheitseinstellungen.
+chat_not_exist_idle: Chat existiert nicht. Versuche, einen Chat zu finden!
+chat_not_exist_in_lobby: Du wartest in der Lobby. Wir sagen bescheid, sobald der Chat startet.
+chat_start: Der Chat wurde gestartet. Du kannst ihn per /${exitChatCommand} verlassen. Viel Spaß.
+exit_chat_are_you_sure: Bist du sicher, dass du den Chat schließen willst?
+exit_chat: Du hast den Chat geschlossen. Wie wäre es, einen neuen zu finden?
+exit_chat_command_desc: Chat verlassen 👋
+exit_chat_opponent: Der Chat wurde vom Chatpartner geschlossen. Versuche, einen Chat zu finden!
+find_chat_command_desc: Chat finden 💬
+help_command_desc: Hilfe 🆘
+invalid_opponent_error: Invalide Anzahl von Chatpartnern gefunden.
+lobby_wait: Warte in der Lobby. Wir lassen es dich wissen, sobald der Chat startet.
+set_language_command_desc: Sprache 🌐
+about_command_desc: Über ℹ️
+user_not_found: Nutzer nicht gefunden
+welcome_back: Willkommen zurück.
+new_user: <b>Messagine</b>\nMit Messagine chattest du mit echten Menschen, ohne Informationen über dich zu verraten. Kein Bots, nur echte Menschen. Deine Sprache ist ${languageNativeName}. Um alle Kommandos zu see, nutze /${helpCommand}.
+message_edited: 'Nachricht bearbeitet: ${newMessage}'
+language_not_found: Sprache nicht gefunden.
+invalid_input: Invalide Eingabe
+message_type_not_found: Nachricht ${messageType} nicht gefunden.
+language_selected: 'Ausgewählte Sprache: ${selectedLanguage}'
+about_reply: '<b>Über</b>\Mit Messagine chattest du mit echten Menschen, ohne Informationen über dich zu verraten. Kein Bots, nur echte Menschen.\n\n<b>Statistiken</b>\nNutzer: ${numberOfUsers}\nAktive Chats: ${numberOfActiveChats}\nFrühere Chats: ${numberOfPreviousChats}\nMeine früheren Chats: ${numberOfMyPreviousChats}\nNutzer in der Lobby: ${numberOfLobbyUsers}'
+language_not_changed: Sprache nicht geändert.
+language_not_changed_in_chat: Sprachänderung im Chat ist nicht erlaubt.
+cancel_find_not_lobby: Du bist nicht in der Lobby.
+help_reply: Wir sind da um dir zu helfen
+detail_reply: 'Sprache: ${languageCode}\nZustand: ${state}\nGebannt: ${banned}\nBlockiert: ${blocked}'
+unban_reply: Nutzerverbannung aufgehoben
+ban_reply: Nutzer verbannt
+not_admin_error: Du bist nicht der Admin
+our_website: Unsere Webseite 📱
+contact: Kontakt 📪
+start_command_desc: Nutzer initialisieren
+all_languages: Alle Sprachen
+top_languages: Häufigste Sprachen
+show_all_languages_button: Alle >>
+show_top_languages_button: << Häufigste
+yes: Ja ✅
+no: Nein ❌
+say_hi: Sag Hi 👋
+hi_message: Hi
+said_hi: Du hast Hi gesagt
