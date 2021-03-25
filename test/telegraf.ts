@@ -23,9 +23,17 @@ function getUser(): IUser {
   return user;
 }
 
+function getAddUserStub() {
+  const user = getUser();
+  const addUserStub = sandbox.stub(DataHandler.prototype, 'addUser');
+  addUserStub.withArgs(1, 'en').resolves(user);
+  return addUserStub;
+}
+
 let sandbox: sinon.SinonSandbox;
 test.beforeEach(() => {
   sandbox = sinon.createSandbox();
+  sandbox.stub(DataHandler.prototype, 'connect').resolves();
 });
 
 test.afterEach(() => {
@@ -33,15 +41,11 @@ test.afterEach(() => {
 });
 
 test('handle new user start', async t => {
-  const user = getUser();
-
   sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
-  sandbox.stub(DataHandler.prototype, 'connect').resolves();
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
-  const addUserStub = sandbox.stub(DataHandler.prototype, 'addUser');
-  addUserStub.withArgs(1, 'en').resolves(user);
+  const addUserStub = getAddUserStub();
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
@@ -63,12 +67,10 @@ test('handle existing user start', async t => {
   const user = getUser();
 
   sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
-  sandbox.stub(DataHandler.prototype, 'connect').resolves();
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(user);
   sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
-  const addUserStub = sandbox.stub(DataHandler.prototype, 'addUser');
-  addUserStub.withArgs(1, 'en').resolves(user);
+  const addUserStub = getAddUserStub();
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
