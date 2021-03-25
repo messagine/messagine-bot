@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "sonarcloud",
+        "projectKey": "messagine_messagine-bot"
+    }
+}
