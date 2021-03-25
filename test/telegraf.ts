@@ -16,6 +16,15 @@ const BaseTextMessage: Message = {
   text: 'foo',
 };
 
+function createBot() {
+  const bot = new Telegraf<IMessagineContext>('');
+  bot.use(dbMiddleware);
+  bot.use(fakeMixpanelMiddleware);
+  bot.use(fakeI18nMiddleware);
+  bot.use(userMiddleware);
+  return bot;
+}
+
 function getUser(): IUser {
   const user = new User();
   user.chatId = 1;
@@ -47,11 +56,7 @@ test('handle new user start', async t => {
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
   const addUserStub = getAddUserStub();
 
-  const bot = new Telegraf<IMessagineContext>('');
-  bot.use(dbMiddleware);
-  bot.use(fakeMixpanelMiddleware);
-  bot.use(fakeI18nMiddleware);
-  bot.use(userMiddleware);
+  const bot = createBot();
   bot.use(async (ctx, next) => {
     await next();
     t.is(ctx.chat?.id, 1);
@@ -72,11 +77,7 @@ test('handle existing user start', async t => {
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
   const addUserStub = getAddUserStub();
 
-  const bot = new Telegraf<IMessagineContext>('');
-  bot.use(dbMiddleware);
-  bot.use(fakeMixpanelMiddleware);
-  bot.use(fakeI18nMiddleware);
-  bot.use(userMiddleware);
+  const bot = createBot();
   bot.use(async (ctx, next) => {
     await next();
     t.is(ctx.chat?.id, 1);
