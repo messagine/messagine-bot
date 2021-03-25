@@ -1,3 +1,7 @@
+import Debug from 'debug';
+const debug = Debug('fake:mixpanelPeople');
 export class FakeMixpanelPeople {
-  public set(_key: any, _value: any) {}
+  public set(key: any, value: any) {
+    debug('set', key, value);
+  }
 }
