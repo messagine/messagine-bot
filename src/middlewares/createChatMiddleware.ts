@@ -5,9 +5,10 @@ import { ILobby } from '../lib/models/Lobby';
 import { IPreviousChat } from '../lib/models/PreviousChat';
 import { chatStartReply } from '../reply';
 
-const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
+const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
   const lobbyUsers = await ctx.db.getAllLobbyUsers();
   if (!lobbyUsers || lobbyUsers.length === 0) {
+    await next();
     return;
   }
 
@@ -40,6 +41,7 @@ const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
   }
 
   await Promise.all(promises);
+  await next();
 };
 
 function findOpponent(
