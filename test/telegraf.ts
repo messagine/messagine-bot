@@ -39,10 +39,16 @@ function getAddUserStub() {
   return addUserStub;
 }
 
+function setupIdleUser() {
+  sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
+  sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
+}
+
 let sandbox: sinon.SinonSandbox;
 test.beforeEach(() => {
   sandbox = sinon.createSandbox();
   sandbox.stub(DataHandler.prototype, 'connect').resolves();
+  sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
 });
 
 test.afterEach(() => {
@@ -50,10 +56,8 @@ test.afterEach(() => {
 });
 
 test('handle new user start', async t => {
-  sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(null);
-  sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
-  sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
+  setupIdleUser();
   const addUserStub = getAddUserStub();
 
   const bot = createBot();
@@ -71,10 +75,8 @@ test('handle new user start', async t => {
 test('handle existing user start', async t => {
   const user = getUser();
 
-  sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(user);
-  sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
-  sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
+  setupIdleUser();
   const addUserStub = getAddUserStub();
 
   const bot = createBot();
