@@ -1,15 +1,13 @@
 import test from 'ava';
-import Sinon from 'sinon';
 import sinon from 'sinon';
-import Telegraf from 'telegraf';
-import { Context as TelegrafContext } from 'telegraf';
+import Telegraf, { Context as TelegrafContext } from 'telegraf';
 import { Message } from 'telegraf/typings/telegram-types';
 import { startCommand } from '../src/commands';
 import { IMessagineContext } from '../src/lib/common';
 import { DataHandler } from '../src/lib/dataHandler';
 import User, { IUser } from '../src/lib/models/User';
 import { dbMiddleware, userMiddleware } from '../src/middlewares';
-import { FakeI18n, FakeMixpanel } from './fakes';
+import { fakeI18nMiddleware, fakeMixpanelMiddleware } from './fakes';
 
 const BaseTextMessage: Message = {
   chat: { id: 1, type: 'private' },
@@ -25,7 +23,7 @@ function getUser(): IUser {
   return user;
 }
 
-let sandbox: Sinon.SinonSandbox;
+let sandbox: sinon.SinonSandbox;
 test.beforeEach(() => {
   sandbox = sinon.createSandbox();
 });
@@ -36,6 +34,7 @@ test.afterEach(() => {
 
 test('handle new user start', async t => {
   const user = getUser();
+
   sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
   sandbox.stub(DataHandler.prototype, 'connect').resolves();
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(null);
@@ -45,11 +44,8 @@ test('handle new user start', async t => {
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
-  bot.use(async (ctx, next) => {
-    ctx.mixpanel = new FakeMixpanel();
-    ctx.i18n = new FakeI18n();
-    await next();
-  });
+  bot.use(fakeMixpanelMiddleware);
+  bot.use(fakeI18nMiddleware);
   bot.use(userMiddleware);
   bot.use(async (ctx, next) => {
     await next();
@@ -72,11 +68,8 @@ test('handle existing user start', async t => {
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
-  bot.use(async (ctx, next) => {
-    ctx.mixpanel = new FakeMixpanel();
-    ctx.i18n = new FakeI18n();
-    await next();
-  });
+  bot.use(fakeMixpanelMiddleware);
+  bot.use(fakeI18nMiddleware);
   bot.use(userMiddleware);
   bot.use(async (ctx, next) => {
     await next();
