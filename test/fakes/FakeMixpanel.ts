@@ -10,7 +10,6 @@ class FakeMixpanel {
   }
   public track(eventName: any, props: any) {
     debug('track', eventName, props);
-    return;
   }
 }
 

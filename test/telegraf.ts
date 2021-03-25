@@ -40,7 +40,8 @@ test('handle new user start', async t => {
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
-  sandbox.stub(DataHandler.prototype, 'addUser').withArgs(1, 'en').resolves(user);
+  const addUserStub = sandbox.stub(DataHandler.prototype, 'addUser');
+  addUserStub.withArgs(1, 'en').resolves(user);
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
@@ -51,6 +52,7 @@ test('handle new user start', async t => {
     await next();
     t.is(ctx.chat?.id, 1);
     t.is(ctx.userState, 'idle');
+    sinon.assert.calledOnce(addUserStub);
   });
 
   bot.on('message', startCommand());
@@ -65,6 +67,8 @@ test('handle existing user start', async t => {
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(user);
   sandbox.stub(DataHandler.prototype, 'findLobby').withArgs(1).resolves(null);
   sandbox.stub(DataHandler.prototype, 'findExistingChat').withArgs(1).resolves(null);
+  const addUserStub = sandbox.stub(DataHandler.prototype, 'addUser');
+  addUserStub.withArgs(1, 'en').resolves(user);
 
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
@@ -75,6 +79,7 @@ test('handle existing user start', async t => {
     await next();
     t.is(ctx.chat?.id, 1);
     t.is(ctx.userState, 'idle');
+    sinon.assert.notCalled(addUserStub);
   });
 
   bot.on('message', startCommand());
