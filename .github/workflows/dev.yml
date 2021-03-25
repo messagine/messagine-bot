@@ -23,7 +23,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: codecov/codecov-action@v1
     - run: npm ci
+    - run: npm run coverage
     - name: serverless deploy
       uses: serverless/github-action@master
       with:

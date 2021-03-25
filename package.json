@@ -7,10 +7,11 @@
 	"license": "GPLv2",
 	"homepage": "https://github.com/messagine/messagine-bot#readme",
 	"scripts": {
+		"coverage": "nyc npm run test",
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
 		"invoke:createChat": "sls invoke local --function createChatJob",
 		"prettier": "prettier --write .",
-		"test": "ava test/*",
+		"test": "ava test/* --serial",
 		"tslint": "tslint --project tsconfig.json"
 	},
 	"dependencies": {
@@ -28,13 +29,16 @@
 		"@types/debug": "^4.1.5",
 		"@types/lodash": "^4.14.168",
 		"@types/mongoose": "^5.10.3",
+		"@types/sinon": "^9.0.11",
 		"ava": "^3.15.0",
 		"aws-lambda": "^1.0.6",
 		"debug": "^4.3.1",
 		"dotenv-cli": "^4.0.0",
 		"nodemon": "^2.0.6",
+		"nyc": "^15.1.0",
 		"prettier": "^2.2.0",
 		"serverless-plugin-typescript": "^1.1.9",
+		"sinon": "^10.0.0",
 		"ts-node": "^9.0.0",
 		"typescript": "^4.1.2"
 	},
