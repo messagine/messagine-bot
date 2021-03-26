@@ -1,5 +1,5 @@
 import { IMessagineContext } from '../lib/common';
-import { commandEnum, eventTypeEnum, userStateEnum } from '../lib/enums';
+import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { helpReply } from '../reply';
 
 const helpCommand = () => (ctx: IMessagineContext) => {
@@ -13,7 +13,7 @@ const helpAction = () => (ctx: IMessagineContext) => {
 };
 
 function onHelp(ctx: IMessagineContext) {
-  return helpReply(ctx, ctx.userState || userStateEnum.idle);
+  return helpReply(ctx);
 }
 
 export { helpAction, helpCommand };

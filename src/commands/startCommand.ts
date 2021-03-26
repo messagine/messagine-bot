@@ -1,5 +1,4 @@
 import { getChatId, getLanguage, IMessagineContext } from '../lib/common';
-import { addUser } from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { newUserReply, welcomeBackReply } from '../reply';
 
@@ -25,7 +24,7 @@ function onStart(ctx: IMessagineContext) {
       signup_date: new Date(),
       username: ctx.from?.username,
     });
-    const addUserPromise = addUser(chatId, language.lang);
+    const addUserPromise = ctx.db.addUser(chatId, language.lang);
     const replyPromise = newUserReply(ctx, language.native_name);
     return Promise.all([mixpanelPeopleSetPromise, addUserPromise, replyPromise]);
   } else {

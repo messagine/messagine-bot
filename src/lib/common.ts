@@ -7,12 +7,12 @@ import {
   ChatNotExistIdleError,
   ChatNotExistInLobbyError,
   InvalidInputError,
-  InvalidNumberOfOpponentError,
+  InvalidPeopleInChatError,
   LanguageNotFoundError,
   NotAdminError,
   UserNotFoundError,
 } from '../error';
-import { createPreviousChat, deleteChat, findExistingChat, findLobby, getUser } from './dataHandler';
+import { DataHandler } from './dataHandler';
 import { userStateEnum } from './enums';
 import { IChat } from './models/Chat';
 import { ILanguage } from './models/Language';
@@ -52,7 +52,7 @@ export function extractOpponentForChatId(ctx: IMessagineContext, chatId: number,
   const chatIds = chat.chatIds;
   const opponentChatIds = chatIds.filter(id => chatId !== id);
   if (opponentChatIds.length !== 1) {
-    throw new InvalidNumberOfOpponentError(ctx, chatId, opponentChatIds);
+    throw new InvalidPeopleInChatError(ctx, chatIds);
   }
   return opponentChatIds[0];
 }
@@ -103,7 +103,7 @@ export function getOpponentChatId(ctx: IMessagineContext): number {
 }
 
 export async function getUserInfoSafe(ctx: IMessagineContext, chatId: number): Promise<IUserInfoSafe> {
-  const userInfo = await getUserInfo(chatId);
+  const userInfo = await getUserInfo(ctx, chatId);
 
   if (!userInfo.user) {
     throw new UserNotFoundError(ctx);
@@ -118,10 +118,10 @@ export async function getUserInfoSafe(ctx: IMessagineContext, chatId: number): P
   };
 }
 
-export async function getUserInfo(chatId: number) {
-  const userPromise = getUser(chatId);
-  const lobbyPromise = findLobby(chatId);
-  const existingChatPromise = findExistingChat(chatId);
+export async function getUserInfo(ctx: IMessagineContext, chatId: number) {
+  const userPromise = ctx.db.getUser(chatId);
+  const lobbyPromise = ctx.db.findLobby(chatId);
+  const existingChatPromise = ctx.db.findExistingChat(chatId);
 
   const checkResults = await Promise.all([userPromise, lobbyPromise, existingChatPromise]);
 
@@ -147,9 +147,9 @@ export async function getUserInfo(chatId: number) {
   };
 }
 
-export function moveChatToPreviousChats(chat: IChat, closedBy: number) {
-  const deleteChatPromise = deleteChat(chat.id);
-  const previousChatCreatePromise = createPreviousChat(chat, closedBy);
+export function moveChatToPreviousChats(ctx: IMessagineContext, chat: IChat, closedBy: number) {
+  const deleteChatPromise = ctx.db.deleteChat(chat.id);
+  const previousChatCreatePromise = ctx.db.createPreviousChat(chat, closedBy);
   return Promise.all([deleteChatPromise, previousChatCreatePromise]);
 }
 
@@ -181,6 +181,7 @@ export interface IMessagineContext extends TelegrafContext {
   userState?: string;
   lobby?: ILobby;
   currentChat?: IChat;
+  db: DataHandler;
 }
 
 export interface IUserInfoSafe {

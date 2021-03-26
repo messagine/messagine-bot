@@ -1,11 +1,4 @@
 import { getChatId, IMessagineContext } from '../lib/common';
-import {
-  getChatCount,
-  getLobbyCount,
-  getPreviousChatCount,
-  getUserCount,
-  getUserPreviousChatCount,
-} from '../lib/dataHandler';
 import { commandEnum, eventTypeEnum } from '../lib/enums';
 import { aboutReply } from '../reply';
 
@@ -21,11 +14,11 @@ const aboutAction = () => (ctx: IMessagineContext) => {
 
 async function onAbout(ctx: IMessagineContext) {
   const chatId = getChatId(ctx);
-  const userCountPromise = getUserCount();
-  const chatCountPromise = getChatCount();
-  const previousChatCountPromise = getPreviousChatCount();
-  const userPreviousChatCountPromise = getUserPreviousChatCount(chatId);
-  const lobbyCountPromise = getLobbyCount();
+  const userCountPromise = ctx.db.getUserCount();
+  const chatCountPromise = ctx.db.getChatCount();
+  const previousChatCountPromise = ctx.db.getPreviousChatCount();
+  const userPreviousChatCountPromise = ctx.db.getUserPreviousChatCount(chatId);
+  const lobbyCountPromise = ctx.db.getLobbyCount();
 
   const result = await Promise.all([
     userCountPromise,

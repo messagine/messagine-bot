@@ -1,5 +1,12 @@
-dist/
+.build/
+.github/*
+.nyc_output/*
+.serverless/
 node_modules/
 .env*
+package.json
+package-lock.json
+*.md
+*.yml
 
 public/

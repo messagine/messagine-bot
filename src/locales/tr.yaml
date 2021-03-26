@@ -11,7 +11,7 @@ exit_chat_command_desc: Konuşmayı sonlandır 👋
 exit_chat_opponent: Karşı taraf konuşmayı sonlandırdı. Yenisini bulmaya ne dersin?
 find_chat_command_desc: Konuşma Ara 💬
 help_command_desc: Yardım 🆘
-invalid_opponent_error: Konuşmadaki kişi sayısı hatalı.
+invalid_people_in_chat_error: Konuşmadaki kişi sayısı hatalı.
 lobby_wait: Lobide bekle, konuşma başladığında haber vereceğiz.
 set_language_command_desc: Dil 🌐
 about_command_desc: Hakkında ℹ️

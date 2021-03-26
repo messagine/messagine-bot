@@ -41,3 +41,13 @@ functions:
       ENDPOINT_URL: ${param:ENDPOINT_URL}
       SENTRY_DSN: ${param:SENTRY_DSN}
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
+  createChatJob:
+    handler: src/handler.createChatJobHandler
+    events:
+      - schedule: rate(${param:CREATE_CHAT_SCHEDULE})
+    environment:
+      BOT_TOKEN: ${param:BOT_TOKEN}
+      DB_URL: ${param:DB_URL}
+      ENDPOINT_URL: ${param:ENDPOINT_URL}
+      SENTRY_DSN: ${param:SENTRY_DSN}
+      MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}

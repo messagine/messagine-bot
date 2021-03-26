@@ -5,7 +5,7 @@ import TelegrafI18n from 'telegraf-i18n';
 const TelegrafMixpanel = require('telegraf-mixpanel');
 // tslint:disable-next-line: no-var-requires
 const rateLimit = require('telegraf-ratelimit');
-import { BotCommand } from 'telegraf/typings/telegram-types';
+import { BotCommand, Update } from 'telegraf/typings/telegram-types';
 import {
   aboutAction,
   aboutCommand,
@@ -47,20 +47,19 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import {
-  extractOpponentForChatId,
-  getChatId,
-  getUserInfo,
-  getUserInfoSafe,
-  IMessagineContext,
-  moveChatToPreviousChats,
-} from './common';
-import { connect, leaveLobby, userBlockedChange } from './dataHandler';
-import { actionEnum, adminCommandEnum, commandEnum, eventTypeEnum } from './enums';
+import { IMessagineContext } from './common';
+import { actionEnum, adminCommandEnum, commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
-import { exitChatToOpponent } from '../reply';
+import {
+  catcherMiddleware,
+  chatMemberMiddleware,
+  createChatMiddleware,
+  dbMiddleware,
+  responseTimeLoggerMiddleware,
+  userMiddleware,
+} from '../middlewares';
 
 const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
 const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
@@ -70,21 +69,21 @@ const i18n = new TelegrafI18n({
   directory: path.resolve(__dirname, '../locales'),
 });
 
-async function botUtils() {
-  await connect();
+function botUtils() {
   const limitConfig = {
     limit: 3,
     onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
     window: 3000,
   };
 
+  bot.use(dbMiddleware);
   bot.use(Telegraf.log());
   bot.use(mixpanel.middleware());
   bot.use(i18n.middleware());
   bot.use(chatMemberMiddleware);
   bot.use(userMiddleware);
-  bot.use(catcher);
-  bot.use(logger);
+  bot.use(catcherMiddleware);
+  bot.use(responseTimeLoggerMiddleware);
   bot.use(rateLimit(limitConfig));
 
   const changeLanguageRegex = new RegExp(`${actionEnum.changeLanguage}:(.+)`);
@@ -138,9 +137,7 @@ async function localBot() {
 
   const botInfo = await bot.telegram.getMe();
   bot.options.username = botInfo.username;
-
-  // tslint:disable-next-line: no-console
-  console.info('Server has initialized bot username: ', botInfo.username);
+  debug('Server has initialized bot username: ', botInfo.username);
 
   debug(`deleting webhook`);
   await bot.telegram.deleteWebhook();
@@ -215,11 +212,20 @@ function checkCommands(existingCommands: BotCommand[]) {
 export async function webhook(event: any) {
   bot.webhookReply = true;
   // call bot commands and middlware
-  await botUtils();
+  botUtils();
 
   const body = JSON.parse(event.body);
   await bot.handleUpdate(body);
   return ok('Success');
+}
+
+export async function createChatJob() {
+  bot.use(dbMiddleware);
+  bot.use(i18n.middleware());
+  bot.use(createChatMiddleware);
+
+  const update: Update = { update_id: 0 };
+  await bot.handleUpdate(update);
 }
 
 export function toArgs(ctx: IMessagineContext) {
@@ -237,102 +243,14 @@ export const NO_PREVIEW = MARKDOWN.webPreview(false);
 
 export const hiddenCharacter = '\u200b';
 
-export const logger = async (_: IMessagineContext, next: any): Promise<void> => {
-  const logStart = new Date();
-  await next();
-  const ms = new Date().getTime() - logStart.getTime();
-  // tslint:disable-next-line: no-console
-  console.log('Response time: %sms', ms);
-};
-
-const catcher = async (ctx: IMessagineContext, next: any): Promise<void> => {
-  try {
-    await next();
-  } catch (e) {
-    await ctx.reply(e.message, e?.extra);
-  }
-};
-
-const chatMemberMiddleware = async (ctx: any, next: any): Promise<void> => {
-  if (ctx?.update?.my_chat_member) {
-    const chatId = ctx.update.my_chat_member.chat.id;
-    const newStatus = ctx.update.my_chat_member.new_chat_member.status;
-    if (newStatus === 'kicked') {
-      await onUserLeft(ctx, chatId);
-    } else if (newStatus === 'member') {
-      await onUserReturned(ctx, chatId);
-    } else {
-      throw new Error(`Unexpected new chat member status: ${newStatus}`);
-    }
-    return;
-  }
-  await next();
-};
-
-async function onUserLeft(ctx: any, chatId: number) {
-  const userInfo = await getUserInfoSafe(ctx, chatId);
-  const promises: Promise<any>[] = [];
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userLeft}`, { distinct_id: chatId });
-  promises.push(mixPanelPromise);
-
-  ctx.i18n.locale(userInfo.user.languageCode);
-  const userBlockPromise = userBlockedChange(chatId, true);
-  promises.push(userBlockPromise);
-
-  if (userInfo.lobby) {
-    const leaveLobbyPromise = leaveLobby(chatId);
-    promises.push(leaveLobbyPromise);
-  }
-  if (userInfo.chat) {
-    const opponentChatId = extractOpponentForChatId(ctx, chatId, userInfo.chat);
-    const moveChatToPreviousChatsPromise = moveChatToPreviousChats(userInfo.chat, chatId);
-    const sendMessageToOpponentPromise = exitChatToOpponent(ctx, opponentChatId);
-    promises.push(moveChatToPreviousChatsPromise);
-    promises.push(sendMessageToOpponentPromise);
-  }
-  return Promise.all(promises);
-}
-
-function onUserReturned(ctx: any, chatId: number) {
-  const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.action}.${actionEnum.userReturned}`, {
-    distinct_id: chatId,
-  });
-  const userBlockPromise = userBlockedChange(chatId, false);
-  return Promise.all([mixPanelPromise, userBlockPromise]);
-}
-
-const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
-  if (ctx.message?.from?.is_bot) {
-    return;
-  }
-  const chatId = getChatId(ctx);
-  const userInfo = await getUserInfo(chatId);
-  ctx.userState = userInfo.state;
-  if (userInfo.lobby) {
-    ctx.lobby = userInfo.lobby;
-  } else if (userInfo.chat) {
-    ctx.currentChat = userInfo.chat;
-  }
-
-  if (userInfo.user) {
-    ctx.user = userInfo.user;
-    ctx.i18n.locale(userInfo.user.languageCode);
-    if (ctx.user.blocked || ctx.user.banned) {
-      return;
-    }
-  }
-  await next();
-};
-
 if (config.IS_DEV) {
-  // tslint:disable-next-line: no-console
-  console.log('isDev', config.IS_DEV);
+  debug('isDev', config.IS_DEV);
   startDevelopment();
 }
 
 async function startDevelopment() {
   await syncCommands();
   await localBot();
-  await botUtils();
+  botUtils();
   await bot.launch();
 }
