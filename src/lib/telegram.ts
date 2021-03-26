@@ -69,7 +69,7 @@ const i18n = new TelegrafI18n({
   directory: path.resolve(__dirname, '../locales'),
 });
 
-async function botUtils() {
+function botUtils() {
   const limitConfig = {
     limit: 3,
     onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
@@ -212,7 +212,7 @@ function checkCommands(existingCommands: BotCommand[]) {
 export async function webhook(event: any) {
   bot.webhookReply = true;
   // call bot commands and middlware
-  await botUtils();
+  botUtils();
 
   const body = JSON.parse(event.body);
   await bot.handleUpdate(body);
@@ -251,6 +251,6 @@ if (config.IS_DEV) {
 async function startDevelopment() {
   await syncCommands();
   await localBot();
-  await botUtils();
+  botUtils();
   await bot.launch();
 }
