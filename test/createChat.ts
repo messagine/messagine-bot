@@ -102,6 +102,34 @@ test('handle users with chat', async t => {
   await bot.handleUpdate({ update_id: 0 });
 });
 
+test('handle users with previous chat and chat', async t => {
+  const lobby1 = createLobby(1, 'en');
+  const lobby2 = createLobby(2, 'en');
+  const lobby3 = createLobby(3, 'en');
+  const lobbies: ILobby[] = [lobby1, lobby2, lobby3];
+  sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(lobbies);
+  const previousChat = new PreviousChat();
+  previousChat.chatIds = [1, 2];
+  previousChat.closedBy = 1;
+  previousChat.languageCode = 'en';
+  sandbox.stub(DataHandler.prototype, 'getUsersPreviousChats').resolves([previousChat]);
+  const leaveLobbyStub = sandbox.stub(DataHandler.prototype, 'leaveLobby');
+  leaveLobbyStub.resolves(null);
+  const chat = createChat([1, 3], 'en');
+  const createChatStub = sandbox.stub(DataHandler.prototype, 'createChat');
+  createChatStub.withArgs([1, 3], 'en').resolves(chat);
+
+  const bot = createBot();
+  bot.use(async (ctx, next) => {
+    await next();
+    t.assert('message' in ctx);
+    sinon.assert.calledOnce(createChatStub);
+    sinon.assert.calledTwice(leaveLobbyStub);
+  });
+
+  await bot.handleUpdate({ update_id: 0 });
+});
+
 test('handle users with multiple chats', async t => {
   const lobby1 = createLobby(1, 'en');
   const lobby2 = createLobby(2, 'en');
