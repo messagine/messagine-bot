@@ -58,7 +58,7 @@ test('handle empty lobby', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.notCalled(createChatStub);
 });
 
@@ -73,7 +73,7 @@ test('handle multiple users without chat lobby', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.notCalled(createChatStub);
 });
 
@@ -91,7 +91,7 @@ test('handle users with chat', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.calledOnce(createChatStub);
   sinon.assert.calledTwice(leaveLobbyStub);
 });
@@ -112,7 +112,7 @@ test('handle users with previous chat and chat', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.calledOnce(createChatStub);
   sinon.assert.calledTwice(leaveLobbyStub);
 });
@@ -134,7 +134,7 @@ test('handle users with multiple chats', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.calledTwice(createChatStub);
   sinon.assert.callCount(leaveLobbyStub, 4);
 });
@@ -152,6 +152,6 @@ test('handle users with previous chat', async t => {
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
 
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.notCalled(createChatStub);
 });

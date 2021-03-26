@@ -109,7 +109,7 @@ test('reject bot', async t => {
 
   bot.on('message', startCommand());
   await bot.handleUpdate({ message: BotMessage, update_id: 1 });
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.notCalled(addUserStub);
   sinon.assert.notCalled(replyStub);
 });
@@ -126,7 +126,7 @@ test('reject blocked user', async t => {
 
   bot.on('message', startCommand());
   await bot.handleUpdate({ message: BotMessage, update_id: 1 });
-  t.is(1, 1);
+  t.true(true);
   sinon.assert.notCalled(addUserStub);
   sinon.assert.notCalled(replyStub);
 });
