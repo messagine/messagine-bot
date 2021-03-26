@@ -16,6 +16,14 @@ const BaseTextMessage: Message = {
   text: 'foo',
 };
 
+const BotMessage: Message = {
+  chat: { id: 1, type: 'private' },
+  date: Date.now(),
+  from: { id: 1, is_bot: true, first_name: 'Bot' },
+  message_id: 1,
+  text: 'foo',
+};
+
 function createBot() {
   const bot = new Telegraf<IMessagineContext>('');
   bot.use(dbMiddleware);
@@ -45,10 +53,12 @@ function setupIdleUser() {
 }
 
 let sandbox: sinon.SinonSandbox;
+let replyStub: sinon.SinonStub;
 test.beforeEach(() => {
   sandbox = sinon.createSandbox();
   sandbox.stub(DataHandler.prototype, 'connect').resolves();
-  sandbox.stub(TelegrafContext.prototype, 'reply').resolves();
+  replyStub = sandbox.stub(TelegrafContext.prototype, 'reply');
+  replyStub.resolves();
 });
 
 test.afterEach(() => {
@@ -89,4 +99,34 @@ test('handle existing user start', async t => {
 
   bot.on('message', startCommand());
   await bot.handleUpdate({ message: BaseTextMessage, update_id: 1 });
+});
+
+test('reject bot', async t => {
+  sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(null);
+  const addUserStub = getAddUserStub();
+
+  const bot = createBot();
+
+  bot.on('message', startCommand());
+  await bot.handleUpdate({ message: BotMessage, update_id: 1 });
+  t.is(1, 1);
+  sinon.assert.notCalled(addUserStub);
+  sinon.assert.notCalled(replyStub);
+});
+
+test('reject blocked user', async t => {
+  const user = getUser();
+  user.blocked = true;
+
+  sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(user);
+  setupIdleUser();
+  const addUserStub = getAddUserStub();
+
+  const bot = createBot();
+
+  bot.on('message', startCommand());
+  await bot.handleUpdate({ message: BotMessage, update_id: 1 });
+  t.is(1, 1);
+  sinon.assert.notCalled(addUserStub);
+  sinon.assert.notCalled(replyStub);
 });
