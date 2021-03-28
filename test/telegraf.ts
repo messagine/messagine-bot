@@ -75,11 +75,11 @@ test('handle new user start', async t => {
     await next();
     t.is(ctx.chat?.id, 1);
     t.is(ctx.userState, 'idle');
-    sinon.assert.calledOnce(addUserStub);
   });
 
   bot.on('message', startCommand());
   await bot.handleUpdate({ message: BaseTextMessage, update_id: 1 });
+  sinon.assert.calledOnce(addUserStub);
 });
 
 test('handle existing user start', async t => {
@@ -94,11 +94,11 @@ test('handle existing user start', async t => {
     await next();
     t.is(ctx.chat?.id, 1);
     t.is(ctx.userState, 'idle');
-    sinon.assert.notCalled(addUserStub);
   });
 
   bot.on('message', startCommand());
   await bot.handleUpdate({ message: BaseTextMessage, update_id: 1 });
+  sinon.assert.notCalled(addUserStub);
 });
 
 test('reject bot', async t => {

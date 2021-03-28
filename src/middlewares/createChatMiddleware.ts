@@ -7,12 +7,11 @@ import { IPreviousChat } from '../lib/models/PreviousChat';
 import { chatStartReply } from '../reply';
 const debug = Debug('job:createChat');
 
-const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
+const createChatMiddleware = async (ctx: IMessagineContext): Promise<void> => {
   debug(`Create chat job started.`);
   const lobbyUsers = await ctx.db.getAllLobbyUsers();
   if (!lobbyUsers || lobbyUsers.length === 0) {
     debug('Lobby users not found.');
-    await next();
     return;
   }
 
@@ -48,7 +47,6 @@ const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<
   }
 
   await Promise.all(promises);
-  await next();
 };
 
 function findOpponent(
