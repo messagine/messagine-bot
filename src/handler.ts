@@ -29,8 +29,6 @@ export const webhookHandler: Handler = async (event: any) => {
     op: 'webhook',
   });
   try {
-    // tslint:disable-next-line: no-console
-    console.debug(event);
     return await webhook(event);
   } catch (e) {
     Sentry.captureException(e);

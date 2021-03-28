@@ -210,6 +210,7 @@ function checkCommands(existingCommands: BotCommand[]) {
 }
 
 export async function webhook(event: any) {
+  debug(event);
   bot.webhookReply = true;
   // call bot commands and middlware
   botUtils();
