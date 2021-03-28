@@ -71,14 +71,10 @@ test('handle new user start', async t => {
   const addUserStub = getAddUserStub();
 
   const bot = createBot();
-  bot.use(async (ctx, next) => {
-    await next();
-    t.is(ctx.chat?.id, 1);
-    t.is(ctx.userState, 'idle');
-  });
-
   bot.on('message', startCommand());
+
   await bot.handleUpdate({ message: BaseTextMessage, update_id: 1 });
+  t.true(true);
   sinon.assert.calledOnce(addUserStub);
 });
 
@@ -90,14 +86,10 @@ test('handle existing user start', async t => {
   const addUserStub = getAddUserStub();
 
   const bot = createBot();
-  bot.use(async (ctx, next) => {
-    await next();
-    t.is(ctx.chat?.id, 1);
-    t.is(ctx.userState, 'idle');
-  });
-
   bot.on('message', startCommand());
+
   await bot.handleUpdate({ message: BaseTextMessage, update_id: 1 });
+  t.true(true);
   sinon.assert.notCalled(addUserStub);
 });
 
