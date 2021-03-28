@@ -1,13 +1,16 @@
+import Debug from 'debug';
 import _ from 'lodash';
 import { InvalidPeopleInChatError } from '../error';
 import { IMessagineContext } from '../lib/common';
 import { ILobby } from '../lib/models/Lobby';
 import { IPreviousChat } from '../lib/models/PreviousChat';
 import { chatStartReply } from '../reply';
+const debug = Debug('job:createChat');
 
 const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> => {
   const lobbyUsers = await ctx.db.getAllLobbyUsers();
   if (!lobbyUsers || lobbyUsers.length === 0) {
+    debug('Lobby users not found.');
     await next();
     return;
   }
@@ -15,11 +18,13 @@ const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<
   const allChatIds = _.map(lobbyUsers, u => u.chatId);
   const allPreviousChats = await ctx.db.getUsersPreviousChats(allChatIds);
   const languageGroups = groupLobbyByLanguage(lobbyUsers);
+  debug(`${lobbyUsers.length} lobby user found with ${languageGroups.length} language group.`);
 
   const processedChatIds: number[] = [];
   const promises: Promise<any>[] = [];
   for (const languageGroup of languageGroups) {
     if (languageGroup.lobbyUsers.length <= 1) {
+      debug(`${languageGroup.languageCode} lobby doesn't have enough lobby user.`);
       continue;
     }
     const chatIds = _.map(languageGroup.lobbyUsers, u => u.chatId);
@@ -67,6 +72,7 @@ function createSingleChat(ctx: IMessagineContext, chatIds: number[], languageCod
     promises.push(leaveLobbyPromise);
     promises.push(chatStartReplyPromise);
   }
+  debug(`Chat created for ${languageCode}.`);
   return Promise.all(promises);
 }
 
