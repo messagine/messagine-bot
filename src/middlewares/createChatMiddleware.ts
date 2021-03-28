@@ -18,7 +18,7 @@ const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<
   const allChatIds = _.map(lobbyUsers, u => u.chatId);
   const allPreviousChats = await ctx.db.getUsersPreviousChats(allChatIds);
   const languageGroups = groupLobbyByLanguage(lobbyUsers);
-  debug(`${lobbyUsers.length} lobby user found with ${languageGroups.length} language group.`);
+  debug(`${lobbyUsers.length} lobby users found with ${languageGroups.length} language group.`);
 
   const processedChatIds: number[] = [];
   const promises: Promise<any>[] = [];
@@ -36,6 +36,7 @@ const createChatMiddleware = async (ctx: IMessagineContext, next: any): Promise<
 
       const opponent = findOpponent(chatId, chatIds, processedChatIds, allPreviousChats);
       if (!opponent) {
+        debug(`Opponent not found for ${languageGroup.languageCode} lobby user.`);
         continue;
       }
 
