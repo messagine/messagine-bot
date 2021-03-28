@@ -227,6 +227,7 @@ export async function createChatJob() {
 
   const update: Update = { update_id: 0 };
   await bot.handleUpdate(update);
+  return ok('Success');
 }
 
 export function toArgs(ctx: IMessagineContext) {
