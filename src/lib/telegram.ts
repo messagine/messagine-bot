@@ -210,7 +210,7 @@ function checkCommands(existingCommands: BotCommand[]) {
 }
 
 export async function webhook(event: any) {
-  debug(event);
+  debug(JSON.stringify(event));
   bot.webhookReply = true;
   // call bot commands and middlware
   botUtils();
@@ -227,6 +227,7 @@ export async function createChatJob() {
 
   const update: Update = { update_id: 0 };
   await bot.handleUpdate(update);
+  return ok('Success');
 }
 
 export function toArgs(ctx: IMessagineContext) {
