@@ -29,6 +29,8 @@ functions:
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       SENTRY_DSN: ${param:SENTRY_DSN}
       WEBHOOK_PATH: 'api'
+      DEBUG: ${param:DEBUG}
+      DEBUG_COLORS: 'no'
   webhook:
     handler: src/handler.webhookHandler
     events:
@@ -41,6 +43,8 @@ functions:
       ENDPOINT_URL: ${param:ENDPOINT_URL}
       SENTRY_DSN: ${param:SENTRY_DSN}
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
+      DEBUG: ${param:DEBUG}
+      DEBUG_COLORS: 'no'
   createChatJob:
     handler: src/handler.createChatJobHandler
     events:
@@ -51,3 +55,5 @@ functions:
       ENDPOINT_URL: ${param:ENDPOINT_URL}
       SENTRY_DSN: ${param:SENTRY_DSN}
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
+      DEBUG: ${param:DEBUG}
+      DEBUG_COLORS: 'no'
