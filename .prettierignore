@@ -1,7 +1,8 @@
 .build/
 .github/*
 .nyc_output/*
-.serverless/
+.serverless/*
+coverage/*
 node_modules/
 .env*
 package.json

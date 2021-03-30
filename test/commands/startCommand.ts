@@ -2,12 +2,12 @@ import test from 'ava';
 import sinon from 'sinon';
 import Telegraf, { Context as TelegrafContext } from 'telegraf';
 import { Message } from 'telegraf/typings/telegram-types';
-import { startCommand } from '../src/commands';
-import { IMessagineContext } from '../src/lib/common';
-import { DataHandler } from '../src/lib/dataHandler';
-import User, { IUser } from '../src/lib/models/User';
-import { dbMiddleware, userMiddleware } from '../src/middlewares';
-import { fakeI18nMiddleware, fakeMixpanelMiddleware } from './fakes';
+import { startCommand } from '../../src/commands';
+import { IMessagineContext } from '../../src/lib/common';
+import { DataHandler } from '../../src/lib/dataHandler';
+import User, { IUser } from '../../src/lib/models/User';
+import { dbMiddleware, userMiddleware } from '../../src/middlewares';
+import { fakeI18nMiddleware, fakeMixpanelMiddleware } from '../__fakes__';
 
 const BaseTextMessage: Message = {
   chat: { id: 1, type: 'private' },

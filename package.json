@@ -11,7 +11,7 @@
 		"dev": "dotenv -- nodemon -e ts -x ts-node src/lib/telegram.ts",
 		"invoke:createChat": "sls invoke local --function createChatJob",
 		"prettier": "prettier --write .",
-		"test": "ava test/* --serial",
+		"test": "ava --serial",
 		"tslint": "tslint --project tsconfig.json"
 	},
 	"dependencies": {
@@ -45,6 +45,10 @@
 	"ava": {
 		"extensions": [
 			"ts"
+		],
+		"files": [
+			"test/**/*",
+			"!test/__fakes__"
 		],
 		"require": [
 			"ts-node/register"

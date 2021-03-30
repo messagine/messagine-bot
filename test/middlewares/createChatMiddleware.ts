@@ -1,13 +1,13 @@
 import test from 'ava';
 import sinon from 'sinon';
 import Telegraf, { Telegram } from 'telegraf';
-import { IMessagineContext } from '../src/lib/common';
-import { DataHandler } from '../src/lib/dataHandler';
-import Chat, { IChat } from '../src/lib/models/Chat';
-import Lobby, { ILobby } from '../src/lib/models/Lobby';
-import PreviousChat, { IPreviousChat } from '../src/lib/models/PreviousChat';
-import { createChatMiddleware, dbMiddleware } from '../src/middlewares';
-import { fakeI18nMiddleware } from './fakes';
+import { IMessagineContext } from '../../src/lib/common';
+import { DataHandler } from '../../src/lib/dataHandler';
+import Chat, { IChat } from '../../src/lib/models/Chat';
+import Lobby, { ILobby } from '../../src/lib/models/Lobby';
+import PreviousChat, { IPreviousChat } from '../../src/lib/models/PreviousChat';
+import { createChatMiddleware, dbMiddleware } from '../../src/middlewares';
+import { fakeI18nMiddleware } from '../__fakes__';
 
 function createBot() {
   const bot = new Telegraf<IMessagineContext>('');
