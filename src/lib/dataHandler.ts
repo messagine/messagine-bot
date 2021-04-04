@@ -1,9 +1,11 @@
 import Debug from 'debug';
 import mongoose from 'mongoose';
 import config from '../config';
+import { getRelativeDays } from './common';
 import Chat, { IChat } from './models/Chat';
 import Lobby, { ILobby } from './models/Lobby';
 import PreviousChat, { IPreviousChat } from './models/PreviousChat';
+import Reminder, { IReminder } from './models/Reminder';
 import User, { IUser } from './models/User';
 const debug = Debug('lib:dataHandler');
 
@@ -25,6 +27,10 @@ export class DataHandler {
     return User.findOne({ chatId }).exec();
   }
 
+  public getActiveUsers(): Promise<IUser[] | null> {
+    return User.find({ $and: [{ blocked: { $ne: true } }, { banned: { $ne: true } }] });
+  }
+
   public addUser(chatId: number, languageCode: string): Promise<IUser> {
     return User.create({ chatId, languageCode });
   }
@@ -39,6 +45,16 @@ export class DataHandler {
 
   public userBannedChange(chatId: number, banned: boolean) {
     return User.updateOne({ chatId }, { $set: { banned } }).exec();
+  }
+
+  public updateLastActivity(chatId: number) {
+    const lastActivity = new Date();
+    const nextReminder = getRelativeDays(1);
+    return User.updateOne({ chatId }, { $set: { lastActivity, nextReminder } }).exec();
+  }
+
+  public clearReminder(chatId: number) {
+    return User.updateOne({ chatId }, { $set: { nextReminder: undefined } }).exec();
   }
 
   public addToLobby(chatId: number, languageCode: string): Promise<ILobby> {
@@ -57,6 +73,10 @@ export class DataHandler {
     return Lobby.deleteOne({ chatId }).exec();
   }
 
+  public addReminder(chatId: number, state: string): Promise<IReminder> {
+    return Reminder.create({ chatId, state });
+  }
+
   public createChat(chatIds: number[], languageCode: string): Promise<IChat> {
     return Chat.create({ chatIds, languageCode });
   }
@@ -67,6 +87,10 @@ export class DataHandler {
 
   public deleteChat(id: string) {
     return Chat.findByIdAndDelete(id).exec();
+  }
+
+  public getAllChatUsers(): Promise<IChat[] | null> {
+    return Chat.find({}).exec();
   }
 
   public createPreviousChat(chat: IChat, closedBy: number) {

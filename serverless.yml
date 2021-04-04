@@ -57,3 +57,15 @@ functions:
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       DEBUG: ${param:DEBUG}
       DEBUG_COLORS: 'no'
+  chatReminderJob:
+    handler: src/handler.chatReminderJobHandler
+    events:
+      - schedule: rate(${param:CHAT_REMINDER_SCHEDULE})
+    environment:
+      BOT_TOKEN: ${param:BOT_TOKEN}
+      DB_URL: ${param:DB_URL}
+      ENDPOINT_URL: ${param:ENDPOINT_URL}
+      SENTRY_DSN: ${param:SENTRY_DSN}
+      MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
+      DEBUG: ${param:DEBUG}
+      DEBUG_COLORS: 'no'

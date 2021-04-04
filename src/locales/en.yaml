@@ -44,3 +44,6 @@ no: No ❌
 say_hi: Say Hi 👋
 hi_message: Hi
 said_hi: You said hi
+idle_reminder: What are you waiting? How about finding chat?
+lobby_reminder: You are still in the lobby. How about changing language?
+chat_reminder: You are in a chat. How about keep talking?

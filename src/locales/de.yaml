@@ -44,3 +44,6 @@ no: Nein ❌
 say_hi: Sag Hi 👋
 hi_message: Hi
 said_hi: Du hast Hi gesagt
+idle_reminder: Worauf wartest du? Wie wäre es mit einem Chat?
+lobby_reminder: Sie sind immer noch in der Lobby. Wie wäre es mit einem Sprachwechsel?
+chat_reminder: Du bist in einem Chat. Wie wäre es weiter zu reden?

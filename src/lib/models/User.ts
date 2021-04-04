@@ -6,6 +6,8 @@ export interface IUser extends Document {
   chatId: number;
   blocked?: boolean;
   languageCode: string;
+  lastActivity?: Date;
+  nextReminder?: Date;
 }
 
 const UserSchema: Schema = new Schema({
@@ -14,6 +16,8 @@ const UserSchema: Schema = new Schema({
   blocked: { type: Boolean },
   chatId: { type: Number, required: true, unique: true },
   languageCode: { type: String, required: true },
+  lastActivity: { type: Date },
+  nextReminder: { type: Date },
 });
 
 const User: Model<IUser> = model<IUser>('User', UserSchema);
