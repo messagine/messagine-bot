@@ -23,6 +23,7 @@ const chatReminderMiddleware = async (ctx: IMessagineContext): Promise<void> => 
     return;
   }
 
+  debug(`${activeUsers.length} active users found.`);
   const lobbyChatIds = getLobbyChatIds(lobbyUsers);
   const chatChatIds = getChatChatIds(chats);
 
@@ -30,6 +31,7 @@ const chatReminderMiddleware = async (ctx: IMessagineContext): Promise<void> => 
   for (const activeUser of activeUsers) {
     const timeToSend = timeToSendReminder(activeUser);
     if (!timeToSend) {
+      debug(`Not a good time to send reminder.`);
       continue;
     }
     const userState = getUserState(activeUser.chatId, lobbyChatIds, chatChatIds);
