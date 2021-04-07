@@ -174,6 +174,11 @@ export function getInputUserInfoSafe(ctx: IMessagineContext) {
   return getUserInfoSafe(ctx, chatId);
 }
 
+export function getRelativeDays(daysToAdd: number) {
+  const today = new Date();
+  return new Date(today.getTime() + daysToAdd * 1000 * 60 * 60 * 24);
+}
+
 export interface IMessagineContext extends TelegrafContext {
   i18n?: any;
   mixpanel?: any;

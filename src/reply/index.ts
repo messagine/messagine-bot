@@ -91,6 +91,30 @@ export function chatStartReply(ctx: IMessagineContext, chatId: number) {
   );
 }
 
+export function idleReminderReply(ctx: IMessagineContext, chatId: number) {
+  return ctx.tg.sendMessage(
+    chatId,
+    ctx.i18n.t('idle_reminder'),
+    Markup.inlineKeyboard([[findChatCallbackButton(ctx)]]).extra(),
+  );
+}
+
+export function lobbyReminderReply(ctx: IMessagineContext, chatId: number) {
+  return ctx.tg.sendMessage(
+    chatId,
+    ctx.i18n.t('lobby_reminder'),
+    Markup.inlineKeyboard([[setLanguageCallbackButton(ctx)]]).extra(),
+  );
+}
+
+export function chatReminderReply(ctx: IMessagineContext, chatId: number) {
+  return ctx.tg.sendMessage(
+    chatId,
+    ctx.i18n.t('chat_reminder'),
+    Markup.inlineKeyboard([[Markup.callbackButton(ctx.i18n.t('say_hi'), actionEnum.sayHi)]]).extra(),
+  );
+}
+
 export function hiSendReply(ctx: IMessagineContext) {
   return ctx.reply(ctx.i18n.t('said_hi', { exitChatCommand: commandEnum.exitChat }));
 }

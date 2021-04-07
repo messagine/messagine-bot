@@ -23,6 +23,7 @@ const userMiddleware = async (ctx: IMessagineContext, next: any): Promise<void> 
       debug('Rejected blocked/banned request');
       return;
     }
+    await ctx.db.updateLastActivity(chatId);
   }
   await next();
 };

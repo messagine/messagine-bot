@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
-import { Handler } from 'aws-lambda';
+import { Context, Handler } from 'aws-lambda';
 import config from './config';
-import { createChatJob, status, webhook } from './lib';
+import { chatReminderJob, createChatJob, status, webhook } from './lib';
 import { ok } from './lib/responses';
 
 export const statusHandler: Handler = async () => {
@@ -20,7 +20,8 @@ export const statusHandler: Handler = async () => {
   }
 };
 
-export const webhookHandler: Handler = async (event: any) => {
+export const webhookHandler: Handler = async (event: any, context: Context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const user = getTelegramUserForSentry(event);
   Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2, environment: config.NODE_ENV });
   Sentry.setUser(user);
@@ -38,7 +39,8 @@ export const webhookHandler: Handler = async (event: any) => {
   }
 };
 
-export const createChatJobHandler: Handler = async () => {
+export const createChatJobHandler: Handler = async (_: any, context: Context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2, environment: config.NODE_ENV });
   const transaction = Sentry.startTransaction({
     name: 'Create Chat Job',
@@ -46,6 +48,23 @@ export const createChatJobHandler: Handler = async () => {
   });
   try {
     return await createChatJob();
+  } catch (e) {
+    Sentry.captureException(e);
+    return ok();
+  } finally {
+    transaction.finish();
+  }
+};
+
+export const chatReminderJobHandler: Handler = async (_: any, context: Context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  Sentry.init({ dsn: config.SENTRY_DSN, tracesSampleRate: 0.2, environment: config.NODE_ENV });
+  const transaction = Sentry.startTransaction({
+    name: 'Chat Reminder Job',
+    op: 'chatReminderJob',
+  });
+  try {
+    return await chatReminderJob();
   } catch (e) {
     Sentry.captureException(e);
     return ok();

@@ -55,6 +55,7 @@ import path from 'path';
 import {
   catcherMiddleware,
   chatMemberMiddleware,
+  chatReminderMiddleware,
   createChatMiddleware,
   dbMiddleware,
   responseTimeLoggerMiddleware,
@@ -224,6 +225,16 @@ export async function createChatJob() {
   bot.use(dbMiddleware);
   bot.use(i18n.middleware());
   bot.use(createChatMiddleware);
+
+  const update: Update = { update_id: 0 };
+  await bot.handleUpdate(update);
+  return ok('Success');
+}
+
+export async function chatReminderJob() {
+  bot.use(dbMiddleware);
+  bot.use(i18n.middleware());
+  bot.use(chatReminderMiddleware);
 
   const update: Update = { update_id: 0 };
   await bot.handleUpdate(update);

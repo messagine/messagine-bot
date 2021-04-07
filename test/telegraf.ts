@@ -82,6 +82,7 @@ test('handle existing user start', async t => {
   const user = getUser();
 
   sandbox.stub(DataHandler.prototype, 'getUser').withArgs(1).resolves(user);
+  sandbox.stub(DataHandler.prototype, 'updateLastActivity').withArgs(1).resolves();
   setupIdleUser();
   const addUserStub = getAddUserStub();
 
