@@ -45,6 +45,7 @@ functions:
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       DEBUG: ${param:DEBUG}
       DEBUG_COLORS: 'no'
+      NEXT_REMINDER_DAYS: ${param:NEXT_REMINDER_DAYS}
   createChatJob:
     handler: src/handler.createChatJobHandler
     events:
@@ -57,6 +58,7 @@ functions:
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       DEBUG: ${param:DEBUG}
       DEBUG_COLORS: 'no'
+      NEXT_REMINDER_DAYS: ${param:NEXT_REMINDER_DAYS}
   chatReminderJob:
     handler: src/handler.chatReminderJobHandler
     events:
@@ -69,3 +71,4 @@ functions:
       MIXPANEL_TOKEN: ${param:MIXPANEL_TOKEN}
       DEBUG: ${param:DEBUG}
       DEBUG_COLORS: 'no'
+      NEXT_REMINDER_DAYS: ${param:NEXT_REMINDER_DAYS}

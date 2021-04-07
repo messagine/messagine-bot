@@ -49,7 +49,7 @@ export class DataHandler {
 
   public updateLastActivity(chatId: number) {
     const lastActivity = new Date();
-    const nextReminder = getRelativeDays(1);
+    const nextReminder = getRelativeDays(config.NEXT_REMINDER_DAYS);
     return User.updateOne({ chatId }, { $set: { lastActivity, nextReminder } }).exec();
   }
 
