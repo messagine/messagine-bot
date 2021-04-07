@@ -16,6 +16,12 @@ function getUser(): IUser {
   return user;
 }
 
+function stubReminderUser() {
+  const user = getUser();
+  user.nextReminder = getRelativeDays(-1);
+  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+}
+
 function createLobby(chatId: number, languageCode: string): ILobby {
   const lobby = new Lobby();
   lobby.chatId = chatId;
@@ -82,10 +88,7 @@ test('handle not reminder user', async t => {
 });
 
 test('handle idle user', async t => {
-  const user = getUser();
-  user.nextReminder = getRelativeDays(-1);
-
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+  stubReminderUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
 
@@ -98,11 +101,9 @@ test('handle idle user', async t => {
 });
 
 test('handle lobby user', async t => {
-  const user = getUser();
-  user.nextReminder = getRelativeDays(-1);
   const lobby = createLobby(1, 'en');
 
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+  stubReminderUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves([lobby]);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
 
@@ -115,11 +116,9 @@ test('handle lobby user', async t => {
 });
 
 test('handle chat user', async t => {
-  const user = getUser();
-  user.nextReminder = getRelativeDays(-1);
   const chat = createChat([1, 2], 'en');
 
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+  stubReminderUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves([chat]);
 
