@@ -44,6 +44,6 @@ no: Hayır ❌
 say_hi: Selam yaz 👋
 hi_message: Selam
 said_hi: Selam yazdın
-idle_reminder: Ne bekliyorsun? Konuşma bulmaya ne dersin?
+idle_reminder: Konuşma bulmaya ne dersin?
 lobby_reminder: Hala lobidesin. Dil değiştirmeye ne dersin?
-chat_reminder: Konuşmadasın. Sohbete devam etmeye ne dersin?
+chat_reminder: Hala konuşmadasın. Sohbete devam etmeye ne dersin?
