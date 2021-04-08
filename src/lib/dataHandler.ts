@@ -46,11 +46,11 @@ export class DataHandler {
   }
 
   public userBlockedChange(chatId: number, blocked: boolean) {
-    return User.updateOne({ chatId }, { $set: { blocked } }).exec();
+    return User.updateOne({ chatId }, { $set: { blocked, nextReminder: undefined } }).exec();
   }
 
   public userBannedChange(chatId: number, banned: boolean) {
-    return User.updateOne({ chatId }, { $set: { banned } }).exec();
+    return User.updateOne({ chatId }, { $set: { banned, nextReminder: undefined } }).exec();
   }
 
   public updateLastActivity(chatId: number) {
