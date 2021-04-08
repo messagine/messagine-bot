@@ -15,6 +15,7 @@ async function onDetail(ctx: IMessagineContext) {
       banned: inputUserInfo.user.banned === true,
       blocked: inputUserInfo.user.blocked === true,
       languageCode: inputUserInfo.user.languageCode,
+      lastActivity: inputUserInfo.user.lastActivity,
       state: inputUserInfo.state,
     }),
   );

@@ -28,7 +28,7 @@ language_not_changed: Language not changed.
 language_not_changed_in_chat: Language change in chat is not allowed.
 cancel_find_not_lobby: You are not in the lobby.
 help_reply: We are here to help
-detail_reply: 'Language: ${languageCode}\nState: ${state}\nBanned: ${banned}\nBlocked: ${blocked}'
+detail_reply: 'Language: ${languageCode}\nState: ${state}\nBanned: ${banned}\nBlocked: ${blocked}\nLast Activity: ${lastActivity}'
 unban_reply: User Ban removed
 ban_reply: User Banned
 not_admin_error: You are not admin
@@ -47,3 +47,7 @@ said_hi: You said hi
 idle_reminder: How about finding chat?
 lobby_reminder: You are still in the lobby. How about changing language?
 chat_reminder: You are still in a chat. How about keep talking?
+user_status_blocked: User blocked the application.
+user_status_banned: User is banned.
+admin_chat_started: Admin chat started.
+exit_admin_chat_fail: Unable to exit admin chat.

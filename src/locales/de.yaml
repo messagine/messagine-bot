@@ -28,7 +28,7 @@ language_not_changed: Sprache nicht geändert.
 language_not_changed_in_chat: Sprachänderung im Chat ist nicht erlaubt.
 cancel_find_not_lobby: Du bist nicht in der Lobby.
 help_reply: Wir sind da um dir zu helfen
-detail_reply: 'Sprache: ${languageCode}\nZustand: ${state}\nGebannt: ${banned}\nBlockiert: ${blocked}'
+detail_reply: 'Sprache: ${languageCode}\nZustand: ${state}\nGebannt: ${banned}\nBlockiert: ${blocked}\nLetzte Aktivität: ${lastActivity}'
 unban_reply: Nutzerverbannung aufgehoben
 ban_reply: Nutzer verbannt
 not_admin_error: Du bist nicht der Admin
@@ -47,3 +47,7 @@ said_hi: Du hast Hi gesagt
 idle_reminder: Versuche, einen Chat zu finden!
 lobby_reminder: Sie sind immer noch in der Lobby. Wie wäre es mit einem Sprachwechsel?
 chat_reminder: Sie befinden sich noch in einem Chat. Wie wäre es weiter zu reden?
+user_status_blocked: Benutzer hat die Anwendung blockiert.
+user_status_banned: Benutzer ist gesperrt.
+admin_chat_started: Der Admin-Chat wurde gestartet.
+exit_admin_chat_fail: Der Admin-Chat kann nicht beendet werden.

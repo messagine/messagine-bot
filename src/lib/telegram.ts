@@ -9,6 +9,7 @@ import { BotCommand, Update } from 'telegraf/typings/telegram-types';
 import {
   aboutAction,
   aboutCommand,
+  adminChatCommand,
   banCommand,
   cancelFindAction,
   cancelFindCommand,
@@ -88,6 +89,7 @@ function botUtils() {
   bot.use(rateLimit(limitConfig));
 
   const changeLanguageRegex = new RegExp(`${actionEnum.changeLanguage}:(.+)`);
+  const adminChatCommandRegex = new RegExp(`/${adminCommandEnum.adminChat} (.+)`);
   const banCommandRegex = new RegExp(`/${adminCommandEnum.ban} (.+)`);
   const detailCommandRegex = new RegExp(`/${adminCommandEnum.detail} (.+)`);
   const unbanCommandRegex = new RegExp(`/${adminCommandEnum.unban} (.+)`);
@@ -112,6 +114,7 @@ function botUtils() {
     .action(commandEnum.cancelFind, cancelFindAction())
     .action(actionEnum.deleteMessage, deleteMessageAction())
     .action(actionEnum.sayHi, sayHiAction())
+    .hears(adminChatCommandRegex, adminChatCommand())
     .hears(banCommandRegex, banCommand())
     .hears(detailCommandRegex, detailCommand())
     .hears(unbanCommandRegex, unbanCommand())

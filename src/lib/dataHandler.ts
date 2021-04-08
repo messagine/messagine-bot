@@ -81,6 +81,10 @@ export class DataHandler {
     return Chat.create({ chatIds, languageCode });
   }
 
+  public createAdminChat(chatIds: number[], languageCode: string): Promise<IChat> {
+    return Chat.create({ chatIds, languageCode, admin: true });
+  }
+
   public findExistingChat(chatId: number): Promise<IChat | null> {
     return Chat.findOne({ chatIds: chatId }).exec();
   }
@@ -95,6 +99,7 @@ export class DataHandler {
 
   public createPreviousChat(chat: IChat, closedBy: number) {
     return PreviousChat.create({
+      admin: chat.admin,
       chatIds: chat.chatIds,
       closedBy,
       languageCode: chat.languageCode,
