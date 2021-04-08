@@ -11,44 +11,31 @@ const debug = Debug('job:chatReminder');
 
 const chatReminderMiddleware = async (ctx: IMessagineContext): Promise<void> => {
   debug(`Chat reminder started.`);
-  const activeUsersPromise = ctx.db.getActiveUsers();
+  const remindableUsersPromise = ctx.db.getRemindableUsers();
   const lobbyUsersPromise = ctx.db.getAllLobbyUsers();
   const chatsPromise = ctx.db.getAllChatUsers();
-  const result = await Promise.all([activeUsersPromise, lobbyUsersPromise, chatsPromise]);
-  const activeUsers = result[0];
+  const result = await Promise.all([remindableUsersPromise, lobbyUsersPromise, chatsPromise]);
+  const remindableUsers = result[0];
   const lobbyUsers = result[1];
   const chats = result[2];
-  if (!activeUsers || activeUsers.length === 0) {
-    debug('Active users not found.');
+  if (!remindableUsers || remindableUsers.length === 0) {
+    debug('Remindable users not found.');
     return;
   }
 
-  debug(`${activeUsers.length} active users found.`);
+  debug(`${remindableUsers.length} remindable users found.`);
   const lobbyChatIds = getLobbyChatIds(lobbyUsers);
   const chatChatIds = getChatChatIds(chats);
 
   const promises: Promise<any>[] = [];
-  for (const activeUser of activeUsers) {
-    const timeToSend = timeToSendReminder(activeUser);
-    if (!timeToSend) {
-      debug(`Not a good time to send reminder.`);
-      continue;
-    }
-    const userState = getUserState(activeUser.chatId, lobbyChatIds, chatChatIds);
-    const sendReminderPromise = sendReminder(ctx, activeUser, userState);
+  for (const remindableUser of remindableUsers) {
+    const userState = getUserState(remindableUser.chatId, lobbyChatIds, chatChatIds);
+    const sendReminderPromise = sendReminder(ctx, remindableUser, userState);
     promises.push(sendReminderPromise);
   }
 
   await Promise.all(promises);
 };
-
-function timeToSendReminder(user: IUser): boolean {
-  const nextReminder = user.nextReminder;
-  if (!nextReminder) {
-    return false;
-  }
-  return nextReminder < new Date();
-}
 
 async function sendReminder(ctx: IMessagineContext, user: IUser, state: string): Promise<any[]> {
   ctx.i18n.locale(user.languageCode);
