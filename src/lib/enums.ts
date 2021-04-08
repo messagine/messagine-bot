@@ -32,6 +32,7 @@ export const commandEnum = {
 };
 
 export const adminCommandEnum = {
+  adminChat: 'admin_chat',
   ban: 'ban',
   detail: 'detail',
   unban: 'unban',

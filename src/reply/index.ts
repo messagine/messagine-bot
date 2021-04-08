@@ -73,6 +73,10 @@ export function exitChatReply(ctx: IMessagineContext) {
   );
 }
 
+export function exitAdminChatFailReply(ctx: IMessagineContext) {
+  return ctx.reply(ctx.i18n.t('exit_admin_chat_fail'));
+}
+
 export function exitChatToOpponent(ctx: IMessagineContext, opponentChatId: number) {
   return ctx.tg.sendMessage(
     opponentChatId,

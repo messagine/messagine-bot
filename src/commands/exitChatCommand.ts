@@ -6,7 +6,7 @@ import {
   moveChatToPreviousChats,
 } from '../lib/common';
 import { actionEnum, commandEnum, eventTypeEnum } from '../lib/enums';
-import { exitChatAreYouSureReply, exitChatReply, exitChatToOpponent } from '../reply';
+import { exitAdminChatFailReply, exitChatAreYouSureReply, exitChatReply, exitChatToOpponent } from '../reply';
 
 const exitChatCommand = () => (ctx: IMessagineContext) => {
   const mixPanelPromise = ctx.mixpanel.track(`${eventTypeEnum.command}.${commandEnum.exitChat}`);
@@ -31,6 +31,9 @@ const exitChatSureAction = () => (ctx: IMessagineContext) => {
 function onExitChatSure(ctx: IMessagineContext) {
   const chatId = getChatId(ctx);
   const existingChat = getExistingChat(ctx);
+  if (existingChat.admin && !ctx.user?.admin) {
+    return exitAdminChatFailReply(ctx);
+  }
   const opponentChatId = extractOpponentChatId(ctx, existingChat);
   const sendMessagePromise = exitChatReply(ctx);
 

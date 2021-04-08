@@ -28,7 +28,7 @@ language_not_changed: Dil değişmedi.
 language_not_changed_in_chat: Konuşmada dil değişikliği yapılamaz.
 cancel_find_not_lobby: Lobide değilsin
 help_reply: Yardım için buradayız
-detail_reply: 'Dil: ${languageCode}\nDurum: ${state}\nBan: ${banned}\nBlok: ${blocked}'
+detail_reply: 'Dil: ${languageCode}\nDurum: ${state}\nBan: ${banned}\nBlok: ${blocked}\nSon Aktivite: ${lastActivity}'
 unban_reply: Kullanıcı Banı Kaldırıldı
 ban_reply: Kullanıcı Banlandı
 not_admin_error: Yönetici Değilsiniz
@@ -47,3 +47,7 @@ said_hi: Selam yazdın
 idle_reminder: Konuşma bulmaya ne dersin?
 lobby_reminder: Hala lobidesin. Dil değiştirmeye ne dersin?
 chat_reminder: Hala konuşmadasın. Sohbete devam etmeye ne dersin?
+user_status_blocked: Kullanıcı uygulamayı bloklamış.
+user_status_banned: Kullanıcı banlanmış.
+admin_chat_started: Yönetici konuşması başladı.
+exit_admin_chat_fail: Yöneticiyle olan konuşma sonlandırılamaz.

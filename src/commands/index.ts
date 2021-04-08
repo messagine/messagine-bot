@@ -1,4 +1,5 @@
 export * from './aboutCommand';
+export * from './adminChatCommand';
 export * from './banCommand';
 export * from './cancelFindCommand';
 export * from './deleteMessageAction';
