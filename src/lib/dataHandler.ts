@@ -31,6 +31,12 @@ export class DataHandler {
     return User.find({ $and: [{ blocked: { $ne: true } }, { banned: { $ne: true } }] });
   }
 
+  public getRemindableUsers(): Promise<IUser[] | null> {
+    return User.find({
+      $and: [{ nextReminder: { $lte: new Date() } }, { blocked: { $ne: true } }, { banned: { $ne: true } }],
+    });
+  }
+
   public addUser(chatId: number, languageCode: string): Promise<IUser> {
     return User.create({ chatId, languageCode });
   }

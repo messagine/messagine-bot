@@ -16,10 +16,10 @@ function getUser(): IUser {
   return user;
 }
 
-function stubReminderUser() {
+function stubRemindableUser() {
   const user = getUser();
   user.nextReminder = getRelativeDays(-1);
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+  sandbox.stub(DataHandler.prototype, 'getRemindableUsers').resolves([user]);
 }
 
 function createLobby(chatId: number, languageCode: string): ILobby {
@@ -59,23 +59,8 @@ test.afterEach(() => {
   sandbox.restore();
 });
 
-test('handle not active users', async t => {
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves(null);
-  sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
-  sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
-
-  const bot = createBot();
-  await bot.handleUpdate({ update_id: 0 });
-
-  t.true(true);
-  sinon.assert.notCalled(clearReminderStub);
-  sinon.assert.notCalled(addReminderStub);
-});
-
-test('handle not reminder user', async t => {
-  const user = getUser();
-
-  sandbox.stub(DataHandler.prototype, 'getActiveUsers').resolves([user]);
+test('handle not remindable users', async t => {
+  sandbox.stub(DataHandler.prototype, 'getRemindableUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
 
@@ -88,7 +73,7 @@ test('handle not reminder user', async t => {
 });
 
 test('handle idle user', async t => {
-  stubReminderUser();
+  stubRemindableUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
 
@@ -103,7 +88,7 @@ test('handle idle user', async t => {
 test('handle lobby user', async t => {
   const lobby = createLobby(1, 'en');
 
-  stubReminderUser();
+  stubRemindableUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves([lobby]);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves(null);
 
@@ -118,7 +103,7 @@ test('handle lobby user', async t => {
 test('handle chat user', async t => {
   const chat = createChat([1, 2], 'en');
 
-  stubReminderUser();
+  stubRemindableUser();
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(null);
   sandbox.stub(DataHandler.prototype, 'getAllChatUsers').resolves([chat]);
 
