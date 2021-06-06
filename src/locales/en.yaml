@@ -51,3 +51,4 @@ user_status_blocked: User blocked the application.
 user_status_banned: User is banned.
 admin_chat_started: Admin chat started.
 exit_admin_chat_fail: Unable to exit admin chat.
+slow_down_warning: Please slow down

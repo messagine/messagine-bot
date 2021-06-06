@@ -179,6 +179,10 @@ export function getRelativeDays(daysToAdd: number) {
   return new Date(today.getTime() + daysToAdd * 1000 * 60 * 60 * 24);
 }
 
+export function onRateLimitExceeded(ctx: IMessagineContext) {
+  return ctx.reply(ctx.i18n.t('slow_down_warning'));
+}
+
 export interface IMessagineContext extends TelegrafContext {
   i18n?: any;
   mixpanel?: any;

@@ -48,7 +48,7 @@ import {
   onVoiceMessage,
 } from '../message';
 import resource from '../resource';
-import { IMessagineContext } from './common';
+import { IMessagineContext, onRateLimitExceeded } from './common';
 import { actionEnum, adminCommandEnum, commandEnum } from './enums';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
@@ -74,7 +74,7 @@ const i18n = new TelegrafI18n({
 function botUtils() {
   const limitConfig = {
     limit: 3,
-    onLimitExceeded: (ctx: IMessagineContext) => ctx.reply('Please slow down'),
+    onLimitExceeded: onRateLimitExceeded,
     window: 3000,
   };
 

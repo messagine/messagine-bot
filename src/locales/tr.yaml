@@ -51,3 +51,4 @@ user_status_blocked: Kullanıcı uygulamayı bloklamış.
 user_status_banned: Kullanıcı banlanmış.
 admin_chat_started: Yönetici konuşması başladı.
 exit_admin_chat_fail: Yöneticiyle olan konuşma sonlandırılamaz.
+slow_down_warning: Lütfen yavaş ol
