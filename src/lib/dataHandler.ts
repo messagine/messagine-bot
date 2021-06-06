@@ -28,13 +28,13 @@ export class DataHandler {
   }
 
   public getActiveUsers(): Promise<IUser[] | null> {
-    return User.find({ $and: [{ blocked: { $ne: true } }, { banned: { $ne: true } }] });
+    return User.find({ $and: [{ blocked: { $ne: true } }, { banned: { $ne: true } }] }).exec();
   }
 
   public getRemindableUsers(): Promise<IUser[] | null> {
     return User.find({
       $and: [{ nextReminder: { $lte: new Date() } }, { blocked: { $ne: true } }, { banned: { $ne: true } }],
-    });
+    }).exec();
   }
 
   public addUser(chatId: number, languageCode: string): Promise<IUser> {
