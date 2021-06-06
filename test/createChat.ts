@@ -84,7 +84,7 @@ test('handle users with chat', async t => {
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(lobbies);
   sandbox.stub(DataHandler.prototype, 'getUsersPreviousChats').resolves(null);
   const leaveLobbyStub = sandbox.stub(DataHandler.prototype, 'leaveLobby');
-  leaveLobbyStub.resolves(null);
+  leaveLobbyStub.resolves();
   const chat = createChat([1, 2], 'en');
   createChatStub.resolves(chat);
 
@@ -105,7 +105,7 @@ test('handle users with previous chat and chat', async t => {
   const previousChat = createPreviousChat([1, 2], 1, 'en');
   sandbox.stub(DataHandler.prototype, 'getUsersPreviousChats').resolves([previousChat]);
   const leaveLobbyStub = sandbox.stub(DataHandler.prototype, 'leaveLobby');
-  leaveLobbyStub.resolves(null);
+  leaveLobbyStub.resolves();
   const chat = createChat([1, 3], 'en');
   createChatStub.withArgs([1, 3], 'en').resolves(chat);
 
@@ -126,7 +126,7 @@ test('handle users with multiple chats', async t => {
   sandbox.stub(DataHandler.prototype, 'getAllLobbyUsers').resolves(lobbies);
   sandbox.stub(DataHandler.prototype, 'getUsersPreviousChats').resolves(null);
   const leaveLobbyStub = sandbox.stub(DataHandler.prototype, 'leaveLobby');
-  leaveLobbyStub.resolves(null);
+  leaveLobbyStub.resolves();
   const enChat = createChat([1, 2], 'en');
   const deChat = createChat([3, 4], 'de');
   createChatStub.resolves(enChat).resolves(deChat);
@@ -147,7 +147,7 @@ test('handle users with previous chat', async t => {
   const previousChat = createPreviousChat([1, 2], 1, 'en');
   sandbox.stub(DataHandler.prototype, 'getUsersPreviousChats').resolves([previousChat]);
   const leaveLobbyStub = sandbox.stub(DataHandler.prototype, 'leaveLobby');
-  leaveLobbyStub.resolves(null);
+  leaveLobbyStub.resolves();
 
   const bot = createBot();
   await bot.handleUpdate({ update_id: 0 });
