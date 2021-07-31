@@ -1,6 +1,6 @@
 {
 	"name": "messagine-bot",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Telegram chat bot https://t.me/MessagineBot",
 	"main": "handler.ts",
 	"author": "Messagine",
