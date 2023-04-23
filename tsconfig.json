@@ -11,7 +11,6 @@
     "resolveJsonModule": true,
     "lib": ["es2015"],
     "rootDir": "./",
-
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
