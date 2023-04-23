@@ -2,7 +2,7 @@ service: messagine-bot
 app: messagine
 org: suphero
 
-frameworkVersion: '2'
+frameworkVersion: '3'
 
 plugins:
   - serverless-plugin-typescript
