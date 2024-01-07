@@ -8,4 +8,3 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/messagine/messagine-bot/badge.svg)](https://snyk.io/test/github/messagine/messagine-bot)
 
 Secret messaging with anyone in the world via Telegram. [Click here](https://t.me/MessagineBot) to start messaging.
-
