@@ -27,10 +27,10 @@ export const helpCallbackButton = (ctx: IMessagineContext) =>
   Markup.callbackButton(ctx.i18n.t('help_command_desc'), commandEnum.help);
 
 export const websiteUrlButton = (ctx: IMessagineContext) =>
-  Markup.urlButton(ctx.i18n.t('our_website'), 'https://messaginebot.com');
+  Markup.urlButton(ctx.i18n.t('our_website'), 'https://messagine.netlify.app');
 
 export const contactUrlButton = (ctx: IMessagineContext) =>
-  Markup.urlButton(ctx.i18n.t('contact'), 'https://messaginebot.com/contact');
+  Markup.urlButton(ctx.i18n.t('contact'), 'https://messagine.netlify.app/contact');
 
 export function lobbyWaitReply(ctx: IMessagineContext) {
   return ctx.reply(

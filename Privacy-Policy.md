@@ -1,3 +1,3 @@
 # Privacy Policy
 
-Moved to [messaginebot.com](https://messaginebot.com/privacy-policy/)
+Moved to [messagine.netlify.app](https://messagine.netlify.app/privacy-policy/)
