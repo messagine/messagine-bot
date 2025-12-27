@@ -1,6 +1,7 @@
 
 import express from 'express';
 import cron from 'node-cron';
+import config from './config';
 import { chatReminderJob, createChatJob, setupBot, webhook } from './lib/telegram';
 
 const app = express();
@@ -17,7 +18,8 @@ app.get('/', (_, res) => {
 });
 
 // Webhook handler
-app.post('/api', async (req, res) => {
+const webhookPath = config.WEBHOOK_PATH ? (config.WEBHOOK_PATH.startsWith('/') ? config.WEBHOOK_PATH : `/${config.WEBHOOK_PATH}`) : '/api';
+app.post(webhookPath, async (req, res) => {
     try {
         // The previous handler passed 'event', where event.body was a string. 
         // Express with express.json() parses body to object.
@@ -63,7 +65,7 @@ cron.schedule(chatReminderSchedule, async () => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`Webhook endpoint: /api`);
+    console.log(`Webhook endpoint: ${webhookPath}`);
     console.log(`Create Chat Schedule: ${createChatSchedule}`);
     console.log(`Chat Reminder Schedule: ${chatReminderSchedule}`);
 });

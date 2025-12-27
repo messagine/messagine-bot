@@ -6,10 +6,12 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "outDir": ".build",
+    "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["es2015"],
+    "lib": [
+      "es2015"
+    ],
     "rootDir": "./",
     "noImplicitThis": true,
     "noImplicitReturns": true,

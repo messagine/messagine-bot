@@ -2,10 +2,10 @@
 	"name": "messagine-bot",
 	"version": "1.0.1",
 	"description": "Telegram chat bot https://t.me/MessagineBot",
-	"main": "dist/index.js",
+	"main": "dist/src/index.js",
 	"scripts": {
 		"build": "tsc",
-		"start": "node dist/index.js",
+		"start": "node dist/src/index.js",
 		"dev": "nodemon -e ts -x ts-node src/index.ts",
 		"test": "ava test/* --serial",
 		"lint": "tslint --project tsconfig.json"
