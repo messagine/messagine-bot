@@ -63,7 +63,7 @@ import {
   userMiddleware,
 } from '../middlewares';
 
-const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
+export const bot = new Telegraf<IMessagineContext>(config.BOT_TOKEN);
 const mixpanel = new TelegrafMixpanel(config.MIXPANEL_TOKEN);
 const i18n = new TelegrafI18n({
   defaultLanguage: config.DEFAULT_LANGUAGE_CODE,
@@ -71,7 +71,7 @@ const i18n = new TelegrafI18n({
   directory: path.resolve(__dirname, '../locales'),
 });
 
-function botUtils() {
+export function setupBot() {
   const limitConfig = {
     limit: 3,
     onLimitExceeded: onRateLimitExceeded,
@@ -217,7 +217,6 @@ export async function webhook(event: any) {
   debug(JSON.stringify(event));
   bot.webhookReply = true;
   // call bot commands and middlware
-  botUtils();
 
   const body = JSON.parse(event.body);
   await bot.handleUpdate(body);
@@ -267,6 +266,6 @@ if (config.IS_DEV) {
 async function startDevelopment() {
   await syncCommands();
   await localBot();
-  botUtils();
+  setupBot();
   await bot.launch();
 }
