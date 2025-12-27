@@ -2,13 +2,24 @@
 import express from 'express';
 import cron from 'node-cron';
 import config from './config';
-import { chatReminderJob, createChatJob, setupBot, webhook } from './lib/telegram';
+import { chatReminderJob, createChatJob, setupBot, syncCommands, syncWebhook, webhook } from './lib/telegram';
 
 const app = express();
 app.use(express.json());
 
 // Initialize bot middleware/commands
 setupBot();
+
+// Sync webhook and commands with Telegram
+(async () => {
+    try {
+        await syncWebhook();
+        await syncCommands();
+        console.log('Webhook and commands synced successfully');
+    } catch (error) {
+        console.error('Failed to sync webhook/commands:', error);
+    }
+})();
 
 const PORT = process.env.PORT || 3000;
 
