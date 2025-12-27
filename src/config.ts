@@ -7,6 +7,5 @@ export default {
   MIXPANEL_TOKEN: process.env.MIXPANEL_TOKEN || '',
   NEXT_REMINDER_DAYS: parseInt(process.env.NEXT_REMINDER_DAYS || '1', 10),
   NODE_ENV: process.env.NODE_ENV || 'development',
-  SENTRY_DSN: process.env.SENTRY_DSN || '',
   WEBHOOK_PATH: process.env.WEBHOOK_PATH || '',
 };
