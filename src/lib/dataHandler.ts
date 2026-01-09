@@ -15,11 +15,7 @@ export class DataHandler {
       debug('Database already connected');
       return;
     }
-    await mongoose.connect(config.DB_URL, {
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(config.DB_URL);
     debug('New database connection complete');
   }
 

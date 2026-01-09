@@ -18,11 +18,8 @@ function onStart(ctx: IMessagineContext) {
     const chatId = getChatId(ctx);
     const language = getLanguage(ctx);
     const mixpanelPeopleSetPromise = ctx.mixpanel.people.set({
-      first_name: ctx.from?.first_name,
       language_code: language.lang,
-      last_name: ctx.from?.last_name,
       signup_date: new Date(),
-      username: ctx.from?.username,
     });
     const addUserPromise = ctx.db.addUser(chatId, language.lang);
     const replyPromise = newUserReply(ctx, language.native_name);
