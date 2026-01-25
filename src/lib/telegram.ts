@@ -1,11 +1,14 @@
 import Debug from 'debug';
-import Telegraf, { Extra } from 'telegraf';
+import Telegraf, { Extra, Markup } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
 // tslint:disable-next-line: no-var-requires
 const TelegrafMixpanel = require('telegraf-mixpanel');
 // tslint:disable-next-line: no-var-requires
 const rateLimit = require('telegraf-ratelimit');
-import { BotCommand, Update } from 'telegraf/typings/telegram-types';
+import { BotCommand } from 'telegraf/typings/telegram-types';
+import { DataHandler } from './dataHandler';
+import { ILobby } from './models/Lobby';
+import { IPreviousChat } from './models/PreviousChat';
 import {
   aboutAction,
   aboutCommand,
@@ -49,15 +52,14 @@ import {
 } from '../message';
 import resource from '../resource';
 import { IMessagineContext, onRateLimitExceeded } from './common';
-import { actionEnum, adminCommandEnum, commandEnum } from './enums';
+import { actionEnum, adminCommandEnum, commandEnum, userStateEnum } from './enums';
+import { IUser } from './models/User';
 import { ok } from './responses';
 const debug = Debug('lib:telegram');
 import path from 'path';
 import {
   catcherMiddleware,
   chatMemberMiddleware,
-  chatReminderMiddleware,
-  createChatMiddleware,
   dbMiddleware,
   responseTimeLoggerMiddleware,
   userMiddleware,
@@ -225,23 +227,210 @@ export async function webhook(event: any) {
 }
 
 export async function createChatJob() {
-  bot.use(dbMiddleware);
-  bot.use(i18n.middleware());
-  bot.use(createChatMiddleware);
+  const debug = Debug('job:createChat');
+  debug('Create chat job started.');
 
-  const update: Update = { update_id: 0 };
-  await bot.handleUpdate(update);
+  const db = new DataHandler();
+  await db.connect();
+
+  const lobbyUsers = await db.getAllLobbyUsers();
+  if (!lobbyUsers || lobbyUsers.length === 0) {
+    debug('Lobby users not found.');
+    return ok('No lobby users');
+  }
+
+  const allChatIds = lobbyUsers.map(u => u.chatId);
+  const allPreviousChats = await db.getUsersPreviousChats(allChatIds);
+  const languageGroups = groupLobbyByLanguage(lobbyUsers);
+  debug(`${lobbyUsers.length} lobby users found with ${languageGroups.length} language group.`);
+
+  const processedChatIds: number[] = [];
+  const promises: Promise<any>[] = [];
+
+  for (const languageGroup of languageGroups) {
+    if (languageGroup.lobbyUsers.length <= 1) {
+      debug(`${languageGroup.languageCode} lobby doesn't have enough lobby user.`);
+      continue;
+    }
+    const chatIds = languageGroup.lobbyUsers.map(u => u.chatId);
+    for (const chatId of chatIds) {
+      if (processedChatIds.includes(chatId)) {
+        continue;
+      }
+      processedChatIds.push(chatId);
+
+      const opponent = findOpponentForChat(chatId, chatIds, processedChatIds, allPreviousChats);
+      if (!opponent) {
+        debug(`Opponent not found for ${languageGroup.languageCode} lobby user.`);
+        continue;
+      }
+
+      processedChatIds.push(opponent);
+      const createChatPromise = createSingleChatDirect(db, [chatId, opponent], languageGroup.languageCode);
+      promises.push(createChatPromise);
+    }
+  }
+
+  await Promise.all(promises);
   return ok('Success');
 }
 
-export async function chatReminderJob() {
-  bot.use(dbMiddleware);
-  bot.use(i18n.middleware());
-  bot.use(chatReminderMiddleware);
+function groupLobbyByLanguage(lobbyUsers: ILobby[]) {
+  const groups: { [key: string]: ILobby[] } = {};
+  for (const user of lobbyUsers) {
+    if (!groups[user.languageCode]) {
+      groups[user.languageCode] = [];
+    }
+    groups[user.languageCode].push(user);
+  }
+  return Object.keys(groups).map(key => ({ languageCode: key, lobbyUsers: groups[key] }));
+}
 
-  const update: Update = { update_id: 0 };
-  await bot.handleUpdate(update);
+function findOpponentForChat(
+  chatId: number,
+  chatIds: number[],
+  processedChatIds: number[],
+  allPreviousChats: IPreviousChat[] | null,
+): number | undefined {
+  const previousOpponents = getPreviousOpponents(chatId, allPreviousChats);
+  const available = chatIds.filter(
+    id => id !== chatId && !processedChatIds.includes(id) && !previousOpponents.includes(id),
+  );
+  return available[0];
+}
+
+function getPreviousOpponents(chatId: number, allPreviousChats: IPreviousChat[] | null): number[] {
+  const previousOpponents: number[] = [];
+  if (!allPreviousChats) {
+    return previousOpponents;
+  }
+  for (const previousChat of allPreviousChats) {
+    if (!previousChat.chatIds.includes(chatId)) {
+      continue;
+    }
+    const opponents = previousChat.chatIds.filter(id => id !== chatId);
+    if (opponents.length === 1) {
+      previousOpponents.push(opponents[0]);
+    }
+  }
+  return previousOpponents;
+}
+
+async function createSingleChatDirect(db: DataHandler, chatIds: number[], languageCode: string): Promise<void> {
+  const debug = Debug('job:createChat');
+  if (chatIds.length !== 2) {
+    debug(`Invalid number of chat IDs: ${chatIds.length}`);
+    return;
+  }
+
+  await db.createChat(chatIds, languageCode);
+
+  const chatStartMessage = i18n.t(languageCode, 'chat_start', { exitChatCommand: commandEnum.exitChat });
+  const sayHiButton = Markup.callbackButton(i18n.t(languageCode, 'say_hi'), actionEnum.sayHi);
+  const exitChatButton = Markup.callbackButton(i18n.t(languageCode, 'exit_chat_command_desc'), commandEnum.exitChat);
+  const keyboard = Markup.inlineKeyboard([[sayHiButton, exitChatButton]]).extra();
+
+  for (const chatId of chatIds) {
+    await db.leaveLobby(chatId);
+    try {
+      await bot.telegram.sendMessage(chatId, chatStartMessage, keyboard);
+    } catch (err: any) {
+      debug(`Failed to send chat start message to ${chatId}: ${err.message}`);
+    }
+  }
+  debug(`Chat created for ${languageCode}.`);
+}
+
+export async function chatReminderJob() {
+  const debug = Debug('job:chatReminder');
+  debug('Chat reminder job started.');
+
+  const db = new DataHandler();
+  await db.connect();
+
+  const [remindableUsers, lobbyUsers, chats] = await Promise.all([
+    db.getRemindableUsers(),
+    db.getAllLobbyUsers(),
+    db.getAllChatUsers(),
+  ]);
+
+  if (!remindableUsers || remindableUsers.length === 0) {
+    debug('Remindable users not found.');
+    return ok('No remindable users');
+  }
+
+  debug(`${remindableUsers.length} remindable users found.`);
+
+  const lobbyChatIds = lobbyUsers ? lobbyUsers.map(l => l.chatId) : [];
+  const chatChatIds: number[] = [];
+  if (chats) {
+    for (const chat of chats) {
+      chatChatIds.push(...chat.chatIds);
+    }
+  }
+
+  const promises: Promise<any>[] = [];
+  for (const user of remindableUsers) {
+    const userState = getUserStateForReminder(user.chatId, lobbyChatIds, chatChatIds);
+    const sendReminderPromise = sendReminderDirect(db, user, userState);
+    promises.push(sendReminderPromise);
+  }
+
+  await Promise.all(promises);
   return ok('Success');
+}
+
+function getUserStateForReminder(chatId: number, lobbyChatIds: number[], chatChatIds: number[]): string {
+  if (lobbyChatIds.includes(chatId)) {
+    return userStateEnum.lobby;
+  } else if (chatChatIds.includes(chatId)) {
+    return userStateEnum.chat;
+  } else {
+    return userStateEnum.idle;
+  }
+}
+
+async function sendReminderDirect(db: DataHandler, user: IUser, state: string): Promise<void> {
+  const debug = Debug('job:chatReminder');
+  const languageCode = user.languageCode;
+
+  await db.clearReminder(user.chatId);
+  await db.addReminder(user.chatId, state);
+
+  let message: string;
+  let keyboard: any;
+
+  const findChatButton = Markup.callbackButton(i18n.t(languageCode, 'find_chat_command_desc'), commandEnum.findChat);
+  const setLanguageButton = Markup.callbackButton(
+    i18n.t(languageCode, 'set_language_command_desc'),
+    commandEnum.setLanguage,
+  );
+  const sayHiButton = Markup.callbackButton(i18n.t(languageCode, 'say_hi'), actionEnum.sayHi);
+
+  switch (state) {
+    case userStateEnum.idle:
+      message = i18n.t(languageCode, 'idle_reminder');
+      keyboard = Markup.inlineKeyboard([[findChatButton]]).extra();
+      break;
+    case userStateEnum.lobby:
+      message = i18n.t(languageCode, 'lobby_reminder');
+      keyboard = Markup.inlineKeyboard([[setLanguageButton]]).extra();
+      break;
+    case userStateEnum.chat:
+      message = i18n.t(languageCode, 'chat_reminder');
+      keyboard = Markup.inlineKeyboard([[sayHiButton]]).extra();
+      break;
+    default:
+      debug(`Invalid state: ${state}`);
+      return;
+  }
+
+  try {
+    await bot.telegram.sendMessage(user.chatId, message, keyboard);
+    debug(`Reminder sent to ${user.chatId}.`);
+  } catch (err: any) {
+    debug(`Failed to send reminder to ${user.chatId}: ${err.message}`);
+  }
 }
 
 export function toArgs(ctx: IMessagineContext) {
